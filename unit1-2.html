@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>1.2 Kinematics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+
+    <link rel="stylesheet" href="/ghostly/assets/mystyle.css">
+
+  </head>
+
+<body>
+<textarea id="source">
+
+class: center, middle
+
+# Engineering Physics - Fall 2024
+
+---
+
+<h3 style="color: dodgerblue;">Mechanics &emsp; <span style="color: black;font-size:50%;">\(\mu\eta\chi\alpha\nu\iota\kappa\eta~\tau\epsilon\chi\nu\eta~=~\)mode of action</span> </h3>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+<p style="color: tomato;">Kinematics &emsp; <span style="color: black;font-size:50%;">\(\kappa\iota\nu\eta\mu\alpha~=~\)motion</span> &emsp; 
+<span style="text-align: center;">description of motion disregarding <strong>forces.</strong></span>
+</p>
+
+
+<p style="color: tomato;">Dynamics &emsp; <span style="color: black;font-size:50%;">\(\delta\upsilon\nu\alpha\mu\iota\zeta~=~\)force</span> &emsp;
+<span style="text-align: center;">motion of <strong>bodies</strong> under the action of <strong>forces.</strong></span>
+</p>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+<h3 style="color: black;font-size:90%;">\(\kappa\iota\nu\eta\mu\alpha\):</h3>
+
+measure the location (1D) of a <strong>point</strong> at various time instances:
+
+<img src=/images/1D-table.svg style="text-align:left; max-height:300px; margin-bottom:10px;"> &emsp;&emsp; <img src=/images/1D-graph.svg style="text-align:right; max-height:300px; margin-bottom:10px;">
+
+---
+
+<h3 style="color: dodgerblue;">Functional representation of motion (1D point)</h3>
+
+<p style="text-align: center;"><span>
+\(s(t)\)&emsp; yields a distance for any t.</span> &ensp;
+<span style="color: red;font-size:50%;">What form would you infer for the <i>free-fall</i> example?</span>
+</p>
+
+A more diverse motion:
+
+<p style="text-align:center;"><img src=/images/1D-graph2.svg style="text-align:center; max-height:300px; margin-bottom:0px;"></p>
+
+<strong>Speed</strong> = rate of change at a particular time intant.<br>
+<span style="color: red;font-size:50%;">How much farther would we fall at a given height, if time progresses just a tiny bit `\(\epsilon\)`? <button onclick="https://lti.klicker.uzh.ch?redirectTo=https://pwa.klicker.uzh.ch/course/f172190f-4c31-46da-a526-221572432c2d/liveQuizzes">Live Quiz</button></span>
+
+$$v(t)=\lim_{\epsilon\to 0}\frac{s(t+\epsilon)-s(t)}{\epsilon}$$  
+
+---
+
+<h4 style="color: dodgerblue;">Speed = time derivative of the position</h4>
+<span style="color: red;font-size:50%;">In general, a derivative keeps track of a quantity which changes when a parameter (not necessarily time) changes <i>infinitesimally</i>.</span>
+
+
+<div style="color: gray;text-align: center;margin-top: 30px;font-size: 50%;o">
+\(s, u, v, w\): functions of \(t\); <br> \(a, b, c, n\): arbitrary constants
+</div>
+
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr, td {
+  border-bottom: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+}
+</style>
+
+<table class="tabular">
+    <th>Function</th>
+    <th>Derivative</th>
+<tr>
+    <td class="r t li2">\(s=t^n\)</td>
+    <td class="t">\(\quad\frac{ds}{dt}=nt^{n-1}\)</td></tr>
+<tr>
+    <td class="r li2">\(s=cu\)</td>
+    <td>\(\quad\frac{ds}{dt}=c\,\frac{du}{dt}\)</td></tr>
+<tr>
+    <td class="r li2">\(s=u+v+w+\dotsb\quad\)</td>
+    <td>\(\quad\frac{ds}{dt}=\frac{du}{dt}+\frac{dv}{dt}+\frac{dw}{dt}+\dotsb\)</td></tr>
+<tr>
+    <td class="r li2">\(s=c\)</td>
+    <td>\(\quad\frac{ds}{dt}=0\)</td></tr>
+<tr>
+    <td class="b r li2">\(s=u^av^bw^c\dotsm\)</td>
+    <td class="b">\(\quad\frac{ds}{dt}=s\biggl(\!\frac{a}{u}\frac{du}{dt}\!+\!
+    \frac{b}{v}\frac{dv}{dt}\!+\!\frac{c}{w}\frac{dw}{dt}\!+\!\dotsb\!\biggr)\)</td></tr></tbody>
+</table>
+
+---
+
+<h4 style="color: dodgerblue;">Acceleration <span style="color:black;font-size:80%;"> = time derivative of the velocity = 2nd time derivative of the position</span> </h4>
+
+$$a(t)=\frac{d}{dt}v(t)=\frac{d}{dt}\frac{d}{dt}s(t)\equiv \frac{d^2}{dt^2}s(t)$$
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+As an operation, `\(\frac{d}{dt}\)` has an inverse.&emsp;<span style="color: red;font-size:50%;">Given the speed at some time, where will I be a short increment later?</span>
+
+`\[s(t+\epsilon)=v(t)\cdot\epsilon~\Rightarrow~s(t_f)=\sum_n^N v(t_i+n\epsilon)\epsilon~\to~\int_{t_i}^{t_f}v(t)\,dt\]`
+
+<span style="color: red;font-size:50%;">for the finite difference `\(t_f-t_i=N\epsilon\)` and the integral sign `\(\int\)` representing the infinite sum in the limit `\(\epsilon\to0,~N\to\infty\)` s.t. `\(N\cdot\epsilon~=~\)`constant.</span>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+<p style="color: darkgreen;">Example in 2 dimensions:</p>
+
+- <span style="color:black;font-size:60%;"> `\(x:\)` start from rest at `\(x_0\)` and move with constant speed `\(v\)`&emsp; hence: &emsp; `\(x(t)=x_0+v\cdot t\)`</span>
+- <span style="color:black;font-size:60%;"> `\(y:\)` start from rest at `\(y_0\)` and move with constant acceleration `\(g\)`&emsp; hence: &emsp; `\(y(t)=y_0+\frac{a}{2}\cdot t^2\)`</span> &emsp;<span style="color: red;font-size:50%;">(why is this so?)</span>
+
+`\[s\to\vec{s}=\begin{pmatrix}x\\y\end{pmatrix}\qquad\text{and}\qquad\frac{ds}{dt}\to\frac{d}{dt}\vec{s}=\begin{pmatrix}\frac{dx}{dt}\\\frac{dy}{dt}\end{pmatrix}\]`
+
+---
+
+Parametric graph:
+
+<div><img src="/images/2D-graph.svg"  style="display: block;margin-left: auto;margin-right: auto;"></div>
+
+<div class="center"><strong style="color: red;">Important:</strong> How far does the point travel in a small time interval \(\Delta t\)?</div>
+
+<div class="grid-container">
+  <div class="grid-item"><img src="/images/2D-motion.svgz"  style="display: block;margin-right: auto;max-height: 150px;"></div>
+  <div class="grid-item" style="font-size: 14px;">\(\Delta t\)&emsp;<i>small</i>&emsp;enough to assume that \(\vec{v}=~\)constant.<br>
+We obtain the velocity at \(t\) by taking \(\Delta t\to 0\):
+$$\lim_{\Delta t\to 0}\frac{\Delta s}{\Delta t}=\sqrt{\left(\frac{\Delta x}{\Delta t}\right)^2+\left(\frac{\Delta y}{\Delta t}\right)^2}=\sqrt{v_x^2+v_y^2}=\vert\vec{v}\vert$$
+<button onclick="https://pwa.klicker.uzh.ch/course/f172190f-4c31-46da-a526-221572432c2d/join?pin=416049891">Live Quiz</button>
+  </div>
+</div>
+
+
+</textarea>
+
+
+<script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+<script type="text/javascript">
+      var slideshow = remark.create();
+
+
+
+
+// Setup MathJax
+MathJax.Hub.Config({
+    tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+});
+
+MathJax.Hub.Configured();
+</script>
+</body>
+</html>
