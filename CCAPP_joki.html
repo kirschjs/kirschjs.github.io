@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nuclear Physics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+
+    <link rel="stylesheet" href="/ghostly/assets/mystyle.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+<style>
+  #example1 {
+  border: 2px solid black;
+  padding: 25px;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+.l1 {
+  color:tomato;
+  font-size: 18px;
+  text-align: center;
+  font-family: 'Yanone Kaffeesatz';
+  margin-top: 10px;
+}
+.l2 {
+  color:black;
+  font-size: 22px;
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'Droid Serif';
+}
+.l3 {
+  color:green;
+  font-size: 16px;
+  text-align: left;
+  margin-top: 10px;
+  font-family: 'Droid Serif';
+}
+</style>
+
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+## <a style="color: gray; font-size: 20pt;"> What are - amongst many - the objectives of </a> &emsp; <a style="color: darkgreen; font-size: 40pt;">nuclear physics?</a>
+
+<a style="color: tomato; font-size: 20pt;">(I) Spectra:  </a>
+<a style="color: dodgerblue;text-align: center;">Relative <strong>stability</strong> of <strong>composites</strong> of neutrons and protons</a>
+<p style="text-align:center;"><img src=/images/nuclbinding.png style="text-align:center;border-radius: 8px; max-width:75%; margin-top:10px;"></p>
+
+---
+
+<a style="color: tomato; font-size: 20pt;">(II) Reactions:  </a>
+<a style="color: dodgerblue;text-align: center;">Response of nuclear <strong>composites</strong> to their like and unlike</a>
+
+<div class="grid-container" style="grid-template-columns: auto auto;margin-top: 25px;display: grid;align-items: center;justify-items: center;">
+<div class="grid-item" style="background-color: rgb(255, 255, 255);"><img src="./images/nuclcross.png" style="max-width: 85%;">
+  <div class="l1"><a href="https://journals.aps.org/prc/abstract/10.1103/PhysRevC.69.044002">\(^4\text{He}\left(\gamma,p\right)^3\text{H}\)</a></div>
+  <div class="l2" style="color:dodgerblue;">photo dissociation cross sections</div>
+</div>
+<div class="grid-item" style="background-color: rgb(255, 255, 255);"><img src="./images/nucldiss.png" style="max-width: 95%;">
+</div>
+</div>
+
+---
+
+<div style="text-align: center;">
+<h3 style="color: black; font-size: 18px;"> <strong>Appropriate</strong> theory for low-energy processes:</h3>
+<ul style="font-size: 14px;color: gray;">
+<li> degrees of freedom: neutrons and protons <i>("What do we measure?")</i></li>
+<li> symmetry: Galilei \(\approx\) low-energy Lorentz <i>(translational and rotationally invariant <strong>potentials</strong>)</i></li>
+<li> particle statistics and identity: quantum mechanics</li>
+</ul>
+
+<div style="color: darkgreen;"> \(\Rightarrow i\partial_t\Psi(\tilde{r}_1,\ldots,\tilde{r}_A)=\hat{H}\Psi(\tilde{r}_1,\ldots,\tilde{r}_A)\)
+</div>
+</div>
+
+<div style="color: black;text-align: center;margin-top:5px">
+with &emsp; \(\hat{H}=-\frac{\hbar^2}{2}\sum\limits_i\frac{\vec{\nabla}^2}{m_i}+\sum\limits_{i,j}v_{ij}+\sum\limits_{i,j,k}v_{ijk}\) 
+</div>
+
+<h4 style="color: tomato;text-align: center;margin-top: 10px;">Example:</h4>
+<div style="color: black;text-align: center;margin-top:-20px;font-size:12px">
+\begin{eqnarray}
+v_{ij}&=&\sum\limits_na_n\frac{e^{-n\mu r_{ij}}}{\mu r_{ij}}+\sum\limits_nc_n\frac{e^{-n\mu r_{ij}}}{\mu r_{ij}}\vec{L}\cdot\vec{S}\\
+&&+\left\lbrace\frac{b_1}{\mu r_{ij}}\left[\left(\frac{1}{3}+\frac{1}{\mu r_{ij}}+\frac{1}{(\mu r_{ij})^2}\right)e^{-\mu r_{ij}}-\left(\frac{b_0}{\mu r_{ij}}+\frac{1}{(\mu r_{ij})^2}\right)e^{-b_0\mu r_{ij}}\right]+\sum\limits_nb_n\frac{e^{-n\mu r_{ij}}}{\mu r_{ij}}\right\rbrace \left[3\left(\vec{\sigma}_1\cdot\hat{\vec{r}}\right)\left(\vec{\sigma}_2\cdot\hat{\vec{r}}\right)-\vec{\sigma}_1\cdot\vec{\sigma}_2\right]
+\end{eqnarray}
+</div>
+
+<div style="color: black;text-align: center">But how can we <strong style="color:red">derive</strong> this from a <i>fundamental</i> theory?</div>
+
+<div style="color: black;text-align: center;font-size:13px;margin-top:20px">
+relativistic quantum field theory <strong style="color:red">\(\to\)</strong> non-relativistic dynamics <i>(Schr&ouml;dinger, Lippmann-Schwinger)</i> \(\oplus\) few-body potentials
+</div>
+
+<div style="color: black;text-align: center;font-size:12px;margin-top:20px">
+Understand the dynamical equation as a <strong style="font-size: 150%;color: dodgerblue;">wave equation</strong> resulting from a
+Lagrangean/Hamiltonian density:
+</div>
+
+<div style="color: black;text-align: center;margin-top:15px">
+\(\mathcal{L}_0=\frac{i}{2}\Psi^*\partial_t\Psi-\frac{i}{2}\Psi\partial_t\Psi^*-\frac{\left(\nabla\Psi^*\right)\left(\nabla\Psi\right)}{2m}\)
+</div>
+<div style="color: black;text-align: center;font-size:12px;margin-top:20px">
+where the <i>field</i> \(\Psi(\vec{x},t)\) replaces the position \(\vec{x}(t)\) as the fundamental degree of freedom and
+</div>
+<div style="color: black;text-align: center;margin-top:15px">
+\(\left[\Psi(\vec{x},t),\Psi^*(\vec{x}',t)\right]=\delta(\vec{x}-\vec{x}')\)
+</div>
+---
+<div style="  background-image: url(images/CCAP_aleph.png);height: 90%;background-size: cover;background-repeat: no-repeat;background-position: center;">
+  </div>
+---
+<div style="  background-image: url(images/CCAP_bet.png);height: 90%;background-size: cover;background-repeat: no-repeat;background-position: center;">
+  </div>
+---
+<div style="  background-image: url(images/CCAP_waw.png);height: 85%;background-size: cover;background-repeat: no-repeat;background-position: center;">
+  </div>
+---
+<div style="  background-image: url(images/CCAP_gimel.png);height: 65%;background-size: cover;background-repeat: no-repeat;background-position: center;">
+  </div>
+
+---
+
+<h3>The front:</h3>
+
+<div style="color: black;text-align: center">
+  <strong style="font-size: 150%;color: dodgerblue;">Renormalized form of an \(A\)-body contact theory</strong>.
+</div>
+
+<div style="color: tomato;text-align: center;font-size:22px;margin-top:20px">
+Challenges:
+</div>
+
+<ul style="font-size: 20px;">
+<li> Analytical guidance (Faddeev/Yakubovsky style)</li> 
+<li> Accurate numerics</li>
+<li> Efficient numerics</li>
+<li> The appropriate expansion point (more in 
+<a href="https://journals.aps.org/pra/abstract/10.1103/PhysRevA.109.022814"> Improved-action approach</a>)
+</li>
+</ul>
+
+<p style="text-align:center;"><img src=/images/fusion.jpg style="text-align:center;border-radius: 8px; max-width:60%; margin-top:10px;"></p>
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+
+      // Setup MathJax
+      MathJax.Hub.Config({
+          tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+      });
+
+      MathJax.Hub.Configured();
+    </script>
+  </body>
+</html>

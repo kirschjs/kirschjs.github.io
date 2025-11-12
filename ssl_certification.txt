@@ -1,0 +1,13 @@
+apt-get install certbot python3-certbot-dns-route53
+
+sudo AWS_PROFILE=default certbot certonly --non-interactive --dns-route53 --agree-tos --email kirscjo@gmail.com --domain hilbert-space.com --cert-name jokicert53
+
+AWS certificate manager:
+
+import cert: paste info from 
+
+cat /etc/letsencrypt/renewal/jokicert53.conf
+
+sudo aws iam upload-server-certificate --server-certificate-name jokicert53 --certificate-body file:///etc/letsencrypt/live/jokicert53/cert.pem --private-key file:///etc/letsencrypt/live/jokicert53/privkey.pem --certificate-chain file:///etc/letsencrypt/live/jokicert53/chain.pem --path /cloudfront/d3i7u5mw7sbqk1/
+
+aws iam update-server-certificate --server-certificate-name jokicert53 --new-path /cloudfront/d3i7u5mw7sbqk1/

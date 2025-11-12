@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-09-11T19:13:34+05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Research &amp;amp; Teaching on particles, nucleons, and atoms</title><subtitle>J. Kirscher</subtitle><author><name>Johannes Kirscher</name></author><entry><title type="html">Eclipsing-objects simulation</title><link href="http://localhost:4000/proj/2024/08/29/eclipse.html" rel="alternate" type="text/html" title="Eclipsing-objects simulation" /><published>2024-08-29T00:00:00+05:00</published><updated>2024-08-29T00:00:00+05:00</updated><id>http://localhost:4000/proj/2024/08/29/eclipse</id><content type="html" xml:base="http://localhost:4000/proj/2024/08/29/eclipse.html"><![CDATA[<h3 id="updates">Updates:</h3>
+<p class="date"> <time> <i style="color:indianred;">September 10, 2024 </i> </time> </p>
+
+<ul>
+  <li>In the <a href="https://github.com/kirschjs/IclipSe.git">repository</a> you will find a pseudo code outlining the algorithm which I
+began to implement in the source file <em>IclipSe.py</em>. The other file in the repository is a mathematica notebook which you
+can use in order to visualize quickly certain choices for the object’s orbits (goto the <a href="https://www.wolframcloud.com">WOLFRAM cloud</a>
+and register for free, basic usage).</li>
+</ul>
+
+<h3 id="report">Report:</h3>
+
+<p>We simulate the intensity of light which reaches a $4\pi$ detector at some point in space (conveniently chosen to be at the coordinate origin).
+This light is reaching us from distant objects, e.g., main-sequence stars, magnetars, black holes, brown dwarfs, etc. We assume complete knowledge
+about the object’s trajectories and hence do not dynamically simulate their motion as dictated by their interactions. Instead, we use observational
+and/or hypothetical data. Hence, we need to define the amount of light which reaches us from a point in phase space</p>
+
+<p>\begin{equation}\vec{p}=\left\lbrace\vec{r}(t,i),\frac{d\vec{r}(t,i)}{dt}\right\rbrace_{i=1:N}\end{equation}</p>
+
+<p>where, in the first step, we should neglect effects of the objects’ velocities. However, dilatation and eclipsing/overlap effects should be considered.</p>
+
+<p>The detected/predicted intensity is a function of wave length ($\lambda$) as stellar objects to not emit radiation with a constant
+amplitude for any $\lambda$.</p>
+
+<h3 id="outline">Outline:</h3>
+
+<ol>
+  <li>Gather realistic spectral data about the objects we want to make up our own universe.</li>
+  <li>Access the observed data on the dynamics of the solar system and parametrise the trajectories of those orbits in a useful-for-us way.</li>
+  <li>In order to familiarize yourself with <code class="language-plaintext highlighter-rouge">Julia</code> <a href="https://julialang.org/"></a> and/or <code class="language-plaintext highlighter-rouge">Python</code>, write a program which plots a 2-dimensional circle embeded in <strong>three</strong> dimensions.
+Create a repository (e.g. on <a href="https://github.com/">GitHub </a>) and share the project with the participants.</li>
+</ol>
+
+<h3 id="resources">Resources:</h3>
+
+<ul>
+  <li><a href="https://www.eso.org/public/images/eso9953b/">Spectra (relative intensities as functions of wavelength) </a> of five white dwarfs in the
+cluster galaxy <em>NGC 6397</em></li>
+  <li><a href="https://ssd.jpl.nasa.gov/horizons/#:~:text=The%20JPL%20Horizons%20on%2Dline,and%20dwarf%20planet%20Pluto%7D%2C%208">solar-system dynamics </a></li>
+</ul>]]></content><author><name>Johannes Kirscher</name></author><category term="proj" /><summary type="html"><![CDATA[Updates: September 10, 2024]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/images/Kepler.jpg" /><media:content medium="image" url="http://localhost:4000/images/Kepler.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Remarkable Discrete Eigenvalues</title><link href="http://localhost:4000/proj/2024/08/27/vNeu.html" rel="alternate" type="text/html" title="Remarkable Discrete Eigenvalues" /><published>2024-08-27T00:00:00+05:00</published><updated>2024-08-27T00:00:00+05:00</updated><id>http://localhost:4000/proj/2024/08/27/vNeu</id><content type="html" xml:base="http://localhost:4000/proj/2024/08/27/vNeu.html"><![CDATA[<p>In 1929, J. von Neumann and E. P. Wigner showed that states with point eigenvalues
+$E\geq0$ could, nevertheless, be square integrable, i.e., would not resemble
+systems like an electron moving away from a center to infinity. In contrast, the
+authors provide an intuitive, classical interpretation of states which belong to
+non-normalizable states which are <strong>not</strong> elements of the continuous spectrum but
+obtain discrete eigenvalues when they reach infinity in finite time. For the complete
+localization, they conjecture about an intriguing interference effect, and it is
+the aim of this project to assist those to giants with the proof of their hypothesis.</p>
+
+<h3 id="outline">Outline:</h3>
+
+<h3 id="resources">Resources:</h3>
+
+<ul>
+  <li>Über merkwürdige diskrete Eigenwerte, J. von Neumann and E. P. Wigner, Physikalische Zeitschrift 30, 465-467(1929)</li>
+</ul>]]></content><author><name>Johannes Kirscher</name></author><category term="proj" /><summary type="html"><![CDATA[In 1929, J. von Neumann and E. P. Wigner showed that states with point eigenvalues $E\geq0$ could, nevertheless, be square integrable, i.e., would not resemble systems like an electron moving away from a center to infinity. In contrast, the authors provide an intuitive, classical interpretation of states which belong to non-normalizable states which are not elements of the continuous spectrum but obtain discrete eigenvalues when they reach infinity in finite time. For the complete localization, they conjecture about an intriguing interference effect, and it is the aim of this project to assist those to giants with the proof of their hypothesis.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/images/vonNeumann.jpg" /><media:content medium="image" url="http://localhost:4000/images/vonNeumann.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">atoms</title><link href="http://localhost:4000/2024/08/25/atoms.html" rel="alternate" type="text/html" title="atoms" /><published>2024-08-25T00:00:00+05:00</published><updated>2024-08-25T00:00:00+05:00</updated><id>http://localhost:4000/2024/08/25/atoms</id><content type="html" xml:base="http://localhost:4000/2024/08/25/atoms.html"><![CDATA[<h3 id="a-list-of-experiments-with-atoms-which-the-current-theory-predicts-incorrectly">A list of experiments with atoms which the current theory predicts incorrectly:</h3>
+
+<h2 id="-">-</h2>
+<p>-</p>]]></content><author><name>Johannes Kirscher</name></author><summary type="html"><![CDATA[A list of experiments with atoms which the current theory predicts incorrectly:]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/images/bohr.jpg" /><media:content medium="image" url="http://localhost:4000/images/bohr.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">nuclei</title><link href="http://localhost:4000/2024/08/25/problem.html" rel="alternate" type="text/html" title="nuclei" /><published>2024-08-25T00:00:00+05:00</published><updated>2024-08-25T00:00:00+05:00</updated><id>http://localhost:4000/2024/08/25/problem</id><content type="html" xml:base="http://localhost:4000/2024/08/25/problem.html"><![CDATA[<!-- categories: blog -->
+
+<p>Disregarding for this moment <em>global</em> consistency problems of the type that all presumed
+<em>light</em> mass and energy cannot account for the universe’ dynamics, I want to focus on
+those experiments which we typically address as <strong>scattering problems</strong>. This limits
+our view on those experiments which define/presume a certain initial and final state
+and thereby infer laws about the interaction between the objects which constitute both.
+<i style="font-size:24px;color:red" class="fa"></i></p>]]></content><author><name>Johannes Kirscher</name></author><summary type="html"><![CDATA[]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/images/yukawa.jpg" /><media:content medium="image" url="http://localhost:4000/images/yukawa.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Wave-function collapse</title><link href="http://localhost:4000/proj/2023/04/01/thomas.html" rel="alternate" type="text/html" title="Wave-function collapse" /><published>2023-04-01T00:00:00+05:00</published><updated>2023-04-01T00:00:00+05:00</updated><id>http://localhost:4000/proj/2023/04/01/thomas</id><content type="html" xml:base="http://localhost:4000/proj/2023/04/01/thomas.html"><![CDATA[<h2 id="i-will">I will…</h2>
+
+<ul>
+  <li>gain an intuition about the ostensibly unfathomable <strong>quantum</strong> domain</li>
+  <li>get acquainted with <strong>probability</strong> distributions and <strong>randomness</strong></li>
+  <li>implement my <strong>own ideas</strong> on <strong>high-performance</strong> computers</li>
+</ul>
+
+<h2 id="summary">Summary:</h2>
+
+<p>In contrast to the Newtonian orbits of <strong>two</strong> planets, the trajectories of <strong>three</strong> display
+chaotic behaviour. This discovery of a strong sensitivity of the temporal evolution of a
+system whose dynamics rests on the same interactions as one of its <strong>subsystems</strong>, stripped of one object,
+on initial conditions has its analogue in the quantum world.</p>
+
+<p>While studying the 3-hydrogen nucleus, L.H. Thomas discovered that one can describe the 2-hydrogen
+<strong>subsystem</strong> (cf. the stable Kepler orbits) with a central force between the neutron and proton of arbitrarily short range.
+When he employed this interaction if an neutron is added to the neutron-proton system, he could predict that the
+ensuing solutions are unstable (cf. “chaos”).</p>
+
+<p>Given the insight provided by the visualization of classical orbits and the intuition gained by
+plots of probability densities of an electron in the hydrogen atom, this projects aims to <strong>visualize
+Thomas-collapsing 3-body wave functions</strong>.</p>
+
+<h2 id="outline">Outline:</h2>
+
+<ol>
+  <li>How does one visualize probability densities in quantum mechanics in general?</li>
+  <li>How would I visualize not a 1-body, but a 2-body wave function describing the relative motions within the 3-body system?</li>
+  <li>What is the precise mathematical form of the wave function to plot?</li>
+  <li>How do I runtime optimize my simulation?</li>
+</ol>
+
+<h2 id="solution-shoaib-ahmed-mohammed-bsc-srm-ap">Solution (Shoaib Ahmed Mohammed, BSc, SRM AP):</h2>
+
+<p><img src="/images/h3dens.png" style="max-width:600px;text-align: center;margin-left: auto;margin-right: auto;" /></p>
+
+<h2 id="resources">Resources:</h2>
+
+<ul>
+  <li><a href="https://journals.aps.org/pr/abstract/10.1103/PhysRev.47.903">Thomas’ original work </a> on the collapse of the 3-body wave function in the context of nuclear physics</li>
+  <li><a href="http://www.sciencedirect.com/science/article/pii/0370269370903497">Efimov’s discovery of universal 3-body quantum behaviour </a></li>
+  <li><a href="https://www.science.org/doi/10.1126/science.177.4047.393">Anderson’s essay on the emergence of complexity </a> and the refutation of a reductionist approach to science</li>
+</ul>]]></content><author><name>Johannes Kirscher</name></author><category term="proj" /><summary type="html"><![CDATA[I will…]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/images/hdens.png" /><media:content medium="image" url="http://localhost:4000/images/hdens.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

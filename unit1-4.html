@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>1.4 Force types</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+
+    <link rel="stylesheet" href="/ghostly/assets/mystyle.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+<style>
+div.gallery {
+  border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: justify;
+  font-size: 50%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  padding: 0 6px;
+  float: left;
+  width: 24.99999%;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+    width: 49.99999%;
+    margin: 6px 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+
+  </head>
+
+<body>
+<textarea id="source">
+
+class: center, middle
+
+# Engineering Physics - Fall 2024
+
+---
+
+<!--p style="color: tomato;font-size: 12px;">Classical forces <span style="text-align: center;"> 
+  <span style='color: black;'>  &#10753;  </span> 
+\(\vec{F}=m\,\vec{a}\) 
+<span style='color: black;'>  &#8618;  </span>
+deterministic prediction of the future</span>
+</p-->
+
+
+<div class="grid-container">
+  <div class="grid-item"><img src="/images/Fgraph_grav.svg"  style="display: block;margin-right: auto;max-height: 150px;"></div>
+  <div class="grid-item" style="font-size: 10px;">
+\(\vec{F}=-G\frac{m_1m_2}{\vert\vec{r}_2-\vec{r}_1\vert^2}\,\hat{e}_r\)<br><br>
+\(r=\frac{a(1-e^2)}{1+e\cos f}\)
+<br><br>
+for \(m_1\ll m_2\) and \(\vert\vec{r}_2\vert=\vert\vec{r}_1\vert+\epsilon\):
+<br><br>
+\(F=m_1\,g\) &emsp; with &emsp; \(g\approx9.8\frac{m}{s^2}\)
+  </div>
+  <div class="grid-item"><img src="/images/Fgraph_grav_orb.svg"  style="display: block;margin-right: auto;margin-left: auto;margin-bottom: auto;margin-top: auto;max-height: 120px;"></div>
+    <div class="grid-item"><img src="/images/Fgraph_osci.svg"  style="display: block;margin-right: auto;max-height: 150px;"></div>
+  <div class="grid-item" style="font-size: 10px;">
+\(F_x=-k\,x\)
+<br><br>
+\(x(t)=A\cos\left[\sqrt{\frac{k}{m}}t+\theta\right]\)
+  </div>
+  <div class="grid-item"><img src="/images/Fgraph_osci_orb.svg"  style="display: block;margin-right: auto;margin-left: auto;margin-bottom: auto;margin-top: auto;max-height: 120px;"></div>
+    <div class="grid-item"><img src="/images/Fgraph_oscid.svg"  style="background-color: rgb(200, 200, 200);display: block;margin-right: auto;max-height: 150px;"></div>
+  <div class="grid-item" style="font-size: 10px;">
+\(F_x=-m\,\omega^2\,x-\frac{\beta}{m}\,v\)
+<br><br>
+\(x(t)=A\,\exp\left[\frac{t}{2}\left(-\beta\pm\sqrt{\beta^2-4\,\omega^2}\right)\right]\)
+<br><br>
+\(D:=\beta^2-4\,\omega^2\)
+  </div>
+  <div class="grid-item"><img src="/images/Fgraph_oscid_orb.svg"  style="display: block;margin-right: auto;margin-left: auto;margin-bottom: auto;margin-top: auto;max-width: 220px;"></div>  
+</div>
+
+<div class="grid-container" style="grid-template-columns: auto auto;margin-top: 5px;">
+<div class="grid-item" style="font-size: 12px;color: tomato;background-color: rgb(200, 200, 200);">Tension<br>
+  <span style='color: black;font-size: 10px;'>The force an infinitesimal element of rope, <strong>taut</strong> by forces on its endpoints, would
+  experience if it would not be constrained by its neighbouring elements.</span></div>
+<div class="grid-item" style="font-size: 12px;color: tomato;background-color: rgb(200, 200, 200);">Normal force:<br>
+  <span style='color: black;font-size: 10px;'> When a body presses on a surface, the surface deforms and pushes on the body with a force
+ that is perpendicular, i.e., normal to the surface   </span> 
+
+</div>
+<div class="grid-item" style="font-size: 12px;color: tomato;background-color: white;"></div>
+
+</div>
+
+---
+
+<p style="color: tomato;">Predict the height at which \(M\) and \(m\) come to rest given:
+  <ul   style="list-style-type:square;text-align: left;font-size: 16px;">
+    <li> the spring constant <span style="color:dodgerblue;font-size: 150%;">\(\alpha\)</span>
+    <li> the coefficient of friction between \(M\) and the incline <span style="color:dodgerblue;font-size: 150%;">\(\nu\)</span>
+      <li> the incline makes an angle <span style="color:dodgerblue;font-size: 150%;">\(\theta\)</span> with the horizontal
+  </ul>
+</p>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+<img src="/images/wolpertinger.svg"  style="display: block;margin-left: auto;margin-right: auto;max-height: 200px;text-align: center;">
+
+<p style="color: darkgreen;">Solution recipe:
+  <ul   style="list-style-type:square;text-align: left;font-size: 16px;">
+    <li> draw the <span style="color:dodgerblue;font-size: 150%;">free-body diagram</span><br>
+      <i style="color:lightgray;font-size: 80%;">"Have I checked for forces of friction, gravity, spring, normal, and tension for each object?</i>
+    <li> obtain the vector components of all forces in your diagram in <strong>your</strong> <span style="color:dodgerblue;font-size: 100%;">coordinate system</span>.<br>
+    <li> write out Newton's 2nd law for the horizontal <strong>and</strong> vertical coordinate: <br>
+      <span style="color:dodgerblue;font-size: 100%;">$$ma_{x/y}=\sum F_{x/y}$$</span>
+      <li> if stationary, \(\vec{a}=0\), and you can solve the equations for the unknown quantity.
+  </ul>
+</p>
+
+
+</textarea>
+
+
+<script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+<script type="text/javascript">
+      var slideshow = remark.create();
+
+
+
+
+// Setup MathJax
+MathJax.Hub.Config({
+    tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+});
+
+MathJax.Hub.Configured();
+</script>
+</body>
+</html>
