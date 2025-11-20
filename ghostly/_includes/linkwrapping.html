@@ -1,0 +1,10 @@
+<script>
+    // rules for putting braces around html and mailto links and square brackets around other types
+    // square bracket rules ...ending with any of these
+    $('a[href$="pdf"],a[href$="mp4"],a[href$="dat"],a[href$="zip"],a[href$="gz"],a[href$="mlx"],a[href$="gz"]').prepend('').append(' <i style="font-size:14px;color:DodgerBlue" class="fa">&#xf14c;</i>');
+    // brace rules ... starts with / http or https except ends with pdf, ends with html except when class=nav,
+    // starts with mailto or javascript,
+    $('a[href^="/"]:not([href$="pdf"]):not([href$="zip"]):not(.nav),a[href^="http"]:not([href$="git"]):not([href$="pdf"]):not([href$="zip"]),a[href^="https"]:not([href$="git"]):not([href$="pdf"]):not([href$="zip"]),[href$="html"]:not(.nav),a[href^="mailto"],a[href^="javascript"]').prepend('').append(' <i style="font-size:14px;color:DodgerBlue" class="fa">&#xf08e;</i>');    
+    // see https://www.quackit.com/css/selectors/ for an helpful instroduction to css selectors
+    $('a[href$="git"]').prepend('').append(' <i style="font-size:22px;color:salmon" class="fa">&#xf09b;</i>');
+</script>
