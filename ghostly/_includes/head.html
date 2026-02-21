@@ -26,6 +26,13 @@
         {%- endif -%}
   {%- endif -%}
   <script type="text/javascript">
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  }
+};
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll("script[type='math/tex']").forEach(function(el){
     el.outerHTML = "\\(" + el.textContent + "\\)";
