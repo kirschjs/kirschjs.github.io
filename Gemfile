@@ -9,7 +9,7 @@ source "https://rubygems.org"
 # Happy Jekylling!
 gem "jekyll", "~> 4.3.3"
 #gem "minima", "~> 2.5" #if using Minima as a Gem-based theme
-gem "ghostly", path: '/home/johannesk/Documents/kirschjs.github.io/ghostly'
+gem "ghostly", path: './ghostly'
 gem 'html-proofer' #for link checking 
 #gem "katex"
 #gem 'execjs'
