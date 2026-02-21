@@ -4,11 +4,12 @@ source "https://rubygems.org"
 # file and run `bundle install`. Run Jekyll with `bundle exec`, like so:
 #
 #     bundle exec jekyll serve
+#
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
 gem "jekyll", "~> 4.3.3"
 #gem "minima", "~> 2.5" #if using Minima as a Gem-based theme
-gem "ghostly", path: './ghostly'  
+gem "ghostly", path: '/home/johannesk/Documents/kirschjs.github.io/ghostly'
 gem 'html-proofer' #for link checking 
 #gem "katex"
 #gem 'execjs'

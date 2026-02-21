@@ -6,7 +6,6 @@ title: courses
 ## <span style='color:red;font-size: 120%;'>Advanced Quantum Mechanics</span><span style="font-size: 80%;color: darkgray;"> New Uzbekistan University, Aug - Dec 2025</span>
  
 - [lecture notes ](/skripta/syllabus_QM2.pdf)
-- [project list](/skripta/QM2_project-list.pdf)
 
 <hr style="margin-top: 10px;margin-bottom: 10px;" />
 

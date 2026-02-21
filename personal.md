@@ -46,7 +46,7 @@ title: vita
     <tr>
     <td>Apr 2022 – Jul 2025</td>
     <td>AP</td>
-    <td><a href="https://srmap.edu.in/">SRM University AP, IN</a></td>
+    <td><a href="https://srmap.edu.in/">SRM University AP, India</a></td>
   </tr>
     <tr style="background-color: #dddddd">
     <td>Aug 2018 – Mar 2022</td>
