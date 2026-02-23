@@ -1,0 +1,88 @@
+---
+layout: default
+title: "scroll"
+---
+
+<style>
+.st-timeline {
+  position: relative;
+  padding-left: 2.8em;
+  margin-top: 0.5em;
+}
+.st-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.55em;
+  top: 0.6em;
+  bottom: 0;
+  width: 1px;
+  background: #B8B8B8;
+}
+
+.st-entry {
+  position: relative;
+  padding: 0 0 2.8em 0;
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.st-entry.visible { opacity: 1; transform: translateX(0); }
+.st-entry:last-child { padding-bottom: 0; }
+
+.st-dot {
+  position: absolute;
+  left: -2.17em;
+  top: 0.52em;
+  width: 0.8em;
+  height: 0.8em;
+  border: 2px solid black;
+  background: white;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.st-date  { color: #B8B8B8; font-style: italic; font-size: medium;
+            margin-bottom: 0.2em; padding: 0; }
+.st-title { font-weight: bold; font-size: large; margin-bottom: 0.7em; padding: 0; }
+.st-title a { color: black; }
+.st-title a:hover { text-decoration: underline; }
+
+.st-body figure { margin: 1em 0; padding: 0; }
+.st-body figcaption { padding: 0; }
+
+.st-foot { margin-top: 0.8em; padding: 0; }
+.st-foot a { color: #B8B8B8; font-size: medium; }
+.st-foot a:hover { color: black; }
+</style>
+
+<h2 style="margin-bottom:0.8em; padding-bottom:0;">scroll</h2>
+
+<div class="st-timeline">
+{%- assign scroll_posts = site.categories.scroll | sort: 'date' | reverse -%}
+{%- for post in scroll_posts -%}
+<div class="st-entry">
+  <div class="st-dot"></div>
+  <div class="st-date">{{ post.date | date: site.ghostly.date_format }}</div>
+  <div class="st-title"><a href="{{ post.url }}">{{ post.title }}</a></div>
+  <div class="st-body">{{ post.content }}</div>
+  <div class="st-foot"><a href="{{ post.url }}">respond &rarr;</a></div>
+</div>
+{%- endfor -%}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var entries = Array.from(document.querySelectorAll('.st-entry'));
+  if (!entries.length) return;
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (obs) {
+      obs.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.05 });
+    entries.forEach(function (el) { io.observe(el); });
+  } else {
+    entries.forEach(function (el) { el.classList.add('visible'); });
+  }
+});
+</script>

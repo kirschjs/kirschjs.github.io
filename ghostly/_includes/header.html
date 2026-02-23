@@ -19,9 +19,19 @@
                 {%- assign style = "nav current" -%}
             {%- endif -%}
         {%- endif -%}
+        <!-- highlight scroll in nav when viewing scroll category posts -->
+        {%- if page.url contains "/scroll/" or page.categories[0] == "scroll" -%}
+            {%- if name == "scroll" -%}
+                {%- assign style = "nav current" -%}
+            {%- endif -%}
+        {%- endif -%}
         {%- if name != "home" -%}
             {{ site.ghostly.itemseparator }}
         {%- endif -%}
-        <a class="{{ style }}" href="/{{ filename }}.html">{{ name }}</a>
+        {%- if name == "scroll" -%}
+            <a class="{{ style }} nav-scroll" href="/{{ filename }}.html">{{ name }}</a>
+        {%- else -%}
+            <a class="{{ style }}" href="/{{ filename }}.html">{{ name }}</a>
+        {%- endif -%}
     {%- endfor -%}
 </header>

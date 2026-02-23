@@ -1,0 +1,13 @@
+---
+layout: default
+---
+<article>
+  <header style="border-bottom: solid 1px #B8B8B8; margin-bottom: 1.5em; padding-bottom: 0.75em;">
+    <h2 style="margin:0; padding: 0.5em 0 0.25em 0; letter-spacing: normal;">{{ page.title }}</h2>
+    <p class="date" style="margin:0; padding:0;">{{ page.date | date: site.ghostly.date_format }}</p>
+  </header>
+  {{ content }}
+  <p style="margin-top:2.5em; padding-top:0.75em; border-top: solid 1px #B8B8B8; font-size:medium; color:#B8B8B8;">
+    {{ site.ghostly.backbutton }}
+  </p>
+</article>

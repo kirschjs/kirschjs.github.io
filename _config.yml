@@ -11,7 +11,7 @@ url: "http://www.hilbert-space.com" # the base hostname & protocol for your site
 # The first element is whatever you would like index.html to be called
 # All others refer to files with the ".md" extension in your base directory
 #pageorder: "home blog publications software data talks course vita"
-pageorder: "home teaching projects publications personal"
+pageorder: "home teaching projects publications personal scroll"
 # The order to list social media in the footer, separated by single spaces
 socialorder: "email github googlescholar"
 
