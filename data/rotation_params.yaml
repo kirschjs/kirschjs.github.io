@@ -1,0 +1,42 @@
+# rotation_params.yaml  –  input for bloch_sphere_rotation.py
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# angle          : rotation angle (float)
+# unit           : 'radians'  (default) | 'degrees'
+# axis           : [nx, ny, nz]  –  will be normalised automatically
+# amplitude_zero : real amplitude α of |0⟩,  state = α|0⟩ + √(1-α²)|1⟩
+#                  must be in [0, 1]   (1.0 → |0⟩,  0.0 → |1⟩)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# 90° rotation around the Y-axis, starting from the north pole |0⟩.
+# Expected result: the state moves to the equator  →  |+x⟩ = (|0⟩+|1⟩)/√2
+
+angle: 45    # π/2 radians  =  90°
+unit: degrees
+
+axis: [1, 0, 0]              # Y-axis
+
+amplitude_zero: 0.3          # pure |0⟩  →  Bloch vector points to north pole
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Other examples to try (uncomment one block at a time):
+# ─────────────────────────────────────────────────────────────────────────────
+
+## 180° (pi) rotation around X-axis  →  bit-flip from |0⟩ to |1⟩
+# angle: 180
+# unit: degrees
+# axis: [1, 0, 0]
+# amplitude_zero: 1.0
+
+## 120° rotation around (1,1,1) diagonal axis, starting from a mixed state
+# angle: 120
+# unit: degrees
+# axis: [1, 1, 1]
+# amplitude_zero: 0.7071   # ≈ 1/√2  →  equator
+
+## Arbitrary case
+# angle: 1.2
+# unit: radians
+# axis: [1, 0.5, -0.3]
+# amplitude_zero: 0.6

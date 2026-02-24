@@ -3,13 +3,38 @@ layout: default
 title: courses
 ---
 
-## <span style='color:red;font-size: 120%;'>Advanced Quantum Mechanics</span><span style="font-size: 80%;color: darkgray;"> New Uzbekistan University, Aug - Dec 2025</span>
+## <span style='color:red;font-size: 100%;'>Quantum Computing Architectures and Algorithms (PHYS731)</span>
+<span style="font-size: 80%;color: darkgray;"> New Uzbekistan University, Spring semester 2026</span>
+{: .centered}
+
+### Course material
+- [check your understanding ](/skripta/PHYS731_probs.md)
+
+### Supplements
+1) "Pedestrian" demonstration of a 2-level decomposition of a 4-dimensional Unitary
+<span style="font-size: 80%;color: blue;">challenge: Produce a function which generalizes this <a href="/data/two-level_decomposition.nb"><img src="./images/Mathematica.jpg" width=26 height=26>.nb</a> implementation.</span>
+
+2) <img src="./images/python.svg" width=26 height=26> [code](/data/bloch_sphere_rotation.py) to approximate a general 1-Qbit Unitary (specified in [rotation_params.yaml](/data/rotation_params.yaml)) as a sequence of phase and Hadamard gates.
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+## <span style='color:red;font-size: 100%;'>Three lectures on the decomposition of the A-body Green function</span>
+<span style="font-size: 80%;color: darkgray;"> International Centre for Theoretical Sciences at TIFR (Bengaluru), Jan 2026</span>
+ 
+- <a href="https://icts.res.in/program/satpp2026/talks"> Complete program including lecture recordings</a>
+- [preliminary lecture notes ](/skripta/ICTS_2026.pdf)
+- [list of references ](/skripta/ICTS_26_jkirscher_reading-list.pdf)
+- [diagrammatic summary ](/skripta/wein_circle.pdf)
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+## <span style='color:black;font-size: 90%;'>Advanced Quantum Mechanics</span><span style="font-size: 80%;color: darkgray;"> New Uzbekistan University, Aug - Dec 2025</span>
  
 - [lecture notes ](/skripta/syllabus_QM2.pdf)
 
 <hr style="margin-top: 10px;margin-bottom: 10px;" />
 
-## <span style='color:black'>An hour on (nuclear) effective (field) theories</span>
+## <span style='color:black;font-size: 90%;'>An hour on (nuclear) effective (field) theories</span>
  <span style="font-size: 80%;color: darkgray;"> Conference on Cosmology, Astrophysics, and Particle Physics, SRMIST, Feb 1 (2025)</span>
 {: .centered}
 
@@ -18,7 +43,7 @@ title: courses
 
 <hr style="margin-top: 10px;margin-bottom: 10px;" />
 
-## <span style='color:black'>The E&M field and quantized oscillators</span>
+## <span style='color:black;font-size: 90%;'>The E&M field and quantized oscillators</span>
  <span style="font-size: 80%;color: darkgray;"> A 15m path to renormalization and the Casimir force</span>
 {: .centered}
 
@@ -28,7 +53,7 @@ title: courses
 
 <hr style="margin-top: 10px;margin-bottom: 10px;" />
 
-## <span style='color:black'>Beschleuniger und Synchrotronstrahlungsquellen</span><span style="font-size: 80%;color: darkgray;"> FAU Erlangen, WS 2004</span>
+## <span style='color:black;font-size: 90%;'>Beschleuniger und Synchrotronstrahlungsquellen</span><span style="font-size: 80%;color: darkgray;"> FAU Erlangen, WS 2004</span>
 {: .centered}
 
 - [Vorlesungsskript ](/skripta/accel_skript.pdf)
@@ -36,7 +61,7 @@ title: courses
 
 <hr style="margin-top: 10px;margin-bottom: 10px;" />
 
-## <span style='color:black'>Engineering Physics</span><span style="font-size: 80%;color: darkgray;"> SRM University AP, Aug - Dec 2024</span>
+## <span style='color:black;font-size: 90%;'>Engineering Physics</span><span style="font-size: 80%;color: darkgray;"> SRM University AP, Aug - Dec 2024</span>
 {: .centered}
 
 <ul>
