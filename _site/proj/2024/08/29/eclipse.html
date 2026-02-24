@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang=" en "><head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="keywords" content="johannes, johannes kirscher, j. kirscher, rgm, pionless eft, physics in india">
+  <!-- seo includes setting the title <title>Research & Teaching on particles, nucleons, and atoms </title>--><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Eclipsing-objects simulation | Research &amp; Teaching on particles, nucleons, and atoms</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Eclipsing-objects simulation" />
+<meta name="author" content="Johannes Kirscher" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Updates: September 10, 2024" />
+<meta property="og:description" content="Updates: September 10, 2024" />
+<link rel="canonical" href="http://www.hilbert-space.com/proj/2024/08/29/eclipse.html" />
+<meta property="og:url" content="http://www.hilbert-space.com/proj/2024/08/29/eclipse.html" />
+<meta property="og:site_name" content="Research &amp; Teaching on particles, nucleons, and atoms" />
+<meta property="og:image" content="http://www.hilbert-space.com/images/Kepler.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-29T00:00:00+05:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="http://www.hilbert-space.com/images/Kepler.jpg" />
+<meta property="twitter:title" content="Eclipsing-objects simulation" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Johannes Kirscher"},"dateModified":"2024-08-29T00:00:00+05:00","datePublished":"2024-08-29T00:00:00+05:00","description":"Updates: September 10, 2024","headline":"Eclipsing-objects simulation","image":"http://www.hilbert-space.com/images/Kepler.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.hilbert-space.com/proj/2024/08/29/eclipse.html"},"url":"http://www.hilbert-space.com/proj/2024/08/29/eclipse.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://www.hilbert-space.com/feed.xml" title="Research &amp; Teaching on particles, nucleons, and atoms" /><!-- Included since I plan to use javascript for link modification -->    
+  <script src="/assets/jquery-3.4.1.min.js"> </script><script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script><script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    startup: {
+      ready() {
+        document.querySelectorAll("script[type='math/tex']").forEach(function(el){
+          el.outerHTML = "\\(" + el.textContent + "\\)";
+        });
+        document.querySelectorAll("script[type='math/tex; mode=display']").forEach(function(el){
+          el.outerHTML = "\\[" + el.textContent + "\\]";
+        });
+        MathJax.startup.defaultReady();
+      }
+    }
+  };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+</style>
+
+</head>
+<body><header class="site-header" role="banner">
+    <h1 style="float:center;max-width:90%"> Research & Teaching on particles, nucleons, and atoms </h1><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><a class="nav" href="/index.html">home</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/teaching.html">teaching</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/projects.html">projects</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/publications.html">publications</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/personal.html">personal</a></header>
+<main>
+        <div class="content fade-in">
+             <article itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <!-- Don't show header for homepage category posts --><header visible >
+        <h3>Eclipsing-objects simulation</h3>
+    <p class="date">
+      <time class="dt-published" datetime="2024-08-29T00:00:00+05:00" itemprop="datePublished">
+        <i>August 29, 2024 </i>
+      </time>
+     </p>
+  </header>
+
+  <!-- posts are linked to the next and prev of others in the two categories -->
+  <div itemprop="articleBody">
+    <h3 id="updates">Updates:</h3>
+<p class="date"> <time> <i style="color:indianred;">September 10, 2024 </i> </time> </p>
+
+<ul>
+  <li>In the <a href="https://github.com/kirschjs/IclipSe.git">repository</a> you will find a pseudo code outlining the algorithm which I
+began to implement in the source file <em>IclipSe.py</em>. The other file in the repository is a mathematica notebook which you
+can use in order to visualize quickly certain choices for the object’s orbits (goto the <a href="https://www.wolframcloud.com">WOLFRAM cloud</a>
+and register for free, basic usage).</li>
+</ul>
+
+<h3 id="report">Report:</h3>
+
+<p>We simulate the intensity of light which reaches a $4\pi$ detector at some point in space (conveniently chosen to be at the coordinate origin).
+This light is reaching us from distant objects, e.g., main-sequence stars, magnetars, black holes, brown dwarfs, etc. We assume complete knowledge
+about the object’s trajectories and hence do not dynamically simulate their motion as dictated by their interactions. Instead, we use observational
+and/or hypothetical data. Hence, we need to define the amount of light which reaches us from a point in phase space</p>
+
+<p>\begin{equation}\vec{p}=\left\lbrace\vec{r}(t,i),\frac{d\vec{r}(t,i)}{dt}\right\rbrace_{i=1:N}\end{equation}</p>
+
+<p>where, in the first step, we should neglect effects of the objects’ velocities. However, dilatation and eclipsing/overlap effects should be considered.</p>
+
+<p>The detected/predicted intensity is a function of wave length ($\lambda$) as stellar objects to not emit radiation with a constant
+amplitude for any $\lambda$.</p>
+
+<h3 id="outline">Outline:</h3>
+
+<ol>
+  <li>Gather realistic spectral data about the objects we want to make up our own universe.</li>
+  <li>Access the observed data on the dynamics of the solar system and parametrise the trajectories of those orbits in a useful-for-us way.</li>
+  <li>In order to familiarize yourself with <code class="language-plaintext highlighter-rouge">Julia</code> <a href="https://julialang.org/"></a> and/or <code class="language-plaintext highlighter-rouge">Python</code>, write a program which plots a 2-dimensional circle embeded in <strong>three</strong> dimensions.
+Create a repository (e.g. on <a href="https://github.com/">GitHub </a>) and share the project with the participants.</li>
+</ol>
+
+<h3 id="resources">Resources:</h3>
+
+<ul>
+  <li><a href="https://www.eso.org/public/images/eso9953b/">Spectra (relative intensities as functions of wavelength) </a> of five white dwarfs in the
+cluster galaxy <em>NGC 6397</em></li>
+  <li><a href="https://ssd.jpl.nasa.gov/horizons/#:~:text=The%20JPL%20Horizons%20on%2Dline,and%20dwarf%20planet%20Pluto%7D%2C%208">solar-system dynamics </a></li>
+</ul>
+<!-- Navigate over blog items being pages or posts as the case may be -->
+<!-- Requires navigate-in-category.rb -->
+
+<!-- Don't show the blog navivation if there is only one post --><div style="float:left;width:25%" class="blognav"><a href="/proj/2023/04/01/thomas.html">&xlArr;</a><!--First--></div>
+<div style="float:left;width:50%;align:center;text-align:center" class="blognav"></div>
+<div style="float:right;width:25%;align:right;text-align:right" class="blognav"><a href="/proj/2024/08/27/vNeu.html">&xrArr;</a><!--Previous--></div></div>
+
+  <a class="u-url" href="/proj/2024/08/29/eclipse.html" hidden></a>  <!-- ? -->
+ 
+  <!-- Commentbox Div --></article>
+
+
+<div class="commentbox"></div></div>
+    </main><footer>
+    <div><a class="media" href="mailto:kirscjo@gmail.com">Email</a>|<a class="media" href="https://github.com/kirschjs">GitHub</a>|<a class="media" href="https://scholar.google.com/citations?user=U1b0cSEAAAAJ">Google Scholar</a>
+            <br/><p>&copy; 2024 Johannes Kirscher | Powered by Jekyll using the Ghostly theme</p>
+    </div>
+</footer>
+<script>
+    // rules for putting braces around html and mailto links and square brackets around other types
+    // square bracket rules ...ending with any of these
+    $('a[href$="pdf"],a[href$="mp4"],a[href$="dat"],a[href$="zip"],a[href$="gz"],a[href$="mlx"],a[href$="gz"]').prepend('').append(' <i style="font-size:14px;color:DodgerBlue" class="fa">&#xf14c;</i>');
+    // brace rules ... starts with / http or https except ends with pdf, ends with html except when class=nav,
+    // starts with mailto or javascript,
+    $('a[href^="/"]:not([href$="pdf"]):not([href$="zip"]):not(.nav),a[href^="http"]:not([href$="git"]):not([href$="pdf"]):not([href$="zip"]),a[href^="https"]:not([href$="git"]):not([href$="pdf"]):not([href$="zip"]),[href$="html"]:not(.nav),a[href^="mailto"],a[href^="javascript"]').prepend('').append(' <i style="font-size:14px;color:DodgerBlue" class="fa">&#xf08e;</i>');    
+    // see https://www.quackit.com/css/selectors/ for an helpful instroduction to css selectors
+    $('a[href$="git"]').prepend('').append(' <i style="font-size:22px;color:salmon" class="fa">&#xf09b;</i>');
+</script>
+<!--  Lightbox Javascript --><!-- Mailchimp Javascript --><!-- Commentbox Javascript --><script type='text/javascript' async>
+                commentBox('5642141460070400-proj');
+            </script></body>
+</html>
+

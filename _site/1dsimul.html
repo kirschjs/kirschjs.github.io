@@ -1,0 +1,106 @@
+<!DOCTYPE html>  
+<html lang="en">  
+  <head>  
+    <meta charset="utf-8" />  
+    <meta name="viewport" content="width=device-width, initial-scale=1" />  
+    <title>Your force simulator.</title>  
+   <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />  
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>  
+  </head>  
+  <body>  
+  <py-env>  
+    - numpy   
+    - matplotlib  
+  </py-env>  
+  <py-repl>
+import matplotlib.pyplot as plt
+import numpy as np
+'''
+function which returns the force for specific
+coordinates
+'''
+
+
+def forceV(x, y, z, strength):
+    Fx = -strength * x
+    Fy = -strength * y
+    Fz = -strength * z
+    return Fx, Fy, Fz
+
+
+'''
+initial conditions of the motion
+'''
+v0x = 14
+v0y = 0
+v0z = 0
+
+x0 = 2
+y0 = 0
+z0 = 0
+'''
+define time interval via number of intervals and
+increment
+'''
+dt = 0.05
+Nt = 1530
+timeinterval = np.arange(0, Nt * dt, dt)
+'''
+define properties of the particle and force
+'''
+mass = 0.3
+springstiffness = 20.1
+'''
+solve Newton's equation of motion recursively
+'''
+
+pos = [[x0, y0, z0]]
+vel = []
+
+vel1x = v0x + (dt / 2) * forceV(pos[-1][0], pos[-1][1], pos[-1][2],
+                                springstiffness)[0] / mass
+vel1y = v0y + (dt / 2) * forceV(pos[-1][0], pos[-1][1], pos[-1][2],
+                                springstiffness)[1] / mass
+vel1z = v0z + (dt / 2) * forceV(pos[-1][0], pos[-1][1], pos[-1][2],
+                                springstiffness)[2] / mass
+
+vel.append([vel1x, vel1y, vel1z])
+
+for nt in range(1, Nt):
+
+    x1 = pos[-1][0] + dt * vel[-1][0]
+    y1 = pos[-1][1] + dt * vel[-1][1]
+    z1 = pos[-1][2] + dt * vel[-1][2]
+
+    pos.append([x1, y1, z1])
+
+    force = forceV(pos[-1][0] / (nt * dt)**2, pos[-1][1] / (nt * dt)**2,
+                   pos[-1][2] / (nt * dt)**2, springstiffness)
+
+    v1x = vel[-1][0] + dt * force[0] / mass
+    v1y = vel[-1][1] + dt * force[1] / mass
+    v1z = vel[-1][2] + dt * force[2] / mass
+
+    vel.append([v1x, v1y, v1z])
+
+fig, ax = plt.subplots()
+
+#ax.set_xlim(0, rmax)
+#ax.set_ylim(-20, 20)
+
+ax.plot(timeinterval,
+        np.array(pos)[:, 0],
+        label=r'$m=1\,$kg and $c=1\,\frac{kg}{s^2}$')
+
+ax.set(xlabel=r'time', ylabel=r'x coordinate', title=r'$\vec{F}=-c\,\vec{r}$')
+ax.grid()
+
+plt.legend(loc='best', numpoints=1)
+
+#fig.savefig("myfirstnumericaltrajectory.svg")
+#fig.savefig("myfirstnumericaltrajectory.pdf")
+fig
+  </py-repl>
+  </body>  
+</html> 
+

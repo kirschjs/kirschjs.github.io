@@ -1,0 +1,329 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     13032,        321]
+NotebookOptionsPosition[     12304,        299]
+NotebookOutlinePosition[     12695,        315]
+CellTagsIndexPosition[     12652,        312]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"EnergyLevel", "[", "e_", "]"}], ":=", 
+   RowBox[{"Line", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", 
+         RowBox[{"Sqrt", "[", "e", "]"}]}], ",", "e"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Sqrt", "[", "e", "]"}], ",", "e"}], "}"}]}], "}"}], "]"}]}], 
+  ";"}]], "Input",
+ TaggingRules->{},
+ CellChangeTimes->{{3.3957779753538*^9, 3.3957780536409597`*^9}, {
+   3.3957782486015053`*^9, 3.395778250681323*^9}, {3.395780017578617*^9, 
+   3.395780094860326*^9}, {3.395780130837977*^9, 3.3957801329523087`*^9}, {
+   3.395780249165388*^9, 3.395780249610384*^9}, 3.3960057136410294`*^9},
+ CellLabel->"In[1]:=",
+ CellID->1749819301,ExpressionUUID->"8e287f7b-16dd-4373-8b70-72d42817e4ae"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"shoLevelPlot", "[", "e_", "]"}], ":=", 
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"x", "^", "2"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", 
+       RowBox[{"-", "2.75"}], ",", "2.75"}], "}"}], ",", 
+     RowBox[{"Epilog", "\[Rule]", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"Red", ",", "Thick", ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "3.35"}], ",", "e"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.35", ",", "e"}], "}"}]}], "}"}], "]"}], ",", 
+          "Dashed", ",", "Black", ",", 
+          RowBox[{"Thickness", "[", "0.004", "]"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"EnergyLevel", "[", "w", "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"w", ",", "0.5", ",", "7.5", ",", "1"}], "}"}]}], 
+           "]"}]}], "}"}], ",", "1"}], "]"}]}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"Black", ",", 
+        RowBox[{"Thickness", "[", "0.005", "]"}]}], "}"}]}], ",", 
+     RowBox[{"AxesLabel", "\[Rule]", 
+      RowBox[{"{", "\"\<x\>\"", "}"}]}], ",", 
+     RowBox[{
+     "PlotLabel", "\[Rule]", "\"\<harmonic oscillator potential\>\""}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", 
+      RowBox[{"Scaled", "[", "0.5", "]"}]}]}], "]"}]}], ";"}]], "Input",
+ TaggingRules->{},
+ CellChangeTimes->{{3.3957779753538*^9, 3.3957780536409597`*^9}, {
+  3.3957782486015053`*^9, 3.395778250681323*^9}, {3.395780017578617*^9, 
+  3.395780094860326*^9}, {3.395780130837977*^9, 3.3957801329523087`*^9}, {
+  3.395780249165388*^9, 3.395780249610384*^9}, {3.3960057136410294`*^9, 
+  3.3960057705312905`*^9}, {3.946010778508458*^9, 3.946010782155868*^9}},
+ CellLabel->"In[2]:=",
+ CellID->377019740,ExpressionUUID->"171e3b92-7043-4a1c-beff-60e1748fdcaf"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Grid", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Plot", "[", 
+        RowBox[{
+         RowBox[{"Evaluate", "[", 
+          RowBox[{
+           RowBox[{"y", "[", "x", "]"}], "/.", 
+           RowBox[{"NDSolve", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"-", "0.5"}], 
+                  RowBox[{
+                   RowBox[{"y", "''"}], "[", "x", "]"}]}], "+", 
+                 RowBox[{"0.5", " ", 
+                  SuperscriptBox["x", "2"], 
+                  RowBox[{"y", "[", "x", "]"}]}], "-", 
+                 RowBox[{"energy", " ", 
+                  RowBox[{"y", "[", "x", "]"}]}]}], "==", "0"}], ",", 
+               RowBox[{
+                RowBox[{"y", "[", "1.", "]"}], "==", "1."}], ",", 
+               RowBox[{
+                RowBox[{"y", "[", 
+                 RowBox[{"-", "1."}], "]"}], "==", 
+                RowBox[{"pf", " ", "1."}]}]}], "}"}], ",", "y", ",", 
+             RowBox[{"{", 
+              RowBox[{"x", ",", 
+               RowBox[{"-", "5.9"}], ",", "5.9"}], "}"}]}], "]"}]}], "]"}], 
+         ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"-", "5.5"}], ",", "5.5"}], "}"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "6"}], ",", "6"}], "}"}], ",", "Automatic"}], 
+           "}"}]}], ",", 
+         RowBox[{"PlotStyle", "\[Rule]", 
+          RowBox[{"Thickness", "[", ".007", "]"}]}], ",", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"\"\<x\>\"", ",", "\"\<\>\""}], "}"}]}], ",", 
+         RowBox[{"PlotLabel", "\[Rule]", "\"\<wavefunction \[Psi](x)\>\""}], 
+         ",", 
+         RowBox[{"ImageSize", "\[Rule]", 
+          RowBox[{"Scaled", "[", "0.5", "]"}]}], ",", 
+         RowBox[{"ImagePadding", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"25", ",", "25"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"25", ",", "25"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+       RowBox[{"shoLevelPlot", "[", "energy", "]"}]}], "}"}], "}"}], "]"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"energy", ",", "0.5"}], "}"}], ",", "0.", ",", "7.5", ",", 
+     ".00001"}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "energy", ",", "0.5", ",", 
+       "\"\<allowed energy values (even parity)\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0.5", ",", "2.5", ",", "4.5", ",", "6.5"}], "}"}], ",", 
+     RowBox[{"Enabled", "\[Rule]", 
+      RowBox[{"pf", "\[Equal]", "1"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+   
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "energy", ",", "0.5", ",", 
+       "\"\<allowed energy values (odd parity)\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1.5", ",", "3.5", ",", "5.5", ",", "7.5"}], "}"}], ",", 
+     RowBox[{"Enabled", "\[Rule]", 
+      RowBox[{"pf", "\[Equal]", 
+       RowBox[{"-", "1"}]}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"pf", ",", "1", ",", "\"\<parity\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"1", "\[Rule]", "\"\<even\>\""}], ",", 
+       RowBox[{
+        RowBox[{"-", "1"}], "\[Rule]", "\"\<odd\>\""}]}], "}"}]}], "}"}], ",",
+    "\[IndentingNewLine]", 
+   RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "]"}]], "Input",
+ TaggingRules->{},
+ CellChangeTimes->{
+  3.35696210375764*^9, 3.395779230143854*^9, {3.395780154892413*^9, 
+   3.395780231645987*^9}, {3.3957804227792664`*^9, 3.395780432858666*^9}, 
+   3.3960057222191*^9, {3.396005754250145*^9, 3.3960057743906407`*^9}, {
+   3.3960058340308843`*^9, 3.396005866593176*^9}, {3.396022007349249*^9, 
+   3.396022011771096*^9}, {3.396022731297741*^9, 3.396022759906933*^9}, {
+   3.3960228103909845`*^9, 3.396022813062843*^9}, {3.3960277839841537`*^9, 
+   3.3960278947646947`*^9}, {3.3960279826547575`*^9, 3.39602803295131*^9}, {
+   3.3963622018265257`*^9, 3.3963622035452757`*^9}, 3.3963623059827757`*^9, {
+   3.9460107210792847`*^9, 3.946010756737872*^9}},
+ CellLabel->"In[3]:=",
+ CellID->593879368,ExpressionUUID->"69405a45-5153-4586-8ca6-cc3629d6e8a1"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`energy$$ = 0.5, $CellContext`pf$$ = 1, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`energy$$], 0.5}, 0., 7.5, 0.00001, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`energy$$], 0.5, 
+       "allowed energy values (even parity)"}, {0.5, 2.5, 4.5, 6.5}, 
+      ControlType -> SetterBar}, {{
+       Hold[$CellContext`energy$$], 0.5, 
+       "allowed energy values (odd parity)"}, {1.5, 3.5, 5.5, 7.5}, 
+      ControlType -> SetterBar}, {{
+       Hold[$CellContext`pf$$], 1, "parity"}, {1 -> "even", -1 -> "odd"}, 
+      ControlType -> SetterBar}}, Typeset`size$$ = {
+    554.62, {98.40600568099443, 104.03100568099443`}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = False, 
+    Typeset`keyframeActionsQ$$ = False, Typeset`keyframeList$$ = {}}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`energy$$ = 0.5, $CellContext`pf$$ = 1}, 
+      "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$, Typeset`keyframeActionsQ$$, 
+        Typeset`keyframeList$$}, "Body" :> Grid[{{
+          Plot[
+           Evaluate[
+            ReplaceAll[
+             $CellContext`y[$CellContext`x], 
+             
+             NDSolve[{(-0.5) Derivative[2][$CellContext`y][$CellContext`x] + 
+                0.5 $CellContext`x^2 $CellContext`y[$CellContext`x] - \
+$CellContext`energy$$ $CellContext`y[$CellContext`x] == 0, $CellContext`y[1.] == 
+               1., $CellContext`y[-1.] == $CellContext`pf$$ 
+                1.}, $CellContext`y, {$CellContext`x, -5.9, 
+               5.9}]]], {$CellContext`x, -5.5, 5.5}, 
+           PlotRange -> {{-6, 6}, Automatic}, PlotStyle -> Thickness[0.007], 
+           AxesLabel -> {"x", ""}, PlotLabel -> "wavefunction \[Psi](x)", 
+           ImageSize -> Scaled[0.5], ImagePadding -> {{25, 25}, {25, 25}}], 
+          $CellContext`shoLevelPlot[$CellContext`energy$$]}}], 
+      "Specifications" :> {{{$CellContext`energy$$, 0.5}, 0., 7.5, 
+         0.00001}, {{$CellContext`energy$$, 0.5, 
+          "allowed energy values (even parity)"}, {0.5, 2.5, 4.5, 6.5}, 
+         Enabled -> Dynamic[$CellContext`pf$$ == 1]}, {{$CellContext`energy$$,
+           0.5, "allowed energy values (odd parity)"}, {1.5, 3.5, 5.5, 7.5}, 
+         Enabled -> Dynamic[$CellContext`pf$$ == -1]}, {{$CellContext`pf$$, 1,
+           "parity"}, {1 -> "even", -1 -> "odd"}}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{
+      599.7199999999999, {180.57905255599442`, 186.20405255599442`}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    Initialization:>({$CellContext`shoLevelPlot[
+         Pattern[$CellContext`e, 
+          Blank[]]] := 
+       Plot[$CellContext`x^2, {$CellContext`x, -2.75, 2.75}, Epilog -> 
+         Flatten[{Red, Thick, 
+            Line[{{-3.35, $CellContext`e}, {3.35, $CellContext`e}}], Dashed, 
+            Black, 
+            Thickness[0.004], 
+            Table[
+             $CellContext`EnergyLevel[$CellContext`w], {$CellContext`w, 0.5, 
+              7.5, 1}]}, 1], PlotStyle -> {Black, 
+           Thickness[0.005]}, AxesLabel -> {"x"}, PlotLabel -> 
+         "harmonic oscillator potential", ImageSize -> 
+         Scaled[0.5]], $CellContext`EnergyLevel[
+         Pattern[$CellContext`e, 
+          Blank[]]] := Line[{{-Sqrt[$CellContext`e], $CellContext`e}, {
+           Sqrt[$CellContext`e], $CellContext`e}}]}; 
+     Typeset`initDone$$ = True),
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.946032031444186*^9},
+ CellLabel->"Out[3]=",ExpressionUUID->"7b57ae3a-b482-4528-8eb9-d23357a74b4f"]
+}, Open  ]]
+},
+WindowSize->{720, 872.25},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+FrontEndVersion->"14.1 for Linux x86 (64-bit) (July 16, 2024)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"355368f9-585e-4378-bd1f-259df0a34e2b"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[554, 20, 811, 21, 29, "Input",ExpressionUUID->"8e287f7b-16dd-4373-8b70-72d42817e4ae",
+ CellID->1749819301],
+Cell[1368, 43, 1982, 48, 113, "Input",ExpressionUUID->"171e3b92-7043-4a1c-beff-60e1748fdcaf",
+ CellID->377019740],
+Cell[CellGroupData[{
+Cell[3375, 95, 4544, 115, 358, "Input",ExpressionUUID->"69405a45-5153-4586-8ca6-cc3629d6e8a1",
+ CellID->593879368],
+Cell[7922, 212, 4366, 84, 383, "Output",ExpressionUUID->"7b57ae3a-b482-4528-8eb9-d23357a74b4f"]
+}, Open  ]]
+}
+]
+*)
+

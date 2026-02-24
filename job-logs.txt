@@ -1,0 +1,446 @@
+﻿2026-02-21T12:37:09.3962470Z Current runner version: '2.331.0'
+2026-02-21T12:37:09.3998060Z ##[group]Runner Image Provisioner
+2026-02-21T12:37:09.3999720Z Hosted Compute Agent
+2026-02-21T12:37:09.4000547Z Version: 20260123.484
+2026-02-21T12:37:09.4001596Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+2026-02-21T12:37:09.4002735Z Build Date: 2026-01-23T19:41:17Z
+2026-02-21T12:37:09.4003794Z Worker ID: {e2efdb9a-8b35-47eb-b60a-bb9bb8105f99}
+2026-02-21T12:37:09.4004947Z Azure Region: eastus
+2026-02-21T12:37:09.4005924Z ##[endgroup]
+2026-02-21T12:37:09.4009134Z ##[group]Operating System
+2026-02-21T12:37:09.4010179Z Ubuntu
+2026-02-21T12:37:09.4010989Z 24.04.3
+2026-02-21T12:37:09.4011712Z LTS
+2026-02-21T12:37:09.4012667Z ##[endgroup]
+2026-02-21T12:37:09.4013513Z ##[group]Runner Image
+2026-02-21T12:37:09.4014547Z Image: ubuntu-24.04
+2026-02-21T12:37:09.4015477Z Version: 20260201.15.1
+2026-02-21T12:37:09.4017543Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260201.15/images/ubuntu/Ubuntu2404-Readme.md
+2026-02-21T12:37:09.4020529Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260201.15
+2026-02-21T12:37:09.4022215Z ##[endgroup]
+2026-02-21T12:37:09.4024346Z ##[group]GITHUB_TOKEN Permissions
+2026-02-21T12:37:09.4027706Z Contents: read
+2026-02-21T12:37:09.4028859Z Metadata: read
+2026-02-21T12:37:09.4029723Z Pages: write
+2026-02-21T12:37:09.4030493Z ##[endgroup]
+2026-02-21T12:37:09.4033941Z Secret source: Actions
+2026-02-21T12:37:09.4035541Z Prepare workflow directory
+2026-02-21T12:37:09.4520446Z Prepare all required actions
+2026-02-21T12:37:09.4579541Z Getting action download info
+2026-02-21T12:37:09.6828090Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-02-21T12:37:09.8005081Z Download action repository 'ruby/setup-ruby@v1' (SHA:09a7688d3b55cf0e976497ff046b70949eeaccfd)
+2026-02-21T12:37:09.9935102Z Download action repository 'actions/upload-pages-artifact@v3' (SHA:56afc609e74202658d3ffba0e8f6dda462b719fa)
+2026-02-21T12:37:10.2269027Z Getting action download info
+2026-02-21T12:37:10.3219969Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-02-21T12:37:10.4575782Z Complete job name: build
+2026-02-21T12:37:10.5269332Z ##[group]Run actions/checkout@v4
+2026-02-21T12:37:10.5270213Z with:
+2026-02-21T12:37:10.5270634Z   repository: kirschjs/kirschjs.github.io
+2026-02-21T12:37:10.5271339Z   token: ***
+2026-02-21T12:37:10.5271721Z   ssh-strict: true
+2026-02-21T12:37:10.5272116Z   ssh-user: git
+2026-02-21T12:37:10.5272508Z   persist-credentials: true
+2026-02-21T12:37:10.5272956Z   clean: true
+2026-02-21T12:37:10.5273349Z   sparse-checkout-cone-mode: true
+2026-02-21T12:37:10.5273821Z   fetch-depth: 1
+2026-02-21T12:37:10.5274193Z   fetch-tags: false
+2026-02-21T12:37:10.5274594Z   show-progress: true
+2026-02-21T12:37:10.5274993Z   lfs: false
+2026-02-21T12:37:10.5275347Z   submodules: false
+2026-02-21T12:37:10.5275750Z   set-safe-directory: true
+2026-02-21T12:37:10.5276389Z ##[endgroup]
+2026-02-21T12:37:10.6347547Z Syncing repository: kirschjs/kirschjs.github.io
+2026-02-21T12:37:10.6350044Z ##[group]Getting Git version info
+2026-02-21T12:37:10.6350954Z Working directory is '/home/runner/work/kirschjs.github.io/kirschjs.github.io'
+2026-02-21T12:37:10.6352036Z [command]/usr/bin/git version
+2026-02-21T12:37:10.6416355Z git version 2.52.0
+2026-02-21T12:37:10.6442445Z ##[endgroup]
+2026-02-21T12:37:10.6456549Z Temporarily overriding HOME='/home/runner/work/_temp/54142e1e-45cd-425d-9c8d-982d7e597299' before making global git config changes
+2026-02-21T12:37:10.6458924Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-21T12:37:10.6469146Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/kirschjs.github.io/kirschjs.github.io
+2026-02-21T12:37:10.6509161Z Deleting the contents of '/home/runner/work/kirschjs.github.io/kirschjs.github.io'
+2026-02-21T12:37:10.6512818Z ##[group]Initializing the repository
+2026-02-21T12:37:10.6517849Z [command]/usr/bin/git init /home/runner/work/kirschjs.github.io/kirschjs.github.io
+2026-02-21T12:37:10.6639605Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-02-21T12:37:10.6641007Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-02-21T12:37:10.6642157Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-02-21T12:37:10.6643299Z hint: call:
+2026-02-21T12:37:10.6643673Z hint:
+2026-02-21T12:37:10.6644266Z hint: 	git config --global init.defaultBranch <name>
+2026-02-21T12:37:10.6645296Z hint:
+2026-02-21T12:37:10.6646256Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-02-21T12:37:10.6647845Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-02-21T12:37:10.6649328Z hint:
+2026-02-21T12:37:10.6650032Z hint: 	git branch -m <name>
+2026-02-21T12:37:10.6650809Z hint:
+2026-02-21T12:37:10.6651786Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-02-21T12:37:10.6653649Z Initialized empty Git repository in /home/runner/work/kirschjs.github.io/kirschjs.github.io/.git/
+2026-02-21T12:37:10.6657472Z [command]/usr/bin/git remote add origin https://github.com/kirschjs/kirschjs.github.io
+2026-02-21T12:37:10.6691913Z ##[endgroup]
+2026-02-21T12:37:10.6693079Z ##[group]Disabling automatic garbage collection
+2026-02-21T12:37:10.6697034Z [command]/usr/bin/git config --local gc.auto 0
+2026-02-21T12:37:10.6725800Z ##[endgroup]
+2026-02-21T12:37:10.6726972Z ##[group]Setting up auth
+2026-02-21T12:37:10.6733643Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-21T12:37:10.6764416Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-21T12:37:10.7099406Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-21T12:37:10.7131128Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-21T12:37:10.7353450Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-02-21T12:37:10.7394334Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-02-21T12:37:10.7624360Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-02-21T12:37:10.7659668Z ##[endgroup]
+2026-02-21T12:37:10.7660898Z ##[group]Fetching the repository
+2026-02-21T12:37:10.7669748Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cb020cc805de0780c096fb047610228e5af86899:refs/remotes/origin/master
+2026-02-21T12:37:12.0316455Z From https://github.com/kirschjs/kirschjs.github.io
+2026-02-21T12:37:12.0318261Z  * [new ref]         cb020cc805de0780c096fb047610228e5af86899 -> origin/master
+2026-02-21T12:37:12.0349654Z ##[endgroup]
+2026-02-21T12:37:12.0351916Z ##[group]Determining the checkout info
+2026-02-21T12:37:12.0354070Z ##[endgroup]
+2026-02-21T12:37:12.0358076Z [command]/usr/bin/git sparse-checkout disable
+2026-02-21T12:37:12.0402146Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-02-21T12:37:12.0432055Z ##[group]Checking out the ref
+2026-02-21T12:37:12.0436964Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-02-21T12:37:12.3531902Z Reset branch 'master'
+2026-02-21T12:37:12.3533274Z branch 'master' set up to track 'origin/master'.
+2026-02-21T12:37:12.3564176Z ##[endgroup]
+2026-02-21T12:37:12.3603510Z [command]/usr/bin/git log -1 --format=%H
+2026-02-21T12:37:12.3627539Z cb020cc805de0780c096fb047610228e5af86899
+2026-02-21T12:37:12.3849757Z ##[group]Run ruby/setup-ruby@v1
+2026-02-21T12:37:12.3850110Z with:
+2026-02-21T12:37:12.3850529Z   ruby-version: 3.3
+2026-02-21T12:37:12.3850766Z   bundler-cache: true
+2026-02-21T12:37:12.3851132Z   token: ***
+2026-02-21T12:37:12.3851344Z ##[endgroup]
+2026-02-21T12:37:12.5891515Z ##[group]Modifying PATH
+2026-02-21T12:37:12.5895798Z Entries added to PATH to use selected Ruby:
+2026-02-21T12:37:12.5899389Z   /opt/hostedtoolcache/Ruby/3.3.10/x64/bin
+2026-02-21T12:37:12.5906692Z ##[endgroup]
+2026-02-21T12:37:12.5907867Z ##[group]Print Ruby version
+2026-02-21T12:37:12.6053000Z [command]/opt/hostedtoolcache/Ruby/3.3.10/x64/bin/ruby --version
+2026-02-21T12:37:13.0745849Z ruby 3.3.10 (2025-10-23 revision 343ea05002) [x86_64-linux]
+2026-02-21T12:37:13.0780137Z Took   0.49 seconds
+2026-02-21T12:37:13.0781361Z ##[endgroup]
+2026-02-21T12:37:13.0783444Z ##[group]Installing Bundler
+2026-02-21T12:37:13.0789582Z Using Bundler 2.5.17 from Gemfile.lock BUNDLED WITH 2.5.17
+2026-02-21T12:37:13.0794605Z [command]/opt/hostedtoolcache/Ruby/3.3.10/x64/bin/gem install bundler -v 2.5.17
+2026-02-21T12:37:15.0038884Z Successfully installed bundler-2.5.17
+2026-02-21T12:37:15.0095880Z 1 gem installed
+2026-02-21T12:37:15.0096266Z Took   1.93 seconds
+2026-02-21T12:37:15.0097697Z ##[endgroup]
+2026-02-21T12:37:15.0098896Z > bundle install
+2026-02-21T12:37:15.0103477Z Setting BUNDLER_VERSION=2.5.17 for "bundle config|lock" commands below to ensure Bundler 2.5.17 is used
+2026-02-21T12:37:15.0128268Z [command]/opt/hostedtoolcache/Ruby/3.3.10/x64/bin/bundle config set --local path /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle
+2026-02-21T12:37:15.1849872Z [command]/opt/hostedtoolcache/Ruby/3.3.10/x64/bin/bundle config set --local deployment true
+2026-02-21T12:37:15.3236833Z ##[group]Print lockfile
+2026-02-21T12:37:15.3254977Z [command]/usr/bin/cat Gemfile.lock
+2026-02-21T12:37:15.3281368Z PATH
+2026-02-21T12:37:15.3282250Z   remote: ghostly
+2026-02-21T12:37:15.3282962Z   specs:
+2026-02-21T12:37:15.3283403Z     ghostly (0.1.0)
+2026-02-21T12:37:15.3283768Z       jekyll (>= 3.0)
+2026-02-21T12:37:15.3284034Z 
+2026-02-21T12:37:15.3284151Z GEM
+2026-02-21T12:37:15.3284511Z   remote: https://rubygems.org/
+2026-02-21T12:37:15.3284971Z   specs:
+2026-02-21T12:37:15.3285336Z     Ascii85 (1.1.1)
+2026-02-21T12:37:15.3285700Z     addressable (2.8.7)
+2026-02-21T12:37:15.3286089Z       public_suffix (>= 2.0.2, < 7.0)
+2026-02-21T12:37:15.3286532Z     afm (0.2.2)
+2026-02-21T12:37:15.3286892Z     async (2.15.3)
+2026-02-21T12:37:15.3289150Z       console (~> 1.26)
+2026-02-21T12:37:15.3289539Z       fiber-annotation
+2026-02-21T12:37:15.3289892Z       io-event (~> 1.6, >= 1.6.5)
+2026-02-21T12:37:15.3290245Z     bigdecimal (3.1.8)
+2026-02-21T12:37:15.3290553Z     colorator (1.1.0)
+2026-02-21T12:37:15.3290913Z     concurrent-ruby (1.3.5)
+2026-02-21T12:37:15.3291291Z     console (1.27.0)
+2026-02-21T12:37:15.3291686Z       fiber-annotation
+2026-02-21T12:37:15.3292054Z       fiber-local (~> 1.1)
+2026-02-21T12:37:15.3292450Z       json
+2026-02-21T12:37:15.3292779Z     em-websocket (0.5.3)
+2026-02-21T12:37:15.3293146Z       eventmachine (>= 0.12.9)
+2026-02-21T12:37:15.3293585Z       http_parser.rb (~> 0)
+2026-02-21T12:37:15.3293977Z     ethon (0.16.0)
+2026-02-21T12:37:15.3294272Z       ffi (>= 1.15.0)
+2026-02-21T12:37:15.3294579Z     eventmachine (1.2.7)
+2026-02-21T12:37:15.3294912Z     ffi (1.17.0-aarch64-linux-gnu)
+2026-02-21T12:37:15.3295292Z     ffi (1.17.0-aarch64-linux-musl)
+2026-02-21T12:37:15.3295717Z     ffi (1.17.0-arm-linux-gnu)
+2026-02-21T12:37:15.3296118Z     ffi (1.17.0-arm-linux-musl)
+2026-02-21T12:37:15.3296536Z     ffi (1.17.0-arm64-darwin)
+2026-02-21T12:37:15.3296912Z     ffi (1.17.0-x86-linux-gnu)
+2026-02-21T12:37:15.3297286Z     ffi (1.17.0-x86-linux-musl)
+2026-02-21T12:37:15.3297623Z     ffi (1.17.0-x86_64-darwin)
+2026-02-21T12:37:15.3297963Z     ffi (1.17.0-x86_64-linux-gnu)
+2026-02-21T12:37:15.3298299Z     ffi (1.17.0-x86_64-linux-musl)
+2026-02-21T12:37:15.3298972Z     fiber-annotation (0.2.0)
+2026-02-21T12:37:15.3299968Z     fiber-local (1.1.0)
+2026-02-21T12:37:15.3300411Z       fiber-storage
+2026-02-21T12:37:15.3301083Z     fiber-storage (1.0.0)
+2026-02-21T12:37:15.3301551Z     forwardable-extended (2.6.0)
+2026-02-21T12:37:15.3301979Z     google-protobuf (4.32.0)
+2026-02-21T12:37:15.3302358Z       bigdecimal
+2026-02-21T12:37:15.3302679Z       rake (>= 13)
+2026-02-21T12:37:15.3303059Z     google-protobuf (4.32.0-aarch64-linux-gnu)
+2026-02-21T12:37:15.3303534Z       bigdecimal
+2026-02-21T12:37:15.3303843Z       rake (>= 13)
+2026-02-21T12:37:15.3304229Z     google-protobuf (4.32.0-aarch64-linux-musl)
+2026-02-21T12:37:15.3304705Z       bigdecimal
+2026-02-21T12:37:15.3305030Z       rake (>= 13)
+2026-02-21T12:37:15.3305374Z     google-protobuf (4.32.0-arm64-darwin)
+2026-02-21T12:37:15.3305816Z       bigdecimal
+2026-02-21T12:37:15.3306115Z       rake (>= 13)
+2026-02-21T12:37:15.3306463Z     google-protobuf (4.32.0-x86-linux-gnu)
+2026-02-21T12:37:15.3306883Z       bigdecimal
+2026-02-21T12:37:15.3307177Z       rake (>= 13)
+2026-02-21T12:37:15.3307501Z     google-protobuf (4.32.0-x86-linux-musl)
+2026-02-21T12:37:15.3307922Z       bigdecimal
+2026-02-21T12:37:15.3308230Z       rake (>= 13)
+2026-02-21T12:37:15.3308911Z     google-protobuf (4.32.0-x86_64-darwin)
+2026-02-21T12:37:15.3309412Z       bigdecimal
+2026-02-21T12:37:15.3309731Z       rake (>= 13)
+2026-02-21T12:37:15.3310099Z     google-protobuf (4.32.0-x86_64-linux-gnu)
+2026-02-21T12:37:15.3310552Z       bigdecimal
+2026-02-21T12:37:15.3310856Z       rake (>= 13)
+2026-02-21T12:37:15.3311237Z     google-protobuf (4.32.0-x86_64-linux-musl)
+2026-02-21T12:37:15.3311695Z       bigdecimal
+2026-02-21T12:37:15.3311994Z       rake (>= 13)
+2026-02-21T12:37:15.3312294Z     hashery (2.1.2)
+2026-02-21T12:37:15.3312607Z     html-proofer (5.0.9)
+2026-02-21T12:37:15.3312943Z       addressable (~> 2.3)
+2026-02-21T12:37:15.3411312Z       async (~> 2.1)
+2026-02-21T12:37:15.3411909Z       nokogiri (~> 1.13)
+2026-02-21T12:37:15.3412303Z       pdf-reader (~> 2.11)
+2026-02-21T12:37:15.3412842Z       rainbow (~> 3.0)
+2026-02-21T12:37:15.3413219Z       typhoeus (~> 1.3)
+2026-02-21T12:37:15.3413577Z       yell (~> 2.0)
+2026-02-21T12:37:15.3413961Z       zeitwerk (~> 2.5)
+2026-02-21T12:37:15.3414326Z     http_parser.rb (0.8.0)
+2026-02-21T12:37:15.3414658Z     i18n (1.14.7)
+2026-02-21T12:37:15.3414947Z       concurrent-ruby (~> 1.0)
+2026-02-21T12:37:15.3415180Z     io-event (1.6.5)
+2026-02-21T12:37:15.3415378Z     jekyll (4.3.4)
+2026-02-21T12:37:15.3415560Z       addressable (~> 2.4)
+2026-02-21T12:37:15.3415771Z       colorator (~> 1.0)
+2026-02-21T12:37:15.3415976Z       em-websocket (~> 0.5)
+2026-02-21T12:37:15.3416185Z       i18n (~> 1.0)
+2026-02-21T12:37:15.3416465Z       jekyll-sass-converter (>= 2.0, < 4.0)
+2026-02-21T12:37:15.3416881Z       jekyll-watch (~> 2.0)
+2026-02-21T12:37:15.3417221Z       kramdown (~> 2.3, >= 2.3.1)
+2026-02-21T12:37:15.3417625Z       kramdown-parser-gfm (~> 1.0)
+2026-02-21T12:37:15.3418064Z       liquid (~> 4.0)
+2026-02-21T12:37:15.3418621Z       mercenary (>= 0.3.6, < 0.5)
+2026-02-21T12:37:15.3419059Z       pathutil (~> 0.9)
+2026-02-21T12:37:15.3419422Z       rouge (>= 3.0, < 5.0)
+2026-02-21T12:37:15.3419806Z       safe_yaml (~> 1.0)
+2026-02-21T12:37:15.3420168Z       terminal-table (>= 1.8, < 4.0)
+2026-02-21T12:37:15.3420616Z       webrick (~> 1.7)
+2026-02-21T12:37:15.3420963Z     jekyll-feed (0.17.0)
+2026-02-21T12:37:15.3421342Z       jekyll (>= 3.7, < 5.0)
+2026-02-21T12:37:15.3421733Z     jekyll-sass-converter (3.1.0)
+2026-02-21T12:37:15.3422171Z       sass-embedded (~> 1.75)
+2026-02-21T12:37:15.3422512Z     jekyll-seo-tag (2.8.0)
+2026-02-21T12:37:15.3422734Z       jekyll (>= 3.8, < 5.0)
+2026-02-21T12:37:15.3422945Z     jekyll-watch (2.2.1)
+2026-02-21T12:37:15.3423138Z       listen (~> 3.0)
+2026-02-21T12:37:15.3423326Z     json (2.7.2)
+2026-02-21T12:37:15.3423503Z     kramdown (2.4.0)
+2026-02-21T12:37:15.3423696Z       rexml
+2026-02-21T12:37:15.3423880Z     kramdown-parser-gfm (1.1.0)
+2026-02-21T12:37:15.3424111Z       kramdown (~> 2.0)
+2026-02-21T12:37:15.3424610Z     liquid (4.0.4)
+2026-02-21T12:37:15.3424815Z     listen (3.9.0)
+2026-02-21T12:37:15.3425005Z       rb-fsevent (~> 0.10, >= 0.10.3)
+2026-02-21T12:37:15.3425389Z       rb-inotify (~> 0.9, >= 0.9.10)
+2026-02-21T12:37:15.3425616Z     mercenary (0.4.0)
+2026-02-21T12:37:15.3425825Z     nokogiri (1.16.7-aarch64-linux)
+2026-02-21T12:37:15.3426052Z       racc (~> 1.4)
+2026-02-21T12:37:15.3426236Z     nokogiri (1.16.7-arm-linux)
+2026-02-21T12:37:15.3426463Z       racc (~> 1.4)
+2026-02-21T12:37:15.3426653Z     nokogiri (1.16.7-arm64-darwin)
+2026-02-21T12:37:15.3426874Z       racc (~> 1.4)
+2026-02-21T12:37:15.3427050Z     nokogiri (1.16.7-x86-linux)
+2026-02-21T12:37:15.3427260Z       racc (~> 1.4)
+2026-02-21T12:37:15.3427438Z     nokogiri (1.16.7-x86_64-darwin)
+2026-02-21T12:37:15.3427660Z       racc (~> 1.4)
+2026-02-21T12:37:15.3427839Z     nokogiri (1.16.7-x86_64-linux)
+2026-02-21T12:37:15.3428061Z       racc (~> 1.4)
+2026-02-21T12:37:15.3428244Z     pathutil (0.16.2)
+2026-02-21T12:37:15.3428840Z       forwardable-extended (~> 2.6)
+2026-02-21T12:37:15.3429097Z     pdf-reader (2.12.0)
+2026-02-21T12:37:15.3429316Z       Ascii85 (~> 1.0)
+2026-02-21T12:37:15.3429529Z       afm (~> 0.2.1)
+2026-02-21T12:37:15.3429707Z       hashery (~> 2.0)
+2026-02-21T12:37:15.3429913Z       ruby-rc4
+2026-02-21T12:37:15.3430075Z       ttfunk
+2026-02-21T12:37:15.3430257Z     public_suffix (6.0.1)
+2026-02-21T12:37:15.3430578Z     racc (1.8.1)
+2026-02-21T12:37:15.3430798Z     rainbow (3.1.1)
+2026-02-21T12:37:15.3430973Z     rake (13.3.0)
+2026-02-21T12:37:15.3431161Z     rb-fsevent (0.11.2)
+2026-02-21T12:37:15.3431346Z     rb-inotify (0.11.1)
+2026-02-21T12:37:15.3431536Z       ffi (~> 1.0)
+2026-02-21T12:37:15.3431708Z     rexml (3.3.6)
+2026-02-21T12:37:15.3431887Z       strscan
+2026-02-21T12:37:15.3432048Z     rouge (4.6.0)
+2026-02-21T12:37:15.3432229Z     ruby-rc4 (0.1.5)
+2026-02-21T12:37:15.3432410Z     safe_yaml (1.0.5)
+2026-02-21T12:37:15.3432607Z     sass-embedded (1.90.0)
+2026-02-21T12:37:15.3432819Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3433046Z       rake (>= 13)
+2026-02-21T12:37:15.3433349Z     sass-embedded (1.90.0-aarch64-linux-gnu)
+2026-02-21T12:37:15.3433788Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3434174Z     sass-embedded (1.90.0-aarch64-linux-musl)
+2026-02-21T12:37:15.3434618Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3435048Z     sass-embedded (1.90.0-arm-linux-gnueabihf)
+2026-02-21T12:37:15.3435525Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3435950Z     sass-embedded (1.90.0-arm-linux-musleabihf)
+2026-02-21T12:37:15.3436403Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3436815Z     sass-embedded (1.90.0-arm64-darwin)
+2026-02-21T12:37:15.3437243Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3437668Z     sass-embedded (1.90.0-x86_64-darwin)
+2026-02-21T12:37:15.3438115Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3438767Z     sass-embedded (1.90.0-x86_64-linux-gnu)
+2026-02-21T12:37:15.3439236Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3439671Z     sass-embedded (1.90.0-x86_64-linux-musl)
+2026-02-21T12:37:15.3440146Z       google-protobuf (~> 4.31)
+2026-02-21T12:37:15.3440543Z     strscan (3.1.0)
+2026-02-21T12:37:15.3440869Z     terminal-table (3.0.2)
+2026-02-21T12:37:15.3441264Z       unicode-display_width (>= 1.1.1, < 3)
+2026-02-21T12:37:15.3441697Z     thread_safe (0.3.6)
+2026-02-21T12:37:15.3442030Z     ttfunk (1.8.0)
+2026-02-21T12:37:15.3442342Z       bigdecimal (~> 3.1)
+2026-02-21T12:37:15.3442692Z     typhoeus (1.4.1)
+2026-02-21T12:37:15.3443012Z       ethon (>= 0.9.0)
+2026-02-21T12:37:15.3443323Z     tzinfo (1.2.11)
+2026-02-21T12:37:15.3443640Z       thread_safe (~> 0.1)
+2026-02-21T12:37:15.3444003Z     tzinfo-data (1.2024.1)
+2026-02-21T12:37:15.3444355Z       tzinfo (>= 1.0.0)
+2026-02-21T12:37:15.3444734Z     unicode-display_width (2.6.0)
+2026-02-21T12:37:15.3445140Z     wdm (0.1.1)
+2026-02-21T12:37:15.3445444Z     webrick (1.8.1)
+2026-02-21T12:37:15.3445747Z     yell (2.2.2)
+2026-02-21T12:37:15.3446037Z     zeitwerk (2.6.17)
+2026-02-21T12:37:15.3446250Z 
+2026-02-21T12:37:15.3446722Z PLATFORMS
+2026-02-21T12:37:15.3447058Z   aarch64-linux
+2026-02-21T12:37:15.3447373Z   aarch64-linux-gnu
+2026-02-21T12:37:15.3448029Z   aarch64-linux-musl
+2026-02-21T12:37:15.3448590Z   arm-linux
+2026-02-21T12:37:15.3448897Z   arm-linux-gnu
+2026-02-21T12:37:15.3449202Z   arm-linux-musl
+2026-02-21T12:37:15.3449513Z   arm64-darwin
+2026-02-21T12:37:15.3449807Z   x86-linux
+2026-02-21T12:37:15.3450089Z   x86-linux-gnu
+2026-02-21T12:37:15.3450368Z   x86-linux-musl
+2026-02-21T12:37:15.3450665Z   x86_64-darwin
+2026-02-21T12:37:15.3450949Z   x86_64-linux
+2026-02-21T12:37:15.3451241Z   x86_64-linux-gnu
+2026-02-21T12:37:15.3451550Z   x86_64-linux-musl
+2026-02-21T12:37:15.3451770Z 
+2026-02-21T12:37:15.3451896Z DEPENDENCIES
+2026-02-21T12:37:15.3452238Z   ghostly!
+2026-02-21T12:37:15.3452505Z   html-proofer
+2026-02-21T12:37:15.3452808Z   jekyll (~> 4.3.3)
+2026-02-21T12:37:15.3453122Z   jekyll-feed (~> 0.12)
+2026-02-21T12:37:15.3453486Z   jekyll-seo-tag
+2026-02-21T12:37:15.3453787Z   kramdown
+2026-02-21T12:37:15.3454107Z   tzinfo (~> 1.2)
+2026-02-21T12:37:15.3454424Z   tzinfo-data
+2026-02-21T12:37:15.3454726Z   wdm (~> 0.1.1)
+2026-02-21T12:37:15.3455019Z   webrick (~> 1.8)
+2026-02-21T12:37:15.3455211Z 
+2026-02-21T12:37:15.3455333Z BUNDLED WITH
+2026-02-21T12:37:15.3455627Z    2.5.17
+2026-02-21T12:37:15.3456790Z ##[endgroup]
+2026-02-21T12:37:15.3458746Z Cache key: setup-ruby-bundler-cache-v6-ubuntu-24.04-x64-ruby-3.3.10-wd-/home/runner/work/kirschjs.github.io/kirschjs.github.io-with--without--only--Gemfile.lock-72b8902b518dd5250cfdf4257e7ca554e6d96bf4fb8fd8b3accbcc5d374a97b1
+2026-02-21T12:37:15.4100654Z Cache hit for: setup-ruby-bundler-cache-v6-ubuntu-24.04-x64-ruby-3.3.10-wd-/home/runner/work/kirschjs.github.io/kirschjs.github.io-with--without--only--Gemfile.lock-72b8902b518dd5250cfdf4257e7ca554e6d96bf4fb8fd8b3accbcc5d374a97b1
+2026-02-21T12:37:15.7407438Z Received 28828494 of 28828494 (100.0%), 109.5 MBs/sec
+2026-02-21T12:37:15.7464503Z Cache Size: ~27 MB (28828494 B)
+2026-02-21T12:37:15.7512901Z [command]/usr/bin/tar -xf /home/runner/work/_temp/327b95c3-c0e7-4c5b-9d54-2cbaa7627f6d/cache.tzst -P -C /home/runner/work/kirschjs.github.io/kirschjs.github.io --use-compress-program unzstd
+2026-02-21T12:37:15.9681703Z Cache restored successfully
+2026-02-21T12:37:15.9738125Z Found cache for key: setup-ruby-bundler-cache-v6-ubuntu-24.04-x64-ruby-3.3.10-wd-/home/runner/work/kirschjs.github.io/kirschjs.github.io-with--without--only--Gemfile.lock-72b8902b518dd5250cfdf4257e7ca554e6d96bf4fb8fd8b3accbcc5d374a97b1
+2026-02-21T12:37:15.9750727Z [command]/opt/hostedtoolcache/Ruby/3.3.10/x64/bin/bundle install --jobs 4
+2026-02-21T12:37:16.3217354Z Bundle complete! 10 Gemfile dependencies, 57 gems now installed.
+2026-02-21T12:37:16.3218118Z Bundled gems are installed into `./vendor/bundle`
+2026-02-21T12:37:16.3221116Z 1 installed gem you directly depend on is looking for funding.
+2026-02-21T12:37:16.3221794Z   Run `bundle fund` for details
+2026-02-21T12:37:16.3353247Z Took   1.33 seconds
+2026-02-21T12:37:16.3487579Z ##[group]Run bundle exec jekyll build --destination _site
+2026-02-21T12:37:16.3488050Z [36;1mbundle exec jekyll build --destination _site[0m
+2026-02-21T12:37:16.3526439Z shell: /usr/bin/bash -e {0}
+2026-02-21T12:37:16.3526852Z env:
+2026-02-21T12:37:16.3527145Z   JEKYLL_ENV: production
+2026-02-21T12:37:16.3527411Z ##[endgroup]
+2026-02-21T12:37:16.6969391Z csv was loaded from the standard library, but will no longer be part of the default gems starting from Ruby 3.4.0.
+2026-02-21T12:37:16.6970366Z You can add csv to your Gemfile or gemspec to silence this warning.
+2026-02-21T12:37:16.8144150Z /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/safe_yaml-1.0.5/lib/safe_yaml/load.rb:22: warning: base64 was loaded from the standard library, but will no longer be part of the default gems starting from Ruby 3.4.0.
+2026-02-21T12:37:16.8145530Z You can add base64 to your Gemfile or gemspec to silence this warning.
+2026-02-21T12:37:17.0205704Z Configuration file: /home/runner/work/kirschjs.github.io/kirschjs.github.io/_config.yml
+2026-02-21T12:37:17.0731804Z             Source: /home/runner/work/kirschjs.github.io/kirschjs.github.io
+2026-02-21T12:37:17.0733040Z        Destination: /home/runner/work/kirschjs.github.io/kirschjs.github.io/_site
+2026-02-21T12:37:17.0734965Z  Incremental build: disabled. Enable with --incremental
+2026-02-21T12:37:17.0735531Z       Generating... 
+2026-02-21T12:37:17.1036657Z [31m                    ------------------------------------------------[0m
+2026-02-21T12:37:17.1038543Z [31m      Jekyll 4.3.4   Please append `--trace` to the `build` command [0m
+2026-02-21T12:37:17.1039474Z [31m                     for any additional information or backtrace. [0m
+2026-02-21T12:37:17.1040323Z [31m                    ------------------------------------------------[0m
+2026-02-21T12:37:17.1046627Z /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/utils.rb:142:in `initialize': No such file or directory @ rb_sysopen - /home/runner/work/kirschjs.github.io/kirschjs.github.io/skripta/QM2_project-list.pdf (Errno::ENOENT)
+2026-02-21T12:37:17.1049288Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/utils.rb:142:in `open'
+2026-02-21T12:37:17.1051067Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/utils.rb:142:in `has_yaml_header?'
+2026-02-21T12:37:17.1052846Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:69:in `block in read_directories'
+2026-02-21T12:37:17.1054561Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:65:in `each'
+2026-02-21T12:37:17.1056185Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:65:in `read_directories'
+2026-02-21T12:37:17.1057900Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:106:in `block in retrieve_dirs'
+2026-02-21T12:37:17.1059785Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:103:in `each'
+2026-02-21T12:37:17.1061427Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:103:in `retrieve_dirs'
+2026-02-21T12:37:17.1063133Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:77:in `read_directories'
+2026-02-21T12:37:17.1064758Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/reader.rb:16:in `read'
+2026-02-21T12:37:17.1066696Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/site.rb:181:in `read'
+2026-02-21T12:37:17.1068286Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/site.rb:78:in `process'
+2026-02-21T12:37:17.1070085Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/command.rb:28:in `process_site'
+2026-02-21T12:37:17.1071628Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/commands/build.rb:65:in `build'
+2026-02-21T12:37:17.1073225Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/commands/build.rb:36:in `process'
+2026-02-21T12:37:17.1074971Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/command.rb:91:in `block in process_with_graceful_fail'
+2026-02-21T12:37:17.1076604Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/command.rb:91:in `each'
+2026-02-21T12:37:17.1078179Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/command.rb:91:in `process_with_graceful_fail'
+2026-02-21T12:37:17.1080415Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/lib/jekyll/commands/build.rb:18:in `block (2 levels) in init_with_program'
+2026-02-21T12:37:17.1082264Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `block in execute'
+2026-02-21T12:37:17.1083942Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `each'
+2026-02-21T12:37:17.1085569Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `execute'
+2026-02-21T12:37:17.1087170Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/mercenary-0.4.0/lib/mercenary/program.rb:44:in `go'
+2026-02-21T12:37:17.1088902Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/mercenary-0.4.0/lib/mercenary.rb:21:in `program'
+2026-02-21T12:37:17.1090488Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/gems/jekyll-4.3.4/exe/jekyll:15:in `<top (required)>'
+2026-02-21T12:37:17.1091896Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/bin/jekyll:25:in `load'
+2026-02-21T12:37:17.1093199Z 	from /home/runner/work/kirschjs.github.io/kirschjs.github.io/vendor/bundle/ruby/3.3.0/bin/jekyll:25:in `<top (required)>'
+2026-02-21T12:37:17.1094531Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/cli/exec.rb:58:in `load'
+2026-02-21T12:37:17.1095865Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/cli/exec.rb:58:in `kernel_load'
+2026-02-21T12:37:17.1097177Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/cli/exec.rb:23:in `run'
+2026-02-21T12:37:17.1098586Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/cli.rb:455:in `exec'
+2026-02-21T12:37:17.1099947Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+2026-02-21T12:37:17.1101555Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+2026-02-21T12:37:17.1103145Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/vendor/thor/lib/thor.rb:527:in `dispatch'
+2026-02-21T12:37:17.1104665Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/cli.rb:35:in `dispatch'
+2026-02-21T12:37:17.1105964Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+2026-02-21T12:37:17.1107213Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/cli.rb:29:in `start'
+2026-02-21T12:37:17.1108528Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/exe/bundle:28:in `block in <top (required)>'
+2026-02-21T12:37:17.1109915Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/lib/bundler/friendly_errors.rb:117:in `with_friendly_errors'
+2026-02-21T12:37:17.1111319Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/lib/ruby/gems/3.3.0/gems/bundler-2.5.17/exe/bundle:20:in `<top (required)>'
+2026-02-21T12:37:17.1112302Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/bin/bundle:25:in `load'
+2026-02-21T12:37:17.1113008Z 	from /opt/hostedtoolcache/Ruby/3.3.10/x64/bin/bundle:25:in `<main>'
+2026-02-21T12:37:17.1133185Z ##[error]Process completed with exit code 1.
+2026-02-21T12:37:17.1242667Z Post job cleanup.
+2026-02-21T12:37:17.2174225Z [command]/usr/bin/git version
+2026-02-21T12:37:17.2211354Z git version 2.52.0
+2026-02-21T12:37:17.2256205Z Temporarily overriding HOME='/home/runner/work/_temp/88aa273a-b2c7-4302-8c18-85f4017fb97d' before making global git config changes
+2026-02-21T12:37:17.2257492Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-21T12:37:17.2270472Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/kirschjs.github.io/kirschjs.github.io
+2026-02-21T12:37:17.2305179Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-21T12:37:17.2338070Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-21T12:37:17.2576177Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-21T12:37:17.2599309Z http.https://github.com/.extraheader
+2026-02-21T12:37:17.2612149Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-02-21T12:37:17.2643940Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-21T12:37:17.2876291Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-02-21T12:37:17.2908198Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-02-21T12:37:17.3258788Z Cleaning up orphan processes

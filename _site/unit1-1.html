@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>1.1 Vectors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Engineering Physics - Fall 2024
+
+---
+
+## Dynamics:
+<p style="color: dodgerblue;text-align: center;">Motion of <strong>bodies</strong> under the action of <strong>forces.</strong></p>
+
+### Vectors:
+<p style="color: dodgerblue;text-align: center;">Mathematical representations of the <strong>state</strong> of a body.</p>
+
+
+<hr style="margin-top: 10px;margin-bottom: 60px;" />
+
+How would **You** quantify the position and <a style="color:tomato;">velocity</a> of a point in this room?
+  
+  `\(\vec{r}=(r_x,r_y,r_z)\)` where the `\(r_i\)`'s are the <a style="color:tomato;">components</a> of the vector `\(\vec{r}\)`
+    in the direction of the coordinate axes `\(\hat{x}\)`, `\(\hat{y}\)`, and `\(\hat{z}\)`.
+
+  .center[[The same point `\(P\)` represented in two coordinate systems.](/images/vec-1.svgz)]
+
+---
+
+#### Addition/Subtraction:
+
+<p style="color: dodgerblue;text-align: center;">What is the "net" effect of various pulls on the same point?<br>
+ In general, how do vectors combine?</p>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+`\(\vec{a}+(\vec{b}+\vec{c})=(\vec{a}+\vec{b})+\vec{c}=\begin{pmatrix} a_x+b_x+c_x \\ x\leftrightarrow y \\ x\leftrightarrow z \end{pmatrix}\)`
+  
+<hr style="margin-top: 10px;margin-bottom: 60px;" />
+
+.center[![Center-aligned image](/images/vec-add.svgz)] 
+
+---
+
+#### Scalar/dot product:
+  
+<p style="color: dodgerblue;text-align: center;">
+What is the "net" <strong>overlap</strong> between two vectors?<br>
+Prosaically, how alike are 2 vectors?</p>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+.center[$$\vec{A}\cdot\vec{B}=A_xB_x+A_yB_y+A_ZB_z=\vert\vec{A}\vert\,\vert\vec{B}\vert\cos\theta$$]
+
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+
+<p style="text-align:center;"><img src=/images/vec-scalp.png style="text-align:center;border-radius: 8px;max-width: 50%; height:auto; margin-bottom:10px;"></p>
+
+---
+
+#### Cross product:
+  
+<p style="color: dodgerblue;text-align: center;">
+How large of a space do the 2 vectors <strong>span</strong>?</p>
+Prosaically, how much <strong>volume</strong> can be addressed by combinations
+
+.center[$$c_1\vec{a}+c_2\vec{b}$$]
+
+with \(-1\leq c_{1,2}\leq 1\)?
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+\(\vec{a}\times\vec{b}=\vec{n}_{\tiny ab}\,\vert\vec{a}\vert\,\vert\vec{b}\vert\,\vert\sin\theta\vert=
+\begin{pmatrix}a_yb_z-b_ya_z\\a_zb_x-b_za_x\\a_xb_y-b_ya_x\end{pmatrix}~\text{in 3D}\)
+
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+
+<p style="text-align:center;"><img src=/images/vec-xp.svg style="text-align:center;border-radius: 8px; max-width:25%; margin-bottom:10px;"></p>
+
+---
+
+#### Derivative of a vector:
+  
+<p style="color: dodgerblue;text-align: center;">
+How do You quantify <a style="color:tomato;">infinitesimal </a> <strong>changes</strong> of a vector?
+</p>
+<p style="text-align: center;">
+Change &emsp; \(\Delta\vec{r}=\vec{r}_2-\vec{r}_1\) &emsp; per increment (time) &emsp; \(\Delta t=t_2-t_1\) &emsp; is an average!
+</p>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+<strong>Velocity</strong>: &emsp; `\(\vec{v}=\lim\limits_{\Delta t\to0}\frac{\Delta\vec{r}}{\Delta t}=
+\lim\limits_{\Delta t\to0}\begin{pmatrix}\frac{r_{2,x}-r_{1,x}}{t_2-t_1}\\\frac{r_{2,y}-r_{1,y}}{t_2-t_1}\end{pmatrix}=\frac{d\vec{r}}{dt}=\begin{pmatrix}\frac{dr_x}{dt}\\\frac{dr_y}{dt}\end{pmatrix}\)` 
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
+
+<p style="text-align:center;"><img src=/images/vec_vel.svgz style="text-align:center;border-radius: 8px; max-width:45%; margin-bottom:10px;"></p>
+
+---
+
+### Ponderables:
+
+1. Select <strong>5</strong> criteria to characterize your fellow student (e.g., height, hair colour, handedness, hobby, ...) and define
+a data vector 
+
+  <p style="text-align: center;">
+  \(\vec{s}=\begin{pmatrix}\text{criterion}~1\\\text{criterion}~2\\\vdots\end{pmatrix}\)
+  </p>
+
+  - Define <a style="color:tomato;">addition and multiplication</a> for your criteria.
+  - When do two individuals have the <a style="color:tomato;">least in common</a>?
+  - When has the combination of two individuals the <a style="color:tomato;">highest potential</a> to address something new?
+
+2. The [set<i style="font-size:18px;color:DodgerBlue" class="fa">&#xf14c;</i>](/data/motion.dat) represents the coordinates of an object at successive time instances.
+
+  - <a style="color:tomato;">Draw</a> those number pairs as vectors <a style="font-size:12pt;color:gray;">(left/right column `\(\to~x/y\)` coordinate)</a>.
+  - What kind of shape does the motion remind you of and how would you represent this in the form: <a style="color:tomato;">`\(r_y=f(r_x)\)`</a>?
+  - Is the velocity and/or speed of this motion <a style="color:tomato;">constant</a>?
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+
+      // Setup MathJax
+      MathJax.Hub.Config({
+          tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+      });
+
+      MathJax.Hub.Configured();
+    </script>
+  </body>
+</html>
