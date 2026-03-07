@@ -16,9 +16,8 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
 <p><img src="/images/back2.svg" style="display:block;margin-left:auto;margin-right:auto;border-radius: 8px;width: 100%; height:auto; margin-top:10px; margin-bottom:0px;"></p>
 
 <span style="margin-left: auto;float:right;color: tomato;font-family: sans-serif;font-size: 15px;">
-   <img src="./images/klingon.svg" width=26 height=26> 
-IIT-G presentation
-  <a href='iitG_0225.html'></a>
+   <img src="./images/klingon.svg" width=26 height=26>
+  <a href='iitG_0225.html'>IIT-G presentation</a>
 </span>
 
 <ul>
