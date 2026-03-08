@@ -8,6 +8,7 @@ title: courses
 {: .centered}
 
 ### Course material
+- [practice problems ](/skripta/pset_qcircuits.pdf)
 - [check your understanding ](/skripta/PHYS731_probs.md)
 
 ### Supplements
