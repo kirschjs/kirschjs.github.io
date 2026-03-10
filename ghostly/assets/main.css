@@ -1014,6 +1014,10 @@ ul.tight > li, div {
   padding-bottom: 0ex;
 }
 
+a.nav-scroll {
+  color: #DC143C;
+}
+
 a.nav:nth-child(2), a.media:first-child {
   padding-left: 0;
 }
