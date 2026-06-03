@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startseiten-Entwürfe – Weltkarte</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#FDF6E9;--sand:#EDE0C8;--forest:#2D4A3E;--gold:#C8A060;--terracotta:#9A4520;--dark:#221A14}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--cream);color:var(--dark);font-family:'Crimson Text',Georgia,serif}
+  .hero{background:var(--forest);color:#fff;text-align:center;padding:60px 24px 50px}
+  .hero .kick{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,52px);margin:14px 0 0}
+  .hero h1 em{color:var(--gold);font-style:italic}
+  .hero p{max-width:640px;margin:18px auto 0;color:rgba(255,255,255,.75);font-size:18px;line-height:1.6}
+  .grid{max-width:1080px;margin:50px auto 80px;padding:0 26px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:26px}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--sand);border-radius:8px;overflow:hidden;text-decoration:none;color:inherit;
+    box-shadow:0 3px 16px rgba(0,0,0,.07);transition:transform .25s,box-shadow .25s}
+  .card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(0,0,0,.14)}
+  .thumb{height:150px;display:flex;align-items:center;justify-content:center;position:relative;color:#fff}
+  .thumb svg{width:78%;height:auto;opacity:.9}
+  .tag{position:absolute;top:12px;left:12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+    background:rgba(0,0,0,.35);padding:4px 10px;border-radius:14px}
+  .body{padding:22px 24px 26px}
+  .body .ltr{font-family:'Playfair Display',serif;font-size:13px;letter-spacing:3px;color:var(--gold)}
+  .body h2{font-family:'Playfair Display',serif;font-size:25px;margin:4px 0 8px}
+  .body p{font-size:16px;line-height:1.55;color:#5c5040}
+  .body ul{list-style:none;margin:14px 0 18px}
+  .body li{font-size:14.5px;color:#555;padding:2px 0 2px 18px;position:relative}
+  .body li::before{content:'›';position:absolute;left:0;color:var(--terracotta);font-weight:700}
+  .open{display:inline-block;background:var(--forest);color:#fff;text-decoration:none;
+    padding:9px 20px;border-radius:5px;font-size:15px;font-weight:600}
+  .open:hover{background:var(--terracotta)}
+  footer{background:var(--dark);color:#b9ab95;text-align:center;padding:24px;font-size:14px}
+  .note{max-width:780px;margin:0 auto;padding:0 26px;font-size:15.5px;color:#6a5d49;line-height:1.6;font-style:italic}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="kick">Startseite · 4 Entwürfe zur Auswahl</div>
+  <h1>Eine <em>Weltkarte</em> als Eingang</h1>
+  <p>Vier Wege, die fünf Reisen – Nürnberg, Israel, Japan, Australien, Ecuador – auf einer minimalistischen Weltkarte vorzustellen. Bitte ansehen und auswählen.</p>
+</div>
+
+<p class="note" style="margin-top:34px">Alle vier teilen dieselbe, aus echten Geodaten erzeugte Karte – die Markierungen sitzen also geografisch korrekt. Klicken Sie sich durch und sagen Sie mir, welche Richtung Ihnen gefällt; danach gestalten wir die Länderseiten und die einzelnen Beiträge.</p>
+
+<div class="grid" id="grid"></div>
+
+<footer>jewishgermanculturecooking.com · Startseiten-Entwürfe · erstellt mit Claude Code</footer>
+
+<script src="assets/world.js"></script>
+<script>
+  const dots=Object.values(DESTINATIONS).map(d=>`<circle cx="${d.x}" cy="${d.y}" r="14" fill="#C8A060"/>`).join('');
+  const mini=`<svg viewBox="0 0 1000 500"><path d="${WORLD_PATH}" fill="rgba(255,255,255,.30)"/>${dots}</svg>`;
+  const items=[
+    {f:'home-A-editorial.html',bg:'linear-gradient(135deg,#2D4A3E,#4A7A6A)',tag:'Ruhig · Editorial',ltr:'Entwurf A',h:'Stille Weltkarte',
+     p:'Karte als ruhiger Mittelpunkt, darunter fünf Ziel-Karten mit kurzer Beschreibung. Text immer sichtbar.',
+     li:['Karte oben, Beschreibungen darunter','Sanfte Markierungen mit Namen','Sehr gut lesbar – ideal für ältere Leser']},
+    {f:'home-B-register.html',bg:'linear-gradient(135deg,#21384B,#3C5C74)',tag:'Karte + Liste',ltr:'Entwurf B',h:'Karte & Register',
+     p:'Geteilt: Karte links, ein nummeriertes Reiseregister rechts. Nichts versteckt, alles auf einen Blick.',
+     li:['Zweispaltig, klar gegliedert','Nummerierte Markierungen 1–5','Atlas-Anmutung in Marine & Gold']},
+    {f:'home-C-tagebuch.html',bg:'linear-gradient(135deg,#7A3A1C,#9A4520)',tag:'Persönlich · Nostalgisch',ltr:'Entwurf C',h:'Reisetagebuch',
+     p:'Warme Pergament-Optik mit gestrichelter Reiseroute und Reisestempeln als Zugänge. Erinnerung & Kochbuch.',
+     li:['Gepunktete Route über die Karte','Ziele als runde „Reisestempel“','Handschrift-Akzente, sehr warm']},
+    {f:'home-D-atlas.html',bg:'linear-gradient(135deg,#162923,#0F1C18)',tag:'Modern · Immersiv',ltr:'Entwurf D',h:'Immersiver Atlas',
+     p:'Große, dunkle Karte über den ganzen Bildschirm mit leuchtenden Zielen. Klick öffnet ein Info-Feld – plus Liste als Rückfallebene.',
+     li:['Bildschirmfüllende Nachtkarte','Leuchtende Markierungen, Klick-Info','Liste für gute Zugänglichkeit']},
+  ];
+  document.getElementById('grid').innerHTML=items.map(it=>`
+    <a class="card" href="${it.f}">
+      <div class="thumb" style="background:${it.bg}"><span class="tag">${it.tag}</span>${mini}</div>
+      <div class="body">
+        <div class="ltr">${it.ltr}</div><h2>${it.h}</h2><p>${it.p}</p>
+        <ul>${it.li.map(x=>`<li>${x}</li>`).join('')}</ul>
+        <span class="open">Entwurf öffnen →</span>
+      </div>
+    </a>`).join('');
+</script>
+<script src="assets/feedback.js"></script>
+</body>
+</html>

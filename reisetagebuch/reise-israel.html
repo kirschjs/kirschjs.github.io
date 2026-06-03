@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renate in Israel – Reisetagebuch</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Frank+Ruhl+Libre:wght@500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{   /* Israel · blau & weiß — passend zu den Beiträgen (entry.css) */
+    --parch:#F7FAFF; --parch2:#EEF3FC; --card:#FFFFFF; --edge:#BACDED; --ink:#16233A;
+    --stamp:#0038B8; --stamp2:#0A2A6B; --teal:#2F4D8F; --gold:#A8782A; --sea:#BBD2F1;
+    --muted:#5a6b86;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--parch);color:var(--ink);font-family:'Crimson Text',Georgia,serif;
+    background-image:radial-gradient(rgba(0,56,184,.045) 1px,transparent 1px);background-size:14px 14px}
+  .native{font-family:'Frank Ruhl Libre','Crimson Text',serif}
+
+  .bar{position:sticky;top:0;z-index:30;background:rgba(238,243,252,.92);backdrop-filter:blur(5px);
+    border-bottom:1px solid var(--edge);padding:9px 22px;display:flex;align-items:center;gap:14px;font-size:14px}
+  .bar a{color:var(--stamp);text-decoration:none}
+  .bar a:hover{text-decoration:underline}
+  .crumb{color:var(--muted)}.crumb b{color:var(--ink)}
+
+  header{text-align:center;padding:46px 24px 6px}
+  header .sub{font-family:'Caveat',cursive;font-size:26px;color:var(--stamp2);transform:rotate(-2deg)}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,54px);margin-top:4px;line-height:1.1}
+  header h1 .native{font-size:.6em;color:var(--stamp);font-style:italic}
+  header .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-top:10px}
+  header p{max-width:620px;margin:14px auto 0;font-size:18px;font-style:italic;color:#445575}
+
+  /* ── two clickable maps: places + the festive year ── */
+  .section{max-width:1000px;margin:32px auto 0;padding:0 24px}
+  .section>h2{font-family:'Playfair Display',serif;font-size:26px;text-align:center;margin-bottom:3px}
+  .section>.lead{font-style:italic;color:#445575;text-align:center;font-size:16px;max-width:700px;margin:0 auto 18px}
+
+  .map-frame{position:relative;background:var(--card);border:1px solid var(--edge);
+    box-shadow:0 8px 26px rgba(10,42,107,.16);padding:18px}
+  .map-frame::after{content:'';position:absolute;inset:7px;border:1px dashed var(--edge);pointer-events:none}
+  .map-frame .hint{font-family:'Caveat',cursive;font-size:18px;color:var(--stamp2);text-align:center;margin-bottom:10px}
+  .map-wrap{position:relative}
+  svg.map{width:100%;height:auto;display:block;overflow:hidden}
+  .sea{fill:var(--sea);opacity:.9}
+  .river{fill:none;stroke:#9CBDEA;stroke-width:2.2;stroke-linecap:round;opacity:.85}
+  .land{fill:#E5EDFA;stroke:#A9C0E6;stroke-width:1.4;stroke-linejoin:round}
+  .lake{fill:var(--sea);stroke:#8FB0E0;stroke-width:1}
+  .leader{stroke:#9DB6DF;stroke-width:1;fill:none}
+  .anch{fill:#9DB6DF}
+
+  .pin{cursor:pointer}
+  .pin .dot{fill:var(--stamp);stroke:var(--card);stroke-width:2.5;transition:transform .2s}
+  .pin .dot.multi{fill:var(--stamp2)}
+  .pin:hover .dot,.pin.open .dot{transform:scale(1.25);transform-box:fill-box;transform-origin:center}
+  .pin .pnum{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;fill:var(--card);
+    text-anchor:middle;pointer-events:none}
+
+  /* on-map location cards — the description sits right on the map, joined by a leader line */
+  .cards{position:absolute;inset:0;pointer-events:none}
+  .lbl{position:absolute;pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:168px;
+    background:#fff;border:1px solid var(--edge);border-radius:9px;padding:5px 9px;
+    box-shadow:0 3px 10px rgba(10,42,107,.13);text-decoration:none;color:inherit;cursor:pointer;
+    transform:translate(var(--tx,0),-50%);transition:box-shadow .15s}
+  .lbl:hover{box-shadow:0 7px 18px rgba(10,42,107,.24);z-index:5}
+  .lbl.l{flex-direction:row-reverse;text-align:right}
+  .lbl .nm{font-family:'Playfair Display',serif;font-size:15px;line-height:1.14;color:var(--ink)}
+  .lbl .nm .he{font-size:13px;color:var(--stamp)}
+  .lbl .nm small{display:block;font-size:12px;font-style:italic;color:var(--muted)}
+  .lbl:hover .nm{color:var(--stamp2)}
+
+  /* ── popover listing a location's entries ── */
+  .pop{position:absolute;z-index:40;width:250px;background:var(--card);border:1px solid var(--edge);
+    border-radius:8px;box-shadow:0 12px 30px rgba(10,42,107,.26);padding:12px 14px;display:none}
+  .pop.show{display:block}
+  .pop h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:2px}
+  .pop .pnative{font-family:'Frank Ruhl Libre','Crimson Text',serif;font-size:13px;color:var(--stamp);font-style:italic;margin-bottom:8px}
+  .pop a.row{display:block;text-decoration:none;color:inherit;padding:6px 0;border-top:1px dashed var(--edge)}
+  .pop a.row:first-of-type{border-top:0}
+  .pop a.row:hover h5{text-decoration:underline}
+  .pop a.row .pn{font-family:'Caveat',cursive;font-size:16px;color:var(--stamp2)}
+  .pop a.row h5{font-family:'Crimson Text',serif;font-size:15.5px;font-weight:600;line-height:1.25}
+  .pop a.row .pd{font-size:12px;color:var(--muted)}
+  .pop .close{position:absolute;top:6px;right:9px;cursor:pointer;color:var(--stamp);font-size:18px;line-height:1}
+
+  /* ── festival map: die Themen auf dem Sederteller ── */
+  svg.fyear{width:100%;height:auto;display:block;overflow:visible}
+  .plate{fill:#F2F7FF}
+  .plate-rim{fill:none;stroke:var(--stamp);stroke-width:1.5;opacity:.85}
+  .plate-band{fill:none;stroke:var(--stamp2);stroke-width:1;stroke-dasharray:2 6;opacity:.5}
+  .well{fill:#fff;stroke:var(--edge);stroke-width:1}
+  .ftick{stroke:var(--edge);stroke-width:1;stroke-dasharray:1.5 3}
+  .fstop .medal{fill:#fff;stroke:var(--stamp);stroke-width:1.6;transition:stroke-width .15s,fill .15s}
+  .fstop:hover .medal{stroke-width:2.6;fill:#EEF4FF}
+  .fsym{fill:none;stroke:var(--stamp);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .fsym.fill{fill:var(--stamp);stroke:none}
+  .fnm{font-family:'Playfair Display',serif;font-size:12px;fill:var(--ink);text-anchor:middle}
+  .fnm .he{fill:var(--stamp)}
+  .fdt{font-family:'Crimson Text',serif;font-size:9px;font-style:italic;fill:var(--muted);text-anchor:middle}
+  .fstop:hover .fnm{fill:var(--stamp2)}
+
+  .end{text-align:center;font-family:'Caveat',cursive;font-size:22px;color:var(--stamp);padding:40px 0 50px}
+  footer{background:var(--stamp2);color:#cfdcf5;text-align:center;padding:24px;font-size:14px;font-family:'Caveat',cursive}
+  footer span{font-size:18px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a href="home-C-tagebuch.html">← Startseite</a>
+  <span class="crumb">Startseite › Renate in <b>Israel</b></span>
+</div>
+
+<header>
+  <div class="sub">Reisetagebuch &amp; Kochbuch</div>
+  <h1>Renate in Israel <span class="native">יִשְׂרָאֵל</span></h1>
+  <div class="region">Reisetagebuch № 1 · Naher Osten · 2022–2023</div>
+  <p>Mit dem Containerschiff nach Erez-Israel: von Haifa und Galiläa über Jerusalems Altstadt
+     bis ans Tote Meer – und die jüdischen Festtage mit ihren Köstlichkeiten. Zwei Karten führen
+     durch die Reise – die <b>Orte</b> und das <b>jüdische Festjahr</b>.</p>
+</header>
+
+<div class="section">
+  <h2>Stationen der Reise</h2>
+  <p class="lead">Renates Weg durch Erez-Israel – tippen Sie einen Ort an. Orte mit mehreren
+     Beiträgen öffnen eine kleine Auswahl.</p>
+  <div class="map-frame">
+    <div class="hint">↓ Tippen Sie auf einen Ort</div>
+    <div class="map-wrap">
+      <svg class="map" id="map" viewBox="-30 35 525 555" aria-label="Karte von Israel mit Reisestationen"></svg>
+      <div class="cards" id="cards"></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Die Themen – auf dem Sederteller</h2>
+  <p class="lead">Die Beiträge ohne festen Ort liegen wie die Speisen auf dem Sederteller:
+     die Anreise, die jüdischen Feste und ein süßer Ausklang – rund um Pessach in der Mitte.
+     Tippen Sie auf ein Symbol.</p>
+  <div class="map-frame">
+    <div class="map-wrap">
+      <svg class="fyear" id="fyear" viewBox="0 0 780 640" aria-label="Sederteller mit den Themen-Beiträgen"></svg>
+    </div>
+  </div>
+</div>
+
+<div class="pop" id="pop"><span class="close" id="popClose">×</span><div id="popInner"></div></div>
+
+<div class="end">~ 39 Beiträge · mit Liebe gereist und gekocht ~</div>
+<footer><span>Mit Liebe gereist und gekocht</span> · jewishgermanculturecooking.com</footer>
+
+<script src="assets/israel.js"></script>
+<script>
+/* ── all 39 Israel entries ──────────────────────────────────────────────
+   loc: key into ISRAEL_CITIES (map pin) or null = thematic (Feste & Themen) */
+const ENTRIES=[
+ {n:1, date:'9. März 2022',     loc:null,        t:'Wie alles begann', short:'Auftakt'},
+ {n:2, date:'16. März 2022',    loc:null,        t:'Warum Israel? Und warum mit dem Containerschiff?', short:'Warum Israel?'},
+ {n:3, date:'16. März 2022',    loc:null,        t:'Schiffspassage', short:'Passage'},
+ {n:4, date:'19. März 2022',    loc:'Haifa',     t:'Haifa: Hafen'},
+ {n:5, date:'25. März 2022',    loc:'Haifa',     t:'Ankunft in Erez-Israel, Haifa'},
+ {n:6, date:'1. April 2022',    loc:null,        t:'Ausflug zu den jüdischen Feiertagen', short:'Feiertage'},
+ {n:7, date:'8. April 2022',    loc:'Haifa',     t:'Immer noch Haifa: Museum, Bahai-Schrein & koscherer Frankenwein?'},
+ {n:8, date:'15. April 2022',   loc:'Akko',      t:'Von Haifa nach Akko'},
+ {n:9, date:'22. April 2022',   loc:'Tiberias',  t:'Tiberias, See Genezareth, En Gev & Golan-Höhen'},
+ {n:10,date:'29. April 2022',   loc:'BetShean',  t:'Moschaw, Kibbuz & Jordantal – Süßes und Saures'},
+ {n:11,date:'6. Mai 2022',      loc:'Tabor',     t:'Von Bet She’an zum Berg Tabor'},
+ {n:12,date:'13. Mai 2022',     loc:'Nazareth',  t:'Von Ostafrika zurück nach Nazareth in Galiläa'},
+ {n:13,date:'20. Mai 2022',     loc:'Caesarea',  t:'Cäsarea – Netanya'},
+ {n:14,date:'27. Mai 2022',     loc:'Masada',    t:'Ans Tote Meer und mit König Herodes nach Masada'},
+ {n:15,date:'4. Juni 2022',     loc:null,        t:'Pfingsten – Schawuot', native:'שבועות', short:'Schawuot'},
+ {n:16,date:'10. Juni 2022',    loc:'TelAviv',   t:'Tel Aviv / Yafo (Jaffa)'},
+ {n:17,date:'17. Juni 2022',    loc:null,        t:'Rezepte in alphabetischer Reihenfolge', short:'Rezepte A–Z'},
+ {n:18,date:'24. Juni 2022',    loc:'Jerusalem', t:'Jerusalem', native:'ירושלים'},
+ {n:19,date:'1. Juli 2022',     loc:'Jerusalem', t:'Old City – Mahane Yehuda'},
+ {n:20,date:'8. Juli 2022',     loc:null,        t:'Israel und Jerusalem ohne seine Festtage – undenkbar', short:'Festtage'},
+ {n:21,date:'15. Juli 2022',    loc:null,        t:'Vorbereitung zum Laubhüttenfest (Sukkot)', short:'Sukkot'},
+ {n:22,date:'22. Juli 2022',    loc:'Jerusalem', t:'Europäischer Einfluss in Jerusalem'},
+ {n:23,date:'29. Juli 2022',    loc:'Jericho',   t:'Ausflug nach Jericho'},
+ {n:24,date:'5. August 2022',   loc:'Ramallah',  t:'Ein Tag in Ramallah'},
+ {n:25,date:'19. August 2022',  loc:'TelAviv',   t:'Tel Aviv: Rothschild-Boulevard, Strand & Yafo'},
+ {n:26,date:'26. August 2022',  loc:'Jerusalem', t:'Wieder in Jerusalem: Teddy-Kollek-Park & King David Hotel'},
+ {n:27,date:'2. September 2022', loc:'Jerusalem', t:'Vom Skopusberg nach Givat Ram und En Kerem'},
+ {n:28,date:'9. September 2022', loc:'Jerusalem', t:'Tu biSchevat & ein Spaziergang zum Ölberg'},
+ {n:29,date:'16. September 2022',loc:null,        t:'Purim', native:'פורים', short:'Purim'},
+ {n:30,date:'23. September 2022',loc:'Jerusalem', t:'Tempelberg mit Felsendom und Al-Aksa-Moschee'},
+ {n:31,date:'30. September 2022',loc:'Jerusalem', t:'Klagemauer und Western Wall Tunnel'},
+ {n:32,date:'7. Oktober 2022',  loc:null,        t:'Pessach', native:'פֶּסַח', short:'Pessach'},
+ {n:33,date:'14. Oktober 2022', loc:'Jerusalem', t:'Von der Altstadt ins Austrian Hospiz'},
+ {n:34,date:'28. Oktober 2022', loc:'Jerusalem', t:'Auf der Altstadtmauer & Zitadelle (Turm Davids)'},
+ {n:35,date:'4. November 2022', loc:'Jerusalem', t:'Israel-Museum, Knesset & Regierungsviertel'},
+ {n:36,date:'11. November 2022',loc:'Jerusalem', t:'Yad Vashem', native:'יד ושם'},
+ {n:37,date:'25. November 2022',loc:'Bethlehem', t:'Bethlehem – arabischer Teil'},
+ {n:38,date:'10. Dezember 2022',loc:'Bethlehem', t:'Bethlehem – christlicher Teil'},
+ {n:39,date:'20. Januar 2023',  loc:null,        t:'Süße Erinnerungen', short:'Ausklang'},
+];
+
+/* display metadata for each map location (label + Hebrew) */
+const PLACES={
+ Haifa:{name:'Haifa',native:'חיפה'}, Akko:{name:'Akko',native:'עכו'},
+ Tiberias:{name:'Tiberias & Galiläa',native:'טבריה'}, BetShean:{name:'Jordantal',native:'עמק הירדן'},
+ Tabor:{name:'Berg Tabor',native:'הר תבור'}, Nazareth:{name:'Nazareth',native:'נצרת'},
+ Caesarea:{name:'Cäsarea & Netanya',native:'קיסריה'}, Masada:{name:'Totes Meer & Masada',native:'מצדה'},
+ TelAviv:{name:'Tel Aviv & Jaffa',native:'תל אביב'}, Jerusalem:{name:'Jerusalem',native:'ירושלים'},
+ Olberg:{name:'Ölberg',native:'הר הזיתים'}, Jericho:{name:'Jericho',native:'יריחו'},
+ Ramallah:{name:'Ramallah',native:'ראם אללה'}, Bethlehem:{name:'Bethlehem',native:'בית לחם'},
+};
+const href=n=>`eintrag-israel-${n}.html`;
+const ns="http://www.w3.org/2000/svg";
+
+/* group geographic entries by location; number stations by travel order
+   (= the entry number where each place is first visited) */
+const byLoc={};
+ENTRIES.filter(e=>e.loc).forEach(e=>{(byLoc[e.loc]=byLoc[e.loc]||[]).push(e)});
+const locKeys=Object.keys(byLoc).sort((a,b)=>byLoc[a][0].n-byLoc[b][0].n);
+const stationNo={};                       // location -> map number (1..N)
+locKeys.forEach((loc,i)=>stationNo[loc]=i+1);
+
+/* small nudges so the dense Jerusalem cluster never overlaps */
+const NUDGE={Jerusalem:[0,0],Bethlehem:[-2,12],Ramallah:[-4,-6],Jericho:[8,0],
+  Nazareth:[-7,-2],Tabor:[8,4]};
+const pos=loc=>{const[x,y]=ISRAEL_CITIES[loc],n=NUDGE[loc]||[0,0];return[x+n[0],y+n[1]];};
+
+/* ── draw map ── */
+const map=document.getElementById('map');
+const svgEl=(tag,attrs)=>{const e=document.createElementNS(ns,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);map.appendChild(e);return e;};
+
+/* seas drawn first → the land path masks the inland seams, leaving a clean coast */
+// Mediterranean: faint water hugging the whole western coast (just-east boundary tucks under land)
+svgEl('path',{class:'sea',d:'M-30,40 L221,82 L215,123 L200,156 L180,210 L172,271 L158,332 '+
+  'L150,360 L135,400 L118,440 L100,475 L78,505 L60,545 L-30,560 Z'});
+// Dead Sea: elongated body seated in the eastern border notch
+svgEl('path',{class:'sea',d:'M283,372 Q300,376 299,410 L297,452 Q303,500 286,533 '+
+  'Q275,510 279,468 L281,418 Q279,388 283,372 Z'});
+
+const land=document.createElementNS(ns,'path');
+land.setAttribute('d',ISRAEL_PATH);land.setAttribute('class','land');map.appendChild(land);
+
+// River Jordan (Galilee → Dead Sea) + Sea of Galilee accent — on top of the land
+svgEl('path',{class:'river',d:'M311,178 Q302,250 297,320 Q293,352 287,372'});
+const lake=document.createElementNS(ns,'ellipse');
+lake.setAttribute('cx',312);lake.setAttribute('cy',158);lake.setAttribute('rx',13);lake.setAttribute('ry',20);
+lake.setAttribute('class','lake');map.appendChild(lake);
+
+const pop=document.getElementById('pop'), popInner=document.getElementById('popInner');
+document.getElementById('popClose').onclick=()=>pop.classList.remove('show');
+
+// place the popover near the click, kept inside the viewport
+function positionPop(clientX,clientY){
+  const w=pop.offsetWidth,h=pop.offsetHeight;
+  let x=clientX+14, y=clientY-10;
+  if(x+w>innerWidth-8)x=clientX-w-14;
+  if(y+h>innerHeight-8)y=innerHeight-h-8;
+  if(y<8)y=8;
+  pop.style.left=(x+scrollX)+'px';pop.style.top=(y+scrollY)+'px';
+}
+
+// a location's entries (map points with several beiträge)
+function openPop(loc,clientX,clientY){
+  const list=byLoc[loc], P=PLACES[loc]||{name:loc,native:''};
+  popInner.innerHTML=`<h4>${P.name}</h4><div class="pnative">${P.native||''}</div>`+
+    list.map(e=>`<a class="row" href="${href(e.n)}">
+        <span class="pn">№ ${e.n} · ${e.date}</span>
+        <h5>${e.t}${e.native?` · ${e.native}`:''}</h5></a>`).join('');
+  pop.classList.add('show');positionPop(clientX,clientY);
+}
+
+// the same little table for one entry — used by the Sederteller dishes;
+// reveals the full title that the plate shows only in short form
+function openEntryPop(e,clientX,clientY){
+  popInner.innerHTML=`<h4>${e.short||e.t}</h4>`+
+    (e.native?`<div class="pnative">${e.native}</div>`:'')+
+    `<a class="row" href="${href(e.n)}">
+        <span class="pn">${e.date}</span>
+        <h5>${e.t}</h5></a>`;
+  pop.classList.add('show');positionPop(clientX,clientY);
+}
+
+/* ── enlarged places map: pins + leader lines + on-map cards ── */
+const VB={x:-30,y:35,w:525,h:555};
+const pctX=x=>(x-VB.x)/VB.w*100, pctY=y=>(y-VB.y)/VB.h*100;
+const cards=document.getElementById('cards');
+
+/* card anchor (viewBox coords) + side ('l'/'r') per station — two tidy gutters,
+   tuned so the cards never overlap and the leaders stay un-crossed */
+const CARDPOS={
+  Haifa:[100,150,'l'], Caesarea:[100,232,'l'], TelAviv:[100,330,'l'],
+  Jerusalem:[100,408,'l'], Bethlehem:[100,470,'l'],
+  Akko:[372,112,'r'], Tiberias:[372,160,'r'], Nazareth:[372,206,'r'], Tabor:[372,252,'r'],
+  BetShean:[372,300,'r'], Ramallah:[372,352,'r'], Jericho:[372,402,'r'], Masada:[372,512,'r'],
+};
+
+locKeys.forEach(loc=>{
+  const [x,y]=pos(loc), list=byLoc[loc], multi=list.length>1;
+  const [cx,cy,side]=CARDPOS[loc]||[x,y,'r'];
+
+  // leader line from the pin to its card
+  svgEl('line',{x1:cx,y1:cy,x2:x,y2:y,class:'leader'});
+  svgEl('circle',{cx:cx,cy:cy,r:1.8,class:'anch'});
+
+  // pin: dot + station number
+  const g=document.createElementNS(ns,'g'); g.setAttribute('class','pin'+(multi?' multi':''));
+  const dot=document.createElementNS(ns,'circle');
+  dot.setAttribute('cx',x);dot.setAttribute('cy',y);dot.setAttribute('r',multi?12:9);
+  dot.setAttribute('class','dot'+(multi?' multi':''));g.appendChild(dot);
+  function activate(ev){ev.preventDefault();ev.stopPropagation();
+    document.querySelectorAll('.pin.open').forEach(p=>p.classList.remove('open'));
+    g.classList.add('open');
+    if(!multi){location.href=href(list[0].n);return;}
+    const r=dot.getBoundingClientRect();openPop(loc,r.left+r.width/2,r.top+r.height/2);}
+  g.addEventListener('click',activate);map.appendChild(g);
+
+  // on-map card: Roman + Hebrew name · date (single) / count (multi) — seder-style, no number
+  const P=PLACES[loc]||{name:loc,native:''};
+  const sub=multi?`${list.length} Beiträge`:list[0].date;
+  const a=document.createElement('a');
+  a.className='lbl '+side+(multi?' multi':'');
+  a.href=multi?'#':href(list[0].n);
+  a.style.left=pctX(cx)+'%';a.style.top=pctY(cy)+'%';a.style.setProperty('--tx',side==='l'?'-100%':'0');
+  a.innerHTML=`<span class="nm"><b>${P.name}</b> <span class="he native">${P.native||''}</span><small>${sub}</small></span>`;
+  if(multi)a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openPop(loc,ev.clientX,ev.clientY);});
+  cards.appendChild(a);
+});
+
+/* ── festival map: a route through the festive year ── */
+const fy=document.getElementById('fyear');
+const fEl=(tag,attrs,parent)=>{const e=document.createElementNS(ns,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||fy).appendChild(e);return e;};
+
+/* one little drawn symbol per thematic entry (paths in a 24×24 box) */
+const FSYM={1:'anchor',2:'ship',3:'waves',6:'calendar',15:'wheat',17:'pot',
+  20:'star',21:'palm',29:'mask',32:'matzah',39:'heart'};
+const ICONS={
+  anchor:[{d:'M12 2.4a2.4 2.4 0 1 0 .01 0 M12 5V22 M4.5 15.5a7.5 7.5 0 0 0 15 0 M4.5 15.5l3.6 .2 M19.5 15.5l-3.6 .2 M7.5 11.5h9'}],
+  ship:[{d:'M3 16h18l-2 5H5z M6 16v-5h12v5 M9 11V7h5v4'}],
+  waves:[{d:'M2 8q3-3 6 0t6 0 6 0 M2 13q3-3 6 0t6 0 6 0 M2 18q3-3 6 0t6 0 6 0'}],
+  calendar:[{d:'M4 6h16v15H4z M4 10h16 M8 3v5 M16 3v5 M8 13h2 M14 13h2 M8 17h2 M14 17h2'}],
+  wheat:[{d:'M12 22V6 M12 6q-3.4-.4-3.4-3.8 3.4 .4 3.4 3.8 M12 6q3.4-.4 3.4-3.8-3.4 .4-3.4 3.8 M12 11q-3.4-.4-3.4-3.8 3.4 .4 3.4 3.8 M12 11q3.4-.4 3.4-3.8-3.4 .4-3.4 3.8 M12 16q-3-.4-3-3.4 3 .4 3 3.4 M12 16q3-.4 3-3.4-3 .4-3 3.4'}],
+  pot:[{d:'M4.5 10h15l-1.5 10H6z M2.5 12.5h2 M19.5 12.5h2 M5 9.2h14 M11 6.2h2'}],
+  star:[{d:'M12 3l8.2 14.2H3.8z'},{d:'M12 21L3.8 6.8h16.4z'}],
+  palm:[{d:'M12 22V6 M12 9q-5-1.4-7.6 2 M12 9q5-1.4 7.6 2 M12 13q-4-1.2-6 1.4 M12 13q4-1.2 6 1.4 M12 6q-2.6-1.6-1.2-4.2 M12 6q2.6-1.6 1.2-4.2'}],
+  mask:[{d:'M4 8c5-3 11-3 16 0 0 7-3.6 11-8 13C7.6 19 4 15 4 8z'},{d:'M8 11q1.6-1.4 3.2 0 M12.8 11q1.6-1.4 3.2 0'}],
+  matzah:[{d:'M5 5h14v14H5z'},{f:1,d:'M8.5 9a.5 .5 0 1 0 .01 0 M12 9a.5 .5 0 1 0 .01 0 M15.5 9a.5 .5 0 1 0 .01 0 M8.5 12.5a.5 .5 0 1 0 .01 0 M12 12.5a.5 .5 0 1 0 .01 0 M15.5 12.5a.5 .5 0 1 0 .01 0 M8.5 16a.5 .5 0 1 0 .01 0 M12 16a.5 .5 0 1 0 .01 0 M15.5 16a.5 .5 0 1 0 .01 0'}],
+  heart:[{f:1,d:'M12 20C4.5 13.5 5.5 6.8 12 9.4 18.5 6.8 19.5 13.5 12 20z'}],
+};
+
+const themed=ENTRIES.filter(e=>!e.loc);
+const byN=n=>themed.find(e=>e.n===n);
+const ringOrder=[1,2,3,6,15,17,20,21,29,39];           // 10 dishes around the rim, chronological
+const rad=d=>d*Math.PI/180;
+const CX=390, CY=312, ROUT=200, RWELL=138, RLABEL=232;
+
+/* ── der Sederteller (the seder plate) ── */
+fEl('circle',{cx:CX,cy:CY,r:ROUT,class:'plate'});          // dish surface
+fEl('circle',{cx:CX,cy:CY,r:ROUT,class:'plate-rim'});      // outer edge
+fEl('circle',{cx:CX,cy:CY,r:ROUT-13,class:'plate-rim'});   // inner edge of the rim
+fEl('circle',{cx:CX,cy:CY,r:ROUT-6.5,class:'plate-band'}); // dashed ceramic band
+fEl('circle',{cx:CX,cy:CY,r:74,class:'plate-rim'});        // centre well
+
+/* draw one dish: well + medallion + drawn symbol + label */
+function dish(e,x,y,r,lx,ly,anchor){
+  const g=fEl('g',{class:'fstop'}); g.style.cursor='pointer';
+  g.addEventListener('click',ev=>{ev.stopPropagation();openEntryPop(e,ev.clientX,ev.clientY);});
+  fEl('circle',{cx:x,cy:y,r:r+6,class:'well'},g);
+  fEl('circle',{cx:x,cy:y,r:r,class:'medal'},g);
+  const k=(2*r/24)*0.9;
+  const ig=fEl('g',{transform:`translate(${(x-12*k).toFixed(1)} ${(y-12*k).toFixed(1)}) scale(${k.toFixed(3)})`},g);
+  (ICONS[FSYM[e.n]]||[]).forEach(p=>fEl('path',{d:p.d,class:'fsym'+(p.f?' fill':'')},ig));
+  const t1=fEl('text',{x:lx,y:ly,class:'fnm','text-anchor':anchor},g);
+  t1.textContent=e.short||e.t;
+  if(e.native){const ts=document.createElementNS(ns,'tspan');ts.setAttribute('class','he native');
+    ts.setAttribute('dx','5');ts.textContent=e.native;t1.appendChild(ts);}
+  fEl('text',{x:lx,y:ly+13,class:'fdt','text-anchor':anchor},g).textContent=e.date;
+}
+
+/* ten dishes around the rim, in calendar order */
+ringOrder.forEach((n,i)=>{
+  const a=rad(-90+i*36), c=Math.cos(a), s=Math.sin(a);
+  const anchor=c>0.25?'start':c<-0.25?'end':'middle';
+  const lx=CX+RLABEL*c, ly=CY+RLABEL*s+(s<-0.3?-3:6);
+  fEl('line',{x1:CX+(ROUT-2)*c,y1:CY+(ROUT-2)*s,x2:CX+(ROUT+16)*c,y2:CY+(ROUT+16)*s,class:'ftick'});
+  dish(byN(n),CX+RWELL*c,CY+RWELL*s,27,lx,ly,anchor);
+});
+
+/* Pessach – the Seder itself – at the heart of the plate */
+const pe=byN(32);
+const pg=fEl('g',{class:'fstop'}); pg.style.cursor='pointer';
+pg.addEventListener('click',ev=>{ev.stopPropagation();openEntryPop(pe,ev.clientX,ev.clientY);});
+fEl('circle',{cx:CX,cy:CY-6,r:40,class:'medal'},pg);
+const pk=(2*40/24)*0.9;
+const pig=fEl('g',{transform:`translate(${(CX-12*pk).toFixed(1)} ${(CY-6-12*pk).toFixed(1)}) scale(${pk.toFixed(3)})`},pg);
+ICONS.matzah.forEach(p=>fEl('path',{d:p.d,class:'fsym'+(p.f?' fill':'')},pig));
+const pt=fEl('text',{x:CX,y:CY+48,class:'fnm','text-anchor':'middle'},pg);
+pt.textContent='Pessach';
+const pts=document.createElementNS(ns,'tspan');pts.setAttribute('class','he native');
+pts.setAttribute('dx','5');pts.textContent='פֶּסַח';pt.appendChild(pts);
+fEl('text',{x:CX,y:CY+61,class:'fdt','text-anchor':'middle'},pg).textContent=pe.date;
+
+/* dismiss popover on outside click / Esc */
+document.addEventListener('click',e=>{if(!pop.contains(e.target))pop.classList.remove('show')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')pop.classList.remove('show')});
+</script>
+<script src="assets/feedback.js"></script>
+</body>
+</html>

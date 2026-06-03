@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renate in Australien – Reisetagebuch</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parch:#EFE2C5; --parch2:#E4D2AC; --card:#F6ECD2; --edge:#C9AE78; --ink:#3A2A18;
+    --stamp:#7A3A1C; --stamp2:#9A4520; --teal:#2C5A52; --gold:#A8782A;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--parch);color:var(--ink);font-family:'Crimson Text',Georgia,serif;
+    background-image:radial-gradient(rgba(150,110,60,.05) 1px,transparent 1px);background-size:14px 14px}
+
+  .bar{position:sticky;top:0;z-index:20;background:rgba(239,226,197,.92);backdrop-filter:blur(5px);
+    border-bottom:1px solid var(--edge);padding:9px 22px;display:flex;align-items:center;gap:14px;font-size:14px}
+  .bar a{color:var(--stamp);text-decoration:none}
+  .bar a:hover{text-decoration:underline}
+  .crumb{color:#7a6748}
+  .crumb b{color:var(--ink)}
+
+  /* HERO */
+  .hero{max-width:1060px;margin:0 auto;padding:46px 26px 8px;display:flex;gap:38px;align-items:center}
+  @media(max-width:760px){.hero{flex-direction:column;text-align:center;gap:24px}}
+  .hero-map{flex-shrink:0;width:230px}
+  .hero-map svg{width:100%;height:auto;background:#F6ECD2;border:1px solid var(--edge);
+    box-shadow:0 6px 18px rgba(80,50,20,.16);filter:sepia(.25)}
+  .hero-map .land{fill:#D9C39A;stroke:#BFA46F;stroke-width:.5;stroke-linejoin:round}
+  .hero-map .hl{fill:var(--stamp2);stroke:#F6ECD2;stroke-width:1.4}
+  .hero-map .cap{font-family:'Caveat',cursive;font-size:13px;fill:var(--stamp);text-anchor:middle}
+  .hero-body .kick{font-family:'Caveat',cursive;font-size:24px;color:var(--stamp2);transform:rotate(-1.5deg)}
+  .hero-body h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);line-height:1.08;margin:2px 0 6px}
+  .hero-body .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+  .hero-body p{font-size:18px;line-height:1.6;color:#5c4a30;max-width:540px}
+  .hero-body .meta{margin-top:14px;font-size:14px;color:#7a6748;letter-spacing:1px}
+
+  .rule{max-width:1060px;margin:30px auto 0;padding:0 26px}
+  .rule .line{border-top:1px dashed var(--edge)}
+
+  /* TIMELINE */
+  .timeline{max-width:880px;margin:18px auto 70px;padding:24px 26px 0;position:relative}
+  .timeline::before{content:'';position:absolute;left:50%;top:0;bottom:60px;width:0;
+    border-left:2px dashed var(--edge);transform:translateX(-50%)}
+  @media(max-width:680px){.timeline::before{left:26px}}
+
+  .entry{position:relative;width:50%;padding:0 38px 40px;}
+  .entry.left{left:0;text-align:right}
+  .entry.right{left:50%}
+  @media(max-width:680px){.entry,.entry.left,.entry.right{width:100%;left:0;text-align:left;padding:0 0 34px 56px}}
+
+  .entry .dot{position:absolute;top:6px;width:30px;height:30px;border-radius:50%;
+    background:var(--stamp);border:3px solid var(--parch);box-shadow:0 0 0 2px var(--stamp);
+    display:flex;align-items:center;justify-content:center;color:var(--card);
+    font-family:'Playfair Display',serif;font-size:12px;font-weight:700;z-index:2}
+  .entry.left .dot{right:-15px}
+  .entry.right .dot{left:-15px}
+  @media(max-width:680px){.entry.left .dot,.entry.right .dot{left:11px;right:auto}}
+
+  .date{font-family:'Caveat',cursive;font-size:21px;color:var(--stamp2);margin-bottom:4px}
+  .card{display:block;background:var(--card);border:1px solid var(--edge);border-radius:7px;
+    padding:18px 20px 20px;text-decoration:none;color:inherit;
+    box-shadow:0 4px 14px rgba(80,50,20,.10);transition:transform .25s,box-shadow .25s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(80,50,20,.18)}
+  .card .thumb{height:80px;border-radius:4px;margin-bottom:12px;
+    background:linear-gradient(135deg,#cdbb95,#b59c6e);display:flex;align-items:center;justify-content:center;
+    color:rgba(255,255,255,.7);font-family:'Caveat',cursive;font-size:16px}
+  .card h3{font-family:'Playfair Display',serif;font-size:21px;line-height:1.15;margin-bottom:6px}
+  .card p{font-size:15.5px;line-height:1.5;color:#5c4a30}
+  .card .go{display:inline-block;margin-top:10px;font-family:'Caveat',cursive;font-size:19px;color:var(--stamp2)}
+  .card:hover .go{text-decoration:underline}
+
+  .end{text-align:center;font-family:'Caveat',cursive;font-size:22px;color:var(--stamp);padding:6px 0 50px}
+  footer{background:#3A2A18;color:#cdbb95;text-align:center;padding:24px;font-size:14px;font-family:'Caveat',cursive}
+  footer span{font-size:18px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a href="home-C-tagebuch.html">← Startseite</a>
+  <span class="crumb">Startseite › Renate in <b>Australien</b></span>
+</div>
+
+<div class="hero">
+  <div class="hero-map">
+    <svg viewBox="795 250 175 135" aria-label="Australien auf der Weltkarte">
+      <path id="hmap" class="land"></path>
+      <circle class="hl" cx="907" cy="367" r="4"></circle>
+      <text class="cap" x="907" y="358">Tasmanien</text>
+    </svg>
+  </div>
+  <div class="hero-body">
+    <div class="kick">Reisetagebuch № 2 · Tasmanien</div>
+    <h1>Renate in Australien</h1>
+    <div class="region">Tasmanien · 2025–2026</div>
+    <p>Acht Etappen rund um Tasmanien – von Hobarts Hafen über die Wildnis des Cradle Mountain bis zu den feuerroten Felsen der Bay of Fires. Mit den Gerichten, die mir unterwegs begegnet sind.</p>
+    <div class="meta">8 Einträge · chronologisch geordnet</div>
+  </div>
+</div>
+
+<div class="rule"><div class="line"></div></div>
+
+<div class="timeline" id="timeline"></div>
+
+<div class="end">~ Ende der Reise ~</div>
+<footer><span>Mit Liebe gereist und gekocht</span> · jewishgermanculturecooking.com</footer>
+
+<script src="assets/world.js"></script>
+<script>
+  // decorative country map crop (reuses shared world path)
+  document.getElementById('hmap').setAttribute('d', WORLD_PATH);
+
+  const entries=[
+    {n:10,date:'17. Januar 2025',  t:'Tasmanien',
+     d:'Ankunft auf der Insel am Ende der Welt – erste Eindrücke und ein Glas tasmanischer Wein.'},
+    {n:11,date:'28. Februar 2025', t:'Hobart, die Hauptstadt',
+     d:'Hafenstadt, Salamanca-Markt und das Aroma frischer Meeresfrüchte.'},
+    {n:12,date:'1. April 2025',    t:'Von Hobart nach Strahan',
+     d:'Quer durch die Wildnis, vorbei an Regenwald und alten Minenstädten.'},
+    {n:13,date:'30. April 2025',   t:'Strahan – Cradle Mountain-Lake',
+     d:'Vom kleinen Hafen Strahan hinauf in die Berge.'},
+    {n:14,date:'1. Juni 2025',     t:'Cradle Mountain – Lake St. Clair National Park',
+     d:'Wanderungen, Wombats und klare Bergseen im Herzen der Insel.'},
+    {n:15,date:'30. Juni 2025',    t:'Bay of Fire / Wine Glass Bay',
+     d:'Orangerote Flechten auf den Felsen, weiße Strände, türkises Wasser.'},
+    {n:16,date:'31. Oktober 2025', t:'Von Shackleton zu Seefisch und den Tasmanischen Teufeln',
+     d:'Polargeschichten, fangfrischer Fisch und ein Besuch bei den Teufeln.'},
+    {n:17,date:'16. Februar 2026', t:'Port Arthur und seine kulinarischen Geheimnisse',
+     d:'Die alte Sträflingskolonie – Geschichte und überraschend feine Küche.'},
+  ];
+
+  const tl=document.getElementById('timeline');
+  entries.forEach((e,i)=>{
+    const side=i%2===0?'left':'right';
+    const el=document.createElement('div');el.className='entry '+side;
+    el.innerHTML=`<div class="dot">${e.n}</div>
+      <div class="date">${e.date}</div>
+      <a class="card" href="eintrag-${e.n}.html">
+        <div class="thumb">Foto folgt</div>
+        <h3>${e.t}</h3><p>${e.d}</p>
+        <span class="go">→ Tagebuch öffnen</span>
+      </a>`;
+    tl.appendChild(el);
+  });
+</script>
+<script src="assets/feedback.js"></script>
+</body>
+</html>

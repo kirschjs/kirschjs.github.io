@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layout D – Immersiver Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#162923; --night2:#0F1C18; --forest:#2D4A3E; --gold:#D7B25E;
+    --terracotta:#C25B2E; --cream:#F3ECDC; --land:#27433A; --land-line:#3C5C50;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--night2);color:var(--cream);font-family:'Crimson Text',Georgia,serif}
+  .back{position:fixed;top:12px;left:14px;z-index:30;background:rgba(0,0,0,.4);
+    border:1px solid rgba(215,178,94,.4);border-radius:20px;padding:5px 14px;font-size:13px;text-decoration:none;color:var(--gold)}
+
+  .stage{position:relative;min-height:100vh;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 32%,var(--night) 0%,var(--night2) 70%)}
+  .title{position:absolute;top:34px;left:0;right:0;text-align:center;z-index:5;pointer-events:none}
+  .title .kick{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--gold)}
+  .title h1{font-family:'Playfair Display',serif;font-size:clamp(26px,4.5vw,50px);margin-top:8px;text-shadow:0 2px 18px rgba(0,0,0,.6)}
+  .title h1 em{color:var(--gold);font-style:italic}
+  .title p{margin-top:10px;font-style:italic;color:rgba(243,236,220,.65)}
+
+  .map-holder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:90px 20px 30px}
+  svg.map{width:100%;max-width:1180px;height:auto}
+  .land{fill:var(--land);stroke:var(--land-line);stroke-width:.6;stroke-linejoin:round}
+  .grat{fill:none;stroke:rgba(215,178,94,.10);stroke-width:.5}
+  .pin-glow{fill:var(--gold);opacity:.0;animation:glow 3.2s ease-in-out infinite}
+  .pin-dot{fill:var(--gold);stroke:var(--night2);stroke-width:1.5;cursor:pointer;transition:r .25s,fill .25s}
+  .pin-g:hover .pin-dot,.pin-g.active .pin-dot{r:12;fill:var(--terracotta)}
+  .pin-lbl{font-family:'Playfair Display',serif;font-size:15px;fill:var(--cream);pointer-events:none;
+    opacity:.0;transition:opacity .25s;text-shadow:0 1px 4px #000}
+  .pin-g:hover .pin-lbl,.pin-g.active .pin-lbl{opacity:1}
+  @keyframes glow{0%,100%{r:8;opacity:.0}50%{r:22;opacity:.22}}
+
+  /* reveal panel */
+  .panel{position:absolute;right:30px;bottom:30px;width:340px;max-width:calc(100vw - 60px);z-index:20;
+    background:rgba(22,41,35,.92);backdrop-filter:blur(6px);border:1px solid rgba(215,178,94,.35);
+    border-radius:8px;padding:24px 26px 26px;box-shadow:0 14px 40px rgba(0,0,0,.5);
+    opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s;pointer-events:none}
+  .panel.show{opacity:1;transform:none;pointer-events:auto}
+  .panel .num{font-size:12px;letter-spacing:2px;color:var(--gold)}
+  .panel h3{font-family:'Playfair Display',serif;font-size:26px;margin:4px 0 2px}
+  .panel .reg{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--terracotta);margin-bottom:12px}
+  .panel p{font-size:16px;line-height:1.55;color:rgba(243,236,220,.85)}
+  .panel a.go{display:inline-block;margin-top:16px;background:var(--gold);color:var(--night2);
+    text-decoration:none;font-weight:600;padding:9px 18px;border-radius:5px;font-size:15px}
+  .panel a.go:hover{background:var(--terracotta);color:#fff}
+  .panel .hint{font-style:italic;color:rgba(243,236,220,.5);font-size:14px}
+
+  /* accessible legend */
+  .legend{position:absolute;left:30px;bottom:30px;z-index:15;background:rgba(15,28,24,.8);
+    border:1px solid rgba(215,178,94,.25);border-radius:8px;padding:14px 16px;max-width:240px}
+  .legend h4{font-family:'Playfair Display',serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .legend button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--cream);
+    font-family:'Crimson Text',serif;font-size:16px;padding:5px 6px;cursor:pointer;border-radius:4px}
+  .legend button:hover,.legend button.active{background:rgba(215,178,94,.15);color:var(--gold)}
+  .legend button b{color:var(--gold);margin-right:8px}
+  @media(max-width:760px){.legend{display:none}.panel{left:30px;right:30px;width:auto}}
+</style>
+</head>
+<body>
+<a class="back" href="home-index.html">← Übersicht</a>
+
+<div class="stage">
+  <div class="title">
+    <div class="kick">Reise · Kultur · Küche</div>
+    <h1>Kulinarisch-kulturelle <em>reiseN</em></h1>
+    <p>Tippen Sie ein leuchtendes Ziel an.</p>
+  </div>
+
+  <div class="map-holder">
+    <svg class="map" viewBox="0 0 1000 500" id="map" aria-label="Weltkarte mit Reisezielen"></svg>
+  </div>
+
+  <nav class="legend">
+    <h4>Reiseziele</h4>
+    <div id="legend"></div>
+  </nav>
+
+  <aside class="panel" id="panel">
+    <p class="hint">Wählen Sie ein Ziel auf der Karte oder in der Liste.</p>
+  </aside>
+</div>
+
+<script src="assets/world.js"></script>
+<script>
+  const order=Object.values(DESTINATIONS).sort((a,b)=>a.order-b.order);
+  const ns="http://www.w3.org/2000/svg";
+  const map=document.getElementById('map');
+
+  // graticule
+  for(let lon=-180;lon<=180;lon+=30){const x=(lon+180)*1000/360;
+    const l=document.createElementNS(ns,'line');l.setAttribute('x1',x);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',500);l.setAttribute('class','grat');map.appendChild(l);}
+  for(let lat=-60;lat<=60;lat+=30){const y=(90-lat)*500/180;
+    const l=document.createElementNS(ns,'line');l.setAttribute('x1',0);l.setAttribute('y1',y);l.setAttribute('x2',1000);l.setAttribute('y2',y);l.setAttribute('class','grat');map.appendChild(l);}
+
+  const land=document.createElementNS(ns,'path');
+  land.setAttribute('d',WORLD_PATH);land.setAttribute('class','land');map.appendChild(land);
+
+  const panel=document.getElementById('panel');
+  const legend=document.getElementById('legend');
+  const pinG={};
+
+  function select(slug){
+    const d=DESTINATIONS[slug];
+    Object.values(pinG).forEach(g=>g.classList.remove('active'));
+    [...legend.children].forEach(b=>b.classList.toggle('active',b.dataset.slug===slug));
+    pinG[slug].classList.add('active');
+    panel.classList.add('show');
+    panel.innerHTML=`<div class="num">Reise № ${d.order}</div><h3>${d.name}</h3>
+      <div class="reg">${d.country}</div><p>${d.desc}</p>
+      <a class="go" href="reise-${d.slug}.html">Zu den Beiträgen →</a>`;
+  }
+
+  order.forEach(d=>{
+    const g=document.createElementNS(ns,'g');g.setAttribute('class','pin-g');g.style.cursor='pointer';
+    const glow=document.createElementNS(ns,'circle');
+    glow.setAttribute('cx',d.x);glow.setAttribute('cy',d.y);glow.setAttribute('r',8);glow.setAttribute('class','pin-glow');
+    const dot=document.createElementNS(ns,'circle');
+    dot.setAttribute('cx',d.x);dot.setAttribute('cy',d.y);dot.setAttribute('r',6.5);dot.setAttribute('class','pin-dot');
+    const flip=d.x>820;
+    const lbl=document.createElementNS(ns,'text');
+    lbl.setAttribute('x',flip?d.x-12:d.x+13);lbl.setAttribute('y',d.y+5);
+    if(flip)lbl.setAttribute('text-anchor','end');
+    lbl.setAttribute('class','pin-lbl');lbl.textContent=d.name;
+    g.append(glow,dot,lbl);map.appendChild(g);
+    pinG[d.slug]=g;
+    g.addEventListener('click',()=>select(d.slug));
+
+    const b=document.createElement('button');b.dataset.slug=d.slug;
+    b.innerHTML=`<b>${d.order}</b>${d.name}`;
+    b.addEventListener('click',()=>select(d.slug));
+    legend.appendChild(b);
+  });
+</script>
+<script src="assets/feedback.js"></script>
+</body>
+</html>
