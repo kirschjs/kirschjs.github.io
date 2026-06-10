@@ -6,73 +6,113 @@
 <title>Renate in Australien – Reisetagebuch</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --parch:#EFE2C5; --parch2:#E4D2AC; --card:#F6ECD2; --edge:#C9AE78; --ink:#3A2A18;
-    --stamp:#7A3A1C; --stamp2:#9A4520; --teal:#2C5A52; --gold:#A8782A;
+  :root{   /* Australien · navy · rot · weiß — passend zu entry.css [data-land=australien] */
+    --parch:#FAFBFE; --parch2:#EDF1FA; --card:#FFFFFF; --edge:#C8D2EA; --ink:#0B1B3A;
+    --stamp:#00247D; --stamp2:#001A5C; --red:#CF142B; --teal:#2C5A82; --gold:#A8782A;
+    --sea:#CFE0F4; --muted:#5a6b86;
+    --sky:#0A1A3F; --sky2:#13265A; --star:#FFF4CF;
   }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--parch);color:var(--ink);font-family:'Crimson Text',Georgia,serif;
-    background-image:radial-gradient(rgba(150,110,60,.05) 1px,transparent 1px);background-size:14px 14px}
+    background-image:radial-gradient(rgba(0,36,125,.045) 1px,transparent 1px);background-size:14px 14px}
+  .native{font-style:italic}
 
-  .bar{position:sticky;top:0;z-index:20;background:rgba(239,226,197,.92);backdrop-filter:blur(5px);
+  .bar{position:sticky;top:0;z-index:30;background:rgba(237,241,250,.92);backdrop-filter:blur(5px);
     border-bottom:1px solid var(--edge);padding:9px 22px;display:flex;align-items:center;gap:14px;font-size:14px}
   .bar a{color:var(--stamp);text-decoration:none}
   .bar a:hover{text-decoration:underline}
-  .crumb{color:#7a6748}
-  .crumb b{color:var(--ink)}
+  .crumb{color:var(--muted)}.crumb b{color:var(--ink)}
 
-  /* HERO */
-  .hero{max-width:1060px;margin:0 auto;padding:46px 26px 8px;display:flex;gap:38px;align-items:center}
-  @media(max-width:760px){.hero{flex-direction:column;text-align:center;gap:24px}}
-  .hero-map{flex-shrink:0;width:230px}
-  .hero-map svg{width:100%;height:auto;background:#F6ECD2;border:1px solid var(--edge);
-    box-shadow:0 6px 18px rgba(80,50,20,.16);filter:sepia(.25)}
-  .hero-map .land{fill:#D9C39A;stroke:#BFA46F;stroke-width:.5;stroke-linejoin:round}
-  .hero-map .hl{fill:var(--stamp2);stroke:#F6ECD2;stroke-width:1.4}
-  .hero-map .cap{font-family:'Caveat',cursive;font-size:13px;fill:var(--stamp);text-anchor:middle}
-  .hero-body .kick{font-family:'Caveat',cursive;font-size:24px;color:var(--stamp2);transform:rotate(-1.5deg)}
-  .hero-body h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);line-height:1.08;margin:2px 0 6px}
-  .hero-body .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
-  .hero-body p{font-size:18px;line-height:1.6;color:#5c4a30;max-width:540px}
-  .hero-body .meta{margin-top:14px;font-size:14px;color:#7a6748;letter-spacing:1px}
+  header{text-align:center;padding:46px 24px 6px}
+  header .sub{font-family:'Caveat',cursive;font-size:26px;color:var(--stamp2);transform:rotate(-2deg)}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,54px);margin-top:4px;line-height:1.1}
+  header h1 .native{font-size:.6em;color:var(--red);font-style:italic}
+  header .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-top:10px}
+  header p{max-width:640px;margin:14px auto 0;font-size:18px;font-style:italic;color:#445575}
 
-  .rule{max-width:1060px;margin:30px auto 0;padding:0 26px}
-  .rule .line{border-top:1px dashed var(--edge)}
+  .section{max-width:1000px;margin:32px auto 0;padding:0 24px}
+  .section>h2{font-family:'Playfair Display',serif;font-size:26px;text-align:center;margin-bottom:3px}
+  .section>.lead{font-style:italic;color:#445575;text-align:center;font-size:16px;max-width:720px;margin:0 auto 18px}
 
-  /* TIMELINE */
-  .timeline{max-width:880px;margin:18px auto 70px;padding:24px 26px 0;position:relative}
-  .timeline::before{content:'';position:absolute;left:50%;top:0;bottom:60px;width:0;
-    border-left:2px dashed var(--edge);transform:translateX(-50%)}
-  @media(max-width:680px){.timeline::before{left:26px}}
+  .map-frame{position:relative;background:var(--card);border:1px solid var(--edge);
+    box-shadow:0 8px 26px rgba(0,26,92,.16);padding:18px}
+  .map-frame::after{content:'';position:absolute;inset:7px;border:1px dashed var(--edge);pointer-events:none}
+  .map-frame.night{background:var(--sky)}
+  .map-frame.night::after{border-color:rgba(255,244,207,.25)}
+  .map-frame .hint{font-family:'Caveat',cursive;font-size:18px;color:var(--stamp2);text-align:center;margin-bottom:10px}
+  .map-frame.night .hint{color:var(--star)}
+  .map-wrap{position:relative}
+  svg.map{width:100%;height:auto;display:block;overflow:visible}
+  .sea{fill:var(--sea)}
+  .land{fill:#F3EAD3;stroke:#BE9B62;stroke-width:1.8;stroke-linejoin:round}
+  .grain{fill:none;stroke:#D8C49A;stroke-width:1;opacity:.7}
+  .route{fill:none;stroke:var(--red);stroke-width:2.2;stroke-dasharray:5 5;stroke-linecap:round;opacity:.8}
+  .leader{stroke:#9DB6DF;stroke-width:1;fill:none}
+  .anch{fill:#9DB6DF}
+  .compass{opacity:.55}
+  .compass text{font-family:'Playfair Display',serif;font-size:12px;fill:var(--teal)}
+  .compass .needle{fill:var(--red)}.compass .needle2{fill:var(--stamp)}
+  .maplabel{font-family:'Caveat',cursive;font-size:14px;fill:var(--teal)}
 
-  .entry{position:relative;width:50%;padding:0 38px 40px;}
-  .entry.left{left:0;text-align:right}
-  .entry.right{left:50%}
-  @media(max-width:680px){.entry,.entry.left,.entry.right{width:100%;left:0;text-align:left;padding:0 0 34px 56px}}
+  .pin{cursor:pointer}
+  .pin .dot{fill:var(--stamp);stroke:var(--card);stroke-width:2.5;transition:transform .2s}
+  .pin .dot.multi{fill:var(--red)}
+  .pin:hover .dot,.pin.open .dot{transform:scale(1.25);transform-box:fill-box;transform-origin:center}
 
-  .entry .dot{position:absolute;top:6px;width:30px;height:30px;border-radius:50%;
-    background:var(--stamp);border:3px solid var(--parch);box-shadow:0 0 0 2px var(--stamp);
-    display:flex;align-items:center;justify-content:center;color:var(--card);
-    font-family:'Playfair Display',serif;font-size:12px;font-weight:700;z-index:2}
-  .entry.left .dot{right:-15px}
-  .entry.right .dot{left:-15px}
-  @media(max-width:680px){.entry.left .dot,.entry.right .dot{left:11px;right:auto}}
+  .cards{position:absolute;inset:0;pointer-events:none}
+  .lbl{position:absolute;pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:178px;
+    background:#fff;border:1px solid var(--edge);border-radius:9px;padding:5px 9px;
+    box-shadow:0 3px 10px rgba(0,26,92,.13);text-decoration:none;color:inherit;cursor:pointer;
+    transform:translate(var(--tx,0),var(--ty,-50%));transition:box-shadow .15s}
+  .lbl:hover{box-shadow:0 7px 18px rgba(0,26,92,.24);z-index:5}
+  .lbl.l{flex-direction:row-reverse;text-align:right}
+  .lbl.c{flex-direction:column;text-align:center;gap:3px}
+  .lbl .nm{font-family:'Playfair Display',serif;font-size:15px;line-height:1.14;color:var(--ink)}
+  .lbl .nm .he{font-size:12.5px;color:var(--red);font-style:italic}
+  .lbl .nm small{display:block;font-size:12px;font-style:italic;color:var(--muted)}
+  .lbl:hover .nm{color:var(--stamp2)}
+  /* on the night sky the cards turn dark */
+  .night-cards .lbl{background:rgba(19,38,90,.94);border-color:rgba(255,244,207,.4);color:#EAF0FF;
+    box-shadow:0 3px 12px rgba(0,0,0,.4)}
+  .night-cards .lbl .nm{color:#EAF0FF}.night-cards .lbl:hover .nm{color:var(--star)}
+  .night-cards .lbl .nm small{color:#A9B8DF}
+  .lbl .stage{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--gold);
+    color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;line-height:1;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,26,92,.3)}
 
-  .date{font-family:'Caveat',cursive;font-size:21px;color:var(--stamp2);margin-bottom:4px}
-  .card{display:block;background:var(--card);border:1px solid var(--edge);border-radius:7px;
-    padding:18px 20px 20px;text-decoration:none;color:inherit;
-    box-shadow:0 4px 14px rgba(80,50,20,.10);transition:transform .25s,box-shadow .25s}
-  .card:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(80,50,20,.18)}
-  .card .thumb{height:80px;border-radius:4px;margin-bottom:12px;
-    background:linear-gradient(135deg,#cdbb95,#b59c6e);display:flex;align-items:center;justify-content:center;
-    color:rgba(255,255,255,.7);font-family:'Caveat',cursive;font-size:16px}
-  .card h3{font-family:'Playfair Display',serif;font-size:21px;line-height:1.15;margin-bottom:6px}
-  .card p{font-size:15.5px;line-height:1.5;color:#5c4a30}
-  .card .go{display:inline-block;margin-top:10px;font-family:'Caveat',cursive;font-size:19px;color:var(--stamp2)}
-  .card:hover .go{text-decoration:underline}
+  .pop{position:absolute;z-index:40;width:255px;background:var(--card);border:1px solid var(--edge);
+    border-radius:8px;box-shadow:0 12px 30px rgba(0,26,92,.26);padding:12px 14px;display:none}
+  .pop.show{display:block}
+  .pop h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:2px}
+  .pop .pnative{font-size:13px;color:var(--red);font-style:italic;margin-bottom:8px}
+  .pop a.row{display:block;text-decoration:none;color:inherit;padding:6px 0;border-top:1px dashed var(--edge)}
+  .pop a.row:first-of-type{border-top:0}
+  .pop a.row:hover h5{text-decoration:underline}
+  .pop a.row .pn{font-family:'Caveat',cursive;font-size:16px;color:var(--stamp2)}
+  .pop a.row h5{font-family:'Crimson Text',serif;font-size:15.5px;font-weight:600;line-height:1.25}
+  .pop .close{position:absolute;top:6px;right:9px;cursor:pointer;color:var(--stamp);font-size:18px;line-height:1}
 
-  .end{text-align:center;font-family:'Caveat',cursive;font-size:22px;color:var(--stamp);padding:6px 0 50px}
-  footer{background:#3A2A18;color:#cdbb95;text-align:center;padding:24px;font-size:14px;font-family:'Caveat',cursive}
+  /* ── night sky / Southern Cross ── */
+  svg.sky{width:100%;height:auto;display:block;overflow:visible}
+  .skybg{fill:url(#skyGrad)}
+  .dust{fill:var(--star);opacity:.5}
+  @keyframes tw{0%,100%{opacity:.35}50%{opacity:.9}}
+  .twinkle{animation:tw 3.4s ease-in-out infinite}
+  .crux-line{stroke:rgba(255,244,207,.45);stroke-width:1;stroke-dasharray:3 4}
+  .crux-star{fill:#CFE0FF}
+  .crux-lbl{font-family:'Crimson Text',serif;font-style:italic;font-size:13px;fill:#AEC2F0;text-anchor:middle}
+  .crux-title{font-family:'Playfair Display',serif;font-size:16px;fill:var(--star);text-anchor:middle}
+  .path-line{fill:none;stroke:var(--red);stroke-width:1.8;stroke-dasharray:5 5;opacity:.7}
+  .sstop{cursor:pointer}
+  .sstar{fill:var(--star);stroke:#fff;stroke-width:1;transition:transform .2s}
+  .sstop:hover .sstar{transform:scale(1.3);transform-box:fill-box;transform-origin:center}
+  .sglow{fill:var(--star);opacity:.18}
+
+  .end{text-align:center;font-family:'Caveat',cursive;font-size:22px;color:var(--stamp);padding:40px 0 16px}
+  .feedback{text-align:center;padding:0 0 30px}
+  .feedback a{display:inline-block;background:var(--stamp);color:#fff;text-decoration:none;
+    font-family:'Caveat',cursive;font-size:19px;padding:8px 22px;border-radius:30px;box-shadow:0 4px 12px rgba(0,26,92,.25)}
+  footer{background:var(--stamp2);color:#cfdcf5;text-align:center;padding:24px;font-size:14px;font-family:'Caveat',cursive}
   footer span{font-size:18px}
 </style>
 </head>
@@ -82,68 +122,249 @@
   <span class="crumb">Startseite › Renate in <b>Australien</b></span>
 </div>
 
-<div class="hero">
-  <div class="hero-map">
-    <svg viewBox="795 250 175 135" aria-label="Australien auf der Weltkarte">
-      <path id="hmap" class="land"></path>
-      <circle class="hl" cx="907" cy="367" r="4"></circle>
-      <text class="cap" x="907" y="358">Tasmanien</text>
-    </svg>
-  </div>
-  <div class="hero-body">
-    <div class="kick">Reisetagebuch № 2 · Tasmanien</div>
-    <h1>Renate in Australien</h1>
-    <div class="region">Tasmanien · 2025–2026</div>
-    <p>Acht Etappen rund um Tasmanien – von Hobarts Hafen über die Wildnis des Cradle Mountain bis zu den feuerroten Felsen der Bay of Fires. Mit den Gerichten, die mir unterwegs begegnet sind.</p>
-    <div class="meta">8 Einträge · chronologisch geordnet</div>
+<header>
+  <div class="sub">Reisetagebuch &amp; Kochbuch</div>
+  <h1>Renate in Australien <span class="native">lutruwita</span></h1>
+  <div class="region">Reisetagebuch № 2 · Tasmanien · 2025–2026</div>
+  <p>Einmal rund um die Insel am Ende der Welt: von Hobarts Hafen durch die Wildnis zum
+     Cradle Mountain, über die feuerroten Felsen der Bay of Fires bis zur Sträflingskolonie
+     Port Arthur. Zwei Karten führen durch die Reise – die <b>Orte</b> und das
+     <b>Kreuz des Südens</b>, das über jeder Nacht stand.</p>
+</header>
+
+<div class="section">
+  <h2>Stationen der Reise</h2>
+  <p class="lead">Renates Weg rund um Tasmanien – tippen Sie einen Ort an. Orte mit mehreren
+     Beiträgen öffnen eine kleine Auswahl. Die <b>nummerierten Stationen</b> zeigen die
+     Reihenfolge der Reise.</p>
+  <div class="map-frame">
+    <div class="hint">↓ Tippen Sie auf einen Ort</div>
+    <div class="map-wrap">
+      <svg class="map" id="map" viewBox="-98 -10 694 520" aria-label="Karte von Tasmanien mit Reisestationen"></svg>
+      <div class="cards" id="cards"></div>
+    </div>
   </div>
 </div>
 
-<div class="rule"><div class="line"></div></div>
+<div class="section">
+  <h2>Unter dem Kreuz des Südens – die Sternkarte der Reise</h2>
+  <p class="lead">Auf der Südhalbkugel steht ein anderer Himmel: das <b>Kreuz des Südens</b>,
+     das auch die australische Flagge trägt. Die acht Etappen leuchten hier als Sternbild der
+     Reise, von Stern zu Stern verbunden. Tippen Sie auf einen Stern.</p>
+  <div class="map-frame night">
+    <div class="hint">↓ Tippen Sie auf einen Stern</div>
+    <div class="map-wrap">
+      <svg class="sky" id="sky" viewBox="0 0 780 560" aria-label="Sternenhimmel mit dem Kreuz des Südens und den Reise-Etappen"></svg>
+      <div class="cards night-cards" id="scards"></div>
+    </div>
+  </div>
+</div>
 
-<div class="timeline" id="timeline"></div>
+<div class="pop" id="pop"><span class="close" id="popClose">×</span><div id="popInner"></div></div>
 
-<div class="end">~ Ende der Reise ~</div>
+<div class="end">~ 8 Etappen · mit Liebe gereist und gekocht ~</div>
+<div class="feedback">
+  <a href="mailto:kirscjo@gmail.com?subject=Reisetagebuch%20Australien&body=Liebe%20Gr%C3%BC%C3%9Fe%2C%20hier%20mein%20Feedback%20zum%20Australien-Kapitel%3A%0A%0A">✎ Mir gefällt … / Bitte ändern …</a>
+</div>
 <footer><span>Mit Liebe gereist und gekocht</span> · jewishgermanculturecooking.com</footer>
 
-<script src="assets/world.js"></script>
 <script>
-  // decorative country map crop (reuses shared world path)
-  document.getElementById('hmap').setAttribute('d', WORLD_PATH);
+/* ── all 8 Tasmania entries ── */
+const ENTRIES=[
+ {n:10,date:'17. Januar 2025',  loc:'Hobart',  t:'Tasmanien – Ankunft am Ende der Welt', short:'Ankunft', native:'lutruwita'},
+ {n:11,date:'28. Februar 2025', loc:'Hobart',  t:'Hobart, die Hauptstadt', short:'Hobart', native:'nipaluna'},
+ {n:12,date:'1. April 2025',    loc:'Strahan', t:'Von Hobart nach Strahan', short:'Quer durch die Wildnis'},
+ {n:13,date:'30. April 2025',   loc:'Strahan', t:'Strahan – Cradle Mountain-Lake', short:'Strahan'},
+ {n:14,date:'1. Juni 2025',     loc:'Cradle',  t:'Cradle Mountain – Lake St. Clair National Park', short:'Cradle Mountain'},
+ {n:15,date:'30. Juni 2025',    loc:'BayFires',t:'Bay of Fires & Wine Glass Bay', short:'Bay of Fires'},
+ {n:16,date:'31. Oktober 2025', loc:'Tasman',  t:'Shackleton, Seefisch & Tasmanische Teufel', short:'Seefisch & Teufel'},
+ {n:17,date:'16. Februar 2026', loc:'Tasman',  t:'Port Arthur und seine kulinarischen Geheimnisse', short:'Port Arthur'},
+];
+const PLACES={
+ Hobart:{name:'Hobart',native:'nipaluna'},
+ Strahan:{name:'Strahan',native:''},
+ Cradle:{name:'Cradle Mountain & Lake St. Clair',native:''},
+ BayFires:{name:'Bay of Fires & Wine Glass Bay',native:''},
+ Tasman:{name:'Tasman-Halbinsel & Port Arthur',native:''},
+};
+const CITIES={
+ Hobart:[300,388], Strahan:[112,310], Cradle:[190,182], BayFires:[418,235], Tasman:[350,440],
+};
+const href=n=>`eintrag-australien-${n}.html`;
+const ns="http://www.w3.org/2000/svg";
 
-  const entries=[
-    {n:10,date:'17. Januar 2025',  t:'Tasmanien',
-     d:'Ankunft auf der Insel am Ende der Welt – erste Eindrücke und ein Glas tasmanischer Wein.'},
-    {n:11,date:'28. Februar 2025', t:'Hobart, die Hauptstadt',
-     d:'Hafenstadt, Salamanca-Markt und das Aroma frischer Meeresfrüchte.'},
-    {n:12,date:'1. April 2025',    t:'Von Hobart nach Strahan',
-     d:'Quer durch die Wildnis, vorbei an Regenwald und alten Minenstädten.'},
-    {n:13,date:'30. April 2025',   t:'Strahan – Cradle Mountain-Lake',
-     d:'Vom kleinen Hafen Strahan hinauf in die Berge.'},
-    {n:14,date:'1. Juni 2025',     t:'Cradle Mountain – Lake St. Clair National Park',
-     d:'Wanderungen, Wombats und klare Bergseen im Herzen der Insel.'},
-    {n:15,date:'30. Juni 2025',    t:'Bay of Fire / Wine Glass Bay',
-     d:'Orangerote Flechten auf den Felsen, weiße Strände, türkises Wasser.'},
-    {n:16,date:'31. Oktober 2025', t:'Von Shackleton zu Seefisch und den Tasmanischen Teufeln',
-     d:'Polargeschichten, fangfrischer Fisch und ein Besuch bei den Teufeln.'},
-    {n:17,date:'16. Februar 2026', t:'Port Arthur und seine kulinarischen Geheimnisse',
-     d:'Die alte Sträflingskolonie – Geschichte und überraschend feine Küche.'},
-  ];
+const byLoc={};
+ENTRIES.filter(e=>e.loc).forEach(e=>{(byLoc[e.loc]=byLoc[e.loc]||[]).push(e)});
+const locKeys=Object.keys(byLoc).sort((a,b)=>byLoc[a][0].n-byLoc[b][0].n);
 
-  const tl=document.getElementById('timeline');
-  entries.forEach((e,i)=>{
-    const side=i%2===0?'left':'right';
-    const el=document.createElement('div');el.className='entry '+side;
-    el.innerHTML=`<div class="dot">${e.n}</div>
-      <div class="date">${e.date}</div>
-      <a class="card" href="eintrag-${e.n}.html">
-        <div class="thumb">Foto folgt</div>
-        <h3>${e.t}</h3><p>${e.d}</p>
-        <span class="go">→ Tagebuch öffnen</span>
-      </a>`;
-    tl.appendChild(el);
-  });
+/* ── draw the Tasmania map ── */
+const map=document.getElementById('map');
+const svgEl=(tag,attrs,parent)=>{const e=document.createElementNS(ns,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||map).appendChild(e);return e;};
+svgEl('rect',{x:-98,y:-10,width:694,height:520,class:'sea',rx:4});
+const TAS="M75,100 Q70,78 110,80 L175,76 Q235,70 300,78 L360,82 Q402,86 400,120 "+
+  "L398,150 Q395,185 405,205 Q432,235 422,262 Q412,300 380,330 Q360,355 345,372 "+
+  "Q335,382 318,388 L300,392 Q345,400 360,430 Q368,452 348,452 Q330,450 325,430 "+
+  "Q318,415 300,420 Q270,432 250,448 Q210,455 185,442 Q150,432 128,400 "+
+  "Q105,360 95,300 Q86,245 88,190 Q90,140 80,118 Q76,108 75,100 Z";
+svgEl('path',{d:TAS,class:'land'});
+svgEl('path',{class:'grain',d:'M165,150 Q235,215 290,250 Q320,275 330,330'});
+const routePts=locKeys.map(l=>CITIES[l]);
+svgEl('path',{class:'route',d:'M'+routePts.map(p=>p.join(',')).join(' L')});
+const comp=svgEl('g',{class:'compass',transform:'translate(60,440)'});
+svgEl('circle',{cx:0,cy:0,r:18,fill:'none',stroke:'var(--teal)','stroke-width':1},comp);
+svgEl('path',{d:'M0,-22 L4,0 L0,4 L-4,0 Z',class:'needle'},comp);
+svgEl('path',{d:'M0,22 L4,0 L0,-4 L-4,0 Z',class:'needle2'},comp);
+svgEl('text',{x:0,y:-26,'text-anchor':'middle',class:'maplabel'},comp).textContent='N';
+svgEl('text',{x:240,y:40,'text-anchor':'middle',class:'maplabel'}).textContent='Bass-Straße';
+svgEl('text',{x:430,y:430,'text-anchor':'middle',class:'maplabel'}).textContent='Tasmansee';
+
+/* popover plumbing */
+const pop=document.getElementById('pop'), popInner=document.getElementById('popInner');
+document.getElementById('popClose').onclick=()=>pop.classList.remove('show');
+function positionPop(clientX,clientY){
+  const w=pop.offsetWidth,h=pop.offsetHeight;
+  let x=clientX+14, y=clientY-10;
+  if(x+w>innerWidth-8)x=clientX-w-14;
+  if(y+h>innerHeight-8)y=innerHeight-h-8;
+  if(y<8)y=8;
+  pop.style.left=(x+scrollX)+'px';pop.style.top=(y+scrollY)+'px';
+}
+function openPop(loc,clientX,clientY){
+  const list=byLoc[loc], P=PLACES[loc]||{name:loc,native:''};
+  popInner.innerHTML=`<h4>${P.name}</h4><div class="pnative">${P.native||''}</div>`+
+    list.map(e=>`<a class="row" href="${href(e.n)}">
+        <span class="pn">№ ${e.n} · ${e.date}</span>
+        <h5>${e.t}</h5></a>`).join('');
+  pop.classList.add('show');positionPop(clientX,clientY);
+}
+function openEntryPop(e,clientX,clientY){
+  popInner.innerHTML=`<h4>${e.short||e.t}</h4>`+
+    (e.native?`<div class="pnative">${e.native}</div>`:'')+
+    `<a class="row" href="${href(e.n)}">
+        <span class="pn">№ ${e.n} · ${e.date}</span>
+        <h5>${e.t}</h5></a>`;
+  pop.classList.add('show');positionPop(clientX,clientY);
+}
+
+/* ── pins + leader cards on the map ── */
+const VB={x:-98,y:-10,w:694,h:520};
+const pctX=x=>(x-VB.x)/VB.w*100, pctY=y=>(y-VB.y)/VB.h*100;
+const cards=document.getElementById('cards');
+const CARDPOS={
+  Strahan:[40,310,'l'], Cradle:[40,180,'l'],
+  Hobart:[457,392,'r'], BayFires:[470,215,'r'], Tasman:[457,455,'r'],
+};
+locKeys.forEach((loc,stageIdx)=>{
+  const [x,y]=CITIES[loc], list=byLoc[loc], multi=list.length>1;
+  const [cx,cy,side]=CARDPOS[loc]||[x,y,'r'];
+  svgEl('line',{x1:cx,y1:cy,x2:x,y2:y,class:'leader'});
+  svgEl('circle',{cx:cx,cy:cy,r:1.8,class:'anch'});
+  const g=document.createElementNS(ns,'g'); g.setAttribute('class','pin'+(multi?' multi':''));
+  const dot=document.createElementNS(ns,'circle');
+  dot.setAttribute('cx',x);dot.setAttribute('cy',y);dot.setAttribute('r',multi?12:9);
+  dot.setAttribute('class','dot'+(multi?' multi':''));g.appendChild(dot);
+  function activate(ev){ev.preventDefault();ev.stopPropagation();
+    document.querySelectorAll('.pin.open').forEach(p=>p.classList.remove('open'));
+    g.classList.add('open');
+    if(!multi){location.href=href(list[0].n);return;}
+    const r=dot.getBoundingClientRect();openPop(loc,r.left+r.width/2,r.top+r.height/2);}
+  g.addEventListener('click',activate);map.appendChild(g);
+  const P=PLACES[loc]||{name:loc,native:''};
+  const sub=multi?`${list.length} Beiträge`:list[0].date;
+  const a=document.createElement('a');
+  a.className='lbl '+side+(multi?' multi':'');
+  a.href=multi?'#':href(list[0].n);
+  a.style.left=pctX(cx)+'%';a.style.top=pctY(cy)+'%';a.style.setProperty('--tx',side==='l'?'-100%':'0');
+  a.innerHTML=`<span class="stage">${stageIdx+1}</span><span class="nm"><b>${P.name}</b> <span class="he">${P.native||''}</span><small>${sub}</small></span>`;
+  if(multi)a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openPop(loc,ev.clientX,ev.clientY);});
+  cards.appendChild(a);
+});
+
+/* ── the night sky ── */
+const sky=document.getElementById('sky');
+const kEl=(tag,attrs,parent)=>{const e=document.createElementNS(ns,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||sky).appendChild(e);return e;};
+
+// gradient + background
+const defs=kEl('defs',{});
+const grad=kEl('radialGradient',{id:'skyGrad',cx:'50%',cy:'40%',r:'75%'},defs);
+kEl('stop',{offset:'0%','stop-color':'#1B2F66'},grad);
+kEl('stop',{offset:'100%','stop-color':'#0A1A3F'},grad);
+kEl('rect',{x:0,y:0,width:780,height:560,class:'skybg',rx:4});
+
+// scattered faint stardust
+let seed=7;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+for(let i=0;i<150;i++){
+  const x=rnd()*780,y=rnd()*560,r=rnd()*1.3+.3;
+  const s=kEl('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:r.toFixed(2),class:'dust'});
+  if(rnd()>.6){s.classList.add('twinkle');s.style.animationDelay=(rnd()*3.4)+'s';}
+}
+
+/* the real Southern Cross (Crux), tucked top-right as the guiding emblem */
+const crux=[
+  {x:648,y:70, m:3.2, nm:'Gacrux'},   // top
+  {x:690,y:150,m:2.5, nm:'Becrux'},   // left arm
+  {x:636,y:172,m:2.0, nm:'Acrux'},    // bottom
+  {x:606,y:118,m:2.4, nm:'Delta'},    // right arm
+  {x:672,y:118,m:1.4, nm:'Epsilon'},  // fainter
+];
+// connect the cross (long axis + cross-arm)
+kEl('line',{x1:crux[0].x,y1:crux[0].y,x2:crux[2].x,y2:crux[2].y,class:'crux-line'});
+kEl('line',{x1:crux[1].x,y1:crux[1].y,x2:crux[3].x,y2:crux[3].y,class:'crux-line'});
+crux.forEach(c=>{
+  kEl('circle',{cx:c.x,cy:c.y,r:c.m+3.5,class:'sglow'});
+  const st=kEl('path',{d:starPath(c.x,c.y,c.m+2.2,c.m*0.5),class:'crux-star'});
+  st.classList.add('twinkle');st.style.animationDelay=(Math.random()*3.4).toFixed(2)+'s';
+});
+kEl('text',{x:648,y:210,class:'crux-title'}).textContent='Kreuz des Südens';
+kEl('text',{x:648,y:228,class:'crux-lbl'}).textContent='Crux · Southern Cross';
+
+/* a 4-point star path generator (outer R, inner r), centred at cx,cy */
+function starPath(cx,cy,R,r){
+  const pts=[];
+  for(let i=0;i<8;i++){const ang=-Math.PI/2+i*Math.PI/4;const rad=(i%2===0)?R:r;
+    pts.push([(cx+rad*Math.cos(ang)).toFixed(1),(cy+rad*Math.sin(ang)).toFixed(1)]);}
+  return 'M'+pts.map(p=>p.join(',')).join(' L')+'Z';
+}
+
+/* the eight journey-stars, laid out as a gentle constellation, chronological */
+const STARPOS=[
+ [150,430],[235,360],[150,255],[300,210],[230,120],[420,150],[470,300],[400,420],
+];
+const scards=document.getElementById('scards');
+const spct=(x,y)=>[(x/780*100).toFixed(2)+'%',(y/560*100).toFixed(2)+'%'];
+
+// dashed path linking the stars in travel order
+kEl('path',{class:'path-line',d:'M'+STARPOS.map(p=>p.join(',')).join(' L')});
+
+ENTRIES.forEach((e,i)=>{
+  const [x,y]=STARPOS[i];
+  const g=kEl('g',{class:'sstop'});
+  g.addEventListener('click',ev=>{ev.stopPropagation();openEntryPop(e,ev.clientX,ev.clientY);});
+  kEl('circle',{cx:x,cy:y,r:13,class:'sglow'},g);
+  const st=kEl('path',{d:starPath(x,y,11,4.4),class:'sstar'},g);
+  st.classList.add('twinkle');st.style.animationDelay=(i*0.4).toFixed(2)+'s';
+
+  // a card just outside, pushed away from the sky centre
+  const cx=390, side = x<cx-30 ? 'l' : (x>cx+30 ? 'r' : 'c');
+  const off=22, ax = side==='l'? x-off : side==='r'? x+off : x;
+  const ay = side==='c' ? (y<260? y-off : y+off) : y;
+  const [L,T]=spct(ax,ay);
+  const a=document.createElement('a'); a.href=href(e.n);
+  let cls='lbl', tx='0', ty='-50%';
+  if(side==='l'){cls+=' l'; tx='-100%';}
+  else if(side==='c'){cls+=' c'; tx='-50%'; ty=(y<260?'-100%':'0');}
+  a.className=cls; a.style.left=L; a.style.top=T;
+  a.style.setProperty('--tx',tx); a.style.setProperty('--ty',ty);
+  a.innerHTML=`<span class="stage">${i+1}</span><span class="nm"><b>${e.short||e.t}</b><small>${e.date}</small></span>`;
+  a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openEntryPop(e,ev.clientX,ev.clientY);});
+  scards.appendChild(a);
+});
+
+/* dismiss popover on outside click / Esc */
+document.addEventListener('click',e=>{if(!pop.contains(e.target))pop.classList.remove('show')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')pop.classList.remove('show')});
 </script>
-<script src="assets/feedback.js"></script>
 </body>
 </html>
