@@ -110,6 +110,8 @@ body{background:var(--page);color:var(--ink);
   text-align:center;margin:1.7em 0 .7em}
 .col-main h2::before,.col-main h2::after{content:' ◈ ';color:var(--accent2);font-size:15px;vertical-align:middle}
 .col-main .signoff{font-family:'Caveat',cursive;font-size:26px;color:var(--accent2);text-align:center;margin:1.4em 0 .3em}
+.col-main ul.flow{margin:0 0 1.3em 1.1em;padding:0}
+.col-main ul.flow li{font-size:17px;line-height:1.7;margin-bottom:.4em;padding-left:4px}
 
 figure.fig{margin:1.7em 0;border:1px solid var(--rule);background:#fff;
   box-shadow:0 4px 14px rgba(40,30,20,.16)}

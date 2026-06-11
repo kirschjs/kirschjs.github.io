@@ -38,14 +38,14 @@ const DESTINATIONS = {
     "y": 250.5,
     "slug": "ecuador"
   },
-  "nuernberg": {
+  "franken": {
     "name": "Nürnberg / Franken",
     "country": "Deutschland",
     "order": 3,
     "desc": "Heimat und Ausgangspunkt: vom Schulweg und fränkischen Flohmärkten über Jazz in Nürnberg bis zum Felsengarten Sanspareil und zur süßen Weihnachtszeit.",
     "x": 530.8,
     "y": 112.6,
-    "slug": "nuernberg"
+    "slug": "franken"
   }
 };
 
