@@ -56,7 +56,7 @@
 
   /* on-map location cards — the description sits right on the map, joined by a leader line */
   .cards{position:absolute;inset:0;pointer-events:none}
-  .lbl{position:absolute;pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:168px;
+  .lbl{position:absolute;pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:186px;
     background:#fff;border:1px solid var(--edge);border-radius:9px;padding:5px 9px;
     box-shadow:0 3px 10px rgba(10,42,107,.13);text-decoration:none;color:inherit;cursor:pointer;
     transform:translate(var(--tx,0),var(--ty,-50%));transition:box-shadow .15s}
@@ -67,10 +67,16 @@
   .lbl .nm .he{font-size:13px;color:var(--stamp)}
   .lbl .nm small{display:block;font-size:12px;font-style:italic;color:var(--muted)}
   .lbl:hover .nm{color:var(--stamp2)}
-  /* encircled stage number — marks the position along the route */
-  .lbl .stage{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--gold);
-    color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;line-height:1;
-    display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(10,42,107,.3)}
+  /* encircled Beitragsnummer(n) — one number per single entry, all numbers for a place
+     with several Beiträge (grows into a soft pill that wraps if there are many) */
+  .lbl .stage{flex:0 0 auto;min-width:23px;max-width:84px;min-height:23px;border-radius:12px;
+    background:var(--gold);color:#fff;font-family:'Playfair Display',serif;font-weight:700;
+    font-size:12px;line-height:1.18;padding:3px 7px;display:flex;align-items:center;
+    justify-content:center;text-align:center;flex-wrap:wrap;box-shadow:0 1px 3px rgba(10,42,107,.3)}
+  /* the Rezeptsammlung: a red dot on white instead of a numbered circle */
+  .lbl .stage.rez{background:#fff;border:1px solid var(--edge);padding:0;
+    width:23px;height:23px;min-width:0;min-height:0}
+  .lbl .stage.rez::before{content:'';width:11px;height:11px;border-radius:50%;background:#D11}
 
   /* ── popover listing a location's entries ── */
   .pop{position:absolute;z-index:40;width:250px;background:var(--card);border:1px solid var(--edge);
@@ -125,8 +131,8 @@
 <div class="section">
   <h2>Stationen der Reise</h2>
   <p class="lead">Renates Weg durch Erez-Israel – tippen Sie einen Ort an. Orte mit mehreren
-     Beiträgen öffnen eine kleine Auswahl. Die <b>nummerierten Stationen</b> zeigen die
-     Reihenfolge der Reise.</p>
+     Beiträgen öffnen eine kleine Auswahl. Die Zahl im Kreis ist die <b>Beitragsnummer</b>;
+     an Orten mit mehreren Beiträgen stehen alle Nummern beieinander.</p>
   <div class="map-frame">
     <div class="hint">↓ Tippen Sie auf einen Ort</div>
     <div class="map-wrap">
@@ -140,8 +146,8 @@
   <h2>Die Themen – auf dem Sederteller</h2>
   <p class="lead">Die Beiträge ohne festen Ort liegen wie die Speisen auf dem Sederteller:
      die Anreise, die jüdischen Feste und ein süßer Ausklang – rund um Pessach in der Mitte.
-     Tippen Sie auf ein Symbol. Die <b>nummerierten Speisen</b> geben die zeitliche Reihenfolge
-     im Kreis – und ins Herz zum Pessachfest.</p>
+     Tippen Sie auf ein Symbol. Die Zahl nennt die <b>Beitragsnummer</b>; die Rezeptsammlung
+     trägt statt einer Nummer einen <b>roten Punkt</b>.</p>
   <div class="map-frame">
     <div class="map-wrap">
       <svg class="fyear" id="fyear" viewBox="0 0 780 640" aria-label="Sederteller mit den Themen-Beiträgen"></svg>
@@ -176,29 +182,29 @@ const ENTRIES=[
  {n:14,date:'27. Mai 2022',     loc:'Masada',    t:'Ans Tote Meer und mit König Herodes nach Masada'},
  {n:15,date:'4. Juni 2022',     loc:null,        t:'Pfingsten – Schawuot', native:'שבועות', short:'Schawuot'},
  {n:16,date:'10. Juni 2022',    loc:'TelAviv',   t:'Tel Aviv / Yafo (Jaffa)'},
- {n:17,date:'17. Juni 2022',    loc:null,        t:'Rezepte in alphabetischer Reihenfolge', short:'Rezepte A–Z'},
- {n:18,date:'24. Juni 2022',    loc:'Jerusalem', t:'Jerusalem', native:'ירושלים'},
- {n:19,date:'1. Juli 2022',     loc:'Jerusalem', t:'Old City – Mahane Yehuda'},
- {n:20,date:'8. Juli 2022',     loc:null,        t:'Israel und Jerusalem ohne seine Festtage – undenkbar', short:'Festtage'},
- {n:21,date:'15. Juli 2022',    loc:null,        t:'Vorbereitung zum Laubhüttenfest (Sukkot)', short:'Sukkot'},
- {n:22,date:'22. Juli 2022',    loc:'Jerusalem', t:'Europäischer Einfluss in Jerusalem'},
- {n:23,date:'29. Juli 2022',    loc:'Jericho',   t:'Ausflug nach Jericho'},
- {n:24,date:'5. August 2022',   loc:'Ramallah',  t:'Ein Tag in Ramallah'},
- {n:25,date:'19. August 2022',  loc:'TelAviv',   t:'Tel Aviv: Rothschild-Boulevard, Strand & Yafo'},
- {n:26,date:'26. August 2022',  loc:'Jerusalem', t:'Wieder in Jerusalem: Teddy-Kollek-Park & King David Hotel'},
- {n:27,date:'2. September 2022', loc:'Jerusalem', t:'Vom Skopusberg nach Givat Ram und En Kerem'},
- {n:28,date:'9. September 2022', loc:'Jerusalem', t:'Tu biSchevat & ein Spaziergang zum Ölberg'},
- {n:29,date:'16. September 2022',loc:null,        t:'Purim', native:'פורים', short:'Purim'},
- {n:30,date:'23. September 2022',loc:'Jerusalem', t:'Tempelberg mit Felsendom und Al-Aksa-Moschee'},
- {n:31,date:'30. September 2022',loc:'Jerusalem', t:'Klagemauer und Western Wall Tunnel'},
- {n:32,date:'7. Oktober 2022',  loc:null,        t:'Pessach', native:'פֶּסַח', short:'Pessach'},
- {n:33,date:'14. Oktober 2022', loc:'Jerusalem', t:'Von der Altstadt ins Austrian Hospiz'},
- {n:34,date:'28. Oktober 2022', loc:'Jerusalem', t:'Auf der Altstadtmauer & Zitadelle (Turm Davids)'},
- {n:35,date:'4. November 2022', loc:'Jerusalem', t:'Israel-Museum, Knesset & Regierungsviertel'},
- {n:36,date:'11. November 2022',loc:'Jerusalem', t:'Yad Vashem', native:'יד ושם'},
- {n:37,date:'25. November 2022',loc:'Bethlehem', t:'Bethlehem – arabischer Teil'},
- {n:38,date:'10. Dezember 2022',loc:'Bethlehem', t:'Bethlehem – christlicher Teil'},
- {n:39,date:'20. Januar 2023',  loc:null,        t:'Süße Erinnerungen', short:'Ausklang'},
+ {n:'rezepte', rez:true, date:'17. Juni 2022', loc:null, t:'Rezepte von A bis Z', short:'Rezepte A–Z'},
+ {n:17,date:'24. Juni 2022',    loc:'Jerusalem', t:'Jerusalem', native:'ירושלים'},
+ {n:18,date:'1. Juli 2022',     loc:'Jerusalem', t:'Old City – Mahane Yehuda'},
+ {n:19,date:'8. Juli 2022',     loc:null,        t:'Israel und Jerusalem ohne seine Festtage – undenkbar', short:'Festtage'},
+ {n:20,date:'15. Juli 2022',    loc:null,        t:'Vorbereitung zum Laubhüttenfest (Sukkot)', short:'Sukkot'},
+ {n:21,date:'22. Juli 2022',    loc:'Jerusalem', t:'Europäischer Einfluss in Jerusalem'},
+ {n:22,date:'29. Juli 2022',    loc:'Jericho',   t:'Ausflug nach Jericho'},
+ {n:23,date:'5. August 2022',   loc:'Ramallah',  t:'Ein Tag in Ramallah'},
+ {n:24,date:'19. August 2022',  loc:'TelAviv',   t:'Tel Aviv: Rothschild-Boulevard, Strand & Yafo'},
+ {n:25,date:'26. August 2022',  loc:'Jerusalem', t:'Wieder in Jerusalem: Teddy-Kollek-Park & King David Hotel'},
+ {n:26,date:'2. September 2022', loc:'Jerusalem', t:'Vom Skopusberg nach Givat Ram und En Kerem'},
+ {n:27,date:'9. September 2022', loc:'Jerusalem', t:'Tu biSchevat & ein Spaziergang zum Ölberg'},
+ {n:28,date:'16. September 2022',loc:null,        t:'Purim', native:'פורים', short:'Purim'},
+ {n:29,date:'23. September 2022',loc:'Jerusalem', t:'Tempelberg mit Felsendom und Al-Aksa-Moschee'},
+ {n:30,date:'30. September 2022',loc:'Jerusalem', t:'Klagemauer und Western Wall Tunnel'},
+ {n:31,date:'7. Oktober 2022',  loc:null,        t:'Pessach', native:'פֶּסַח', short:'Pessach'},
+ {n:32,date:'14. Oktober 2022', loc:'Jerusalem', t:'Von der Altstadt ins Austrian Hospiz'},
+ {n:33,date:'28. Oktober 2022', loc:'Jerusalem', t:'Auf der Altstadtmauer & Zitadelle (Turm Davids)'},
+ {n:34,date:'4. November 2022', loc:'Jerusalem', t:'Israel-Museum, Knesset & Regierungsviertel'},
+ {n:35,date:'11. November 2022',loc:'Jerusalem', t:'Yad Vashem', native:'יד ושם'},
+ {n:36,date:'25. November 2022',loc:'Bethlehem', t:'Bethlehem – arabischer Teil'},
+ {n:37,date:'10. Dezember 2022',loc:'Bethlehem', t:'Bethlehem – christlicher Teil'},
+ {n:38,date:'20. Januar 2023',  loc:null,        t:'Süße Erinnerungen', short:'Ausklang'},
 ];
 
 /* display metadata for each map location (label + Hebrew) */
@@ -319,12 +325,13 @@ locKeys.forEach((loc,stageIdx)=>{
 
   // on-map card: Roman + Hebrew name · date (single) / count (multi) — seder-style, no number
   const P=PLACES[loc]||{name:loc,native:''};
-  const sub=multi?`${list.length} Beiträge`:list[0].date;
+  const sub=multi?`${list.length} Beiträge`:'';
   const a=document.createElement('a');
   a.className='lbl '+side+(multi?' multi':'');
   a.href=multi?'#':href(list[0].n);
   a.style.left=pctX(cx)+'%';a.style.top=pctY(cy)+'%';a.style.setProperty('--tx',side==='l'?'-100%':'0');
-  a.innerHTML=`<span class="stage">${stageIdx+1}</span><span class="nm"><b>${P.name}</b> <span class="he native">${P.native||''}</span><small>${sub}</small></span>`;
+  const nums=list.map(e=>e.n).sort((x,y)=>x-y).join(' · ');
+  a.innerHTML=`<span class="stage">${nums}</span><span class="nm"><b>${P.name}</b> <span class="he native">${P.native||''}</span>${sub?`<small>${sub}</small>`:''}</span>`;
   if(multi)a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openPop(loc,ev.clientX,ev.clientY);});
   cards.appendChild(a);
 });
@@ -335,8 +342,8 @@ const fEl=(tag,attrs,parent)=>{const e=document.createElementNS(ns,tag);
   for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||fy).appendChild(e);return e;};
 
 /* one little drawn symbol per thematic entry (paths in a 24×24 box) */
-const FSYM={1:'anchor',2:'ship',3:'waves',6:'calendar',15:'wheat',17:'pot',
-  20:'star',21:'palm',29:'mask',32:'matzah',39:'heart'};
+const FSYM={1:'anchor',2:'ship',3:'waves',6:'calendar',15:'wheat','rezepte':'pot',
+  19:'star',20:'palm',28:'mask',31:'matzah',38:'heart'};
 const ICONS={
   anchor:[{d:'M12 2.4a2.4 2.4 0 1 0 .01 0 M12 5V22 M4.5 15.5a7.5 7.5 0 0 0 15 0 M4.5 15.5l3.6 .2 M19.5 15.5l-3.6 .2 M7.5 11.5h9'}],
   ship:[{d:'M3 16h18l-2 5H5z M6 16v-5h12v5 M9 11V7h5v4'}],
@@ -353,7 +360,7 @@ const ICONS={
 
 const themed=ENTRIES.filter(e=>!e.loc);
 const byN=n=>themed.find(e=>e.n===n);
-const ringOrder=[1,2,3,6,15,17,20,21,29,39];           // 10 dishes around the rim, chronological
+const ringOrder=[1,2,3,6,15,'rezepte',19,20,28,38];     // 10 dishes around the rim, chronological
 const rad=d=>d*Math.PI/180;
 const CX=390, CY=312, ROUT=200, RWELL=138, RLABEL=232;
 
@@ -381,7 +388,7 @@ function dish(e,x,y,r){
    by a short leader. */
 const fcards=document.getElementById('fcards');
 const fpct=(x,y)=>[(x/780*100).toFixed(2)+'%',(y/640*100).toFixed(2)+'%'];
-function fcard(e,stage,c,s){
+function fcard(e,c,s){
   const [L,T]=fpct(CX+214*c, CY+214*s);
   const a=document.createElement('a'); a.href=href(e.n);
   let cls='lbl', tx='0', ty='-50%';
@@ -389,26 +396,27 @@ function fcard(e,stage,c,s){
   else if(c<=0.25){cls+=' c'; tx='-50%'; ty=(s<0?'-100%':'0');}  // top / bottom centre
   a.className=cls; a.style.left=L; a.style.top=T;
   a.style.setProperty('--tx',tx); a.style.setProperty('--ty',ty);
-  a.innerHTML=`<span class="stage">${stage}</span><span class="nm"><b>${e.short||e.t}</b> `+
-    `<span class="he native">${e.native||''}</span><small>${e.date}</small></span>`;
+  const badge=e.rez?'<span class="stage rez"></span>':`<span class="stage">${e.n}</span>`;
+  a.innerHTML=`${badge}<span class="nm"><b>${e.short||e.t}</b> `+
+    `<span class="he native">${e.native||''}</span></span>`;
   a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openEntryPop(e,ev.clientX,ev.clientY);});
   fcards.appendChild(a);
 }
 
 /* ten dishes around the rim, in calendar order; each tied to its card by a
-   short leader. Ring positions 0..8 are stages 1..9; the last dish (Ausklang)
-   is stage 11, because Pessach in the heart is stage 10. */
+   short leader. Each card carries its Beitragsnummer; the Rezeptsammlung shows
+   a red dot instead. Pessach (Nr. 31) sits in the heart of the plate. */
 ringOrder.forEach((n,i)=>{
   const a=rad(-90+i*36), c=Math.cos(a), s=Math.sin(a);
   dish(byN(n),CX+RWELL*c,CY+RWELL*s,27);
   fEl('line',{x1:(CX+(ROUT+1)*c).toFixed(1),y1:(CY+(ROUT+1)*s).toFixed(1),
               x2:(CX+210*c).toFixed(1),y2:(CY+210*s).toFixed(1),class:'leader'});
   fEl('circle',{cx:(CX+210*c).toFixed(1),cy:(CY+210*s).toFixed(1),r:1.8,class:'anch'});
-  fcard(byN(n), i<=8?i+1:11, c, s);
+  fcard(byN(n), c, s);
 });
 
-/* Pessach – the Seder itself – at the heart of the plate (stage 10) */
-const pe=byN(32);
+/* Pessach – the Seder itself – at the heart of the plate (Nr. 31) */
+const pe=byN(31);
 const pg=fEl('g',{class:'fstop'}); pg.style.cursor='pointer';
 pg.addEventListener('click',ev=>{ev.stopPropagation();openEntryPop(pe,ev.clientX,ev.clientY);});
 fEl('circle',{cx:CX,cy:CY-6,r:40,class:'medal'},pg);
@@ -420,8 +428,8 @@ ICONS.matzah.forEach(p=>fEl('path',{d:p.d,class:'fsym'+(p.f?' fill':'')},pig));
   const [L,T]=fpct(CX, CY+44);
   const a=document.createElement('a'); a.href=href(pe.n); a.className='lbl c';
   a.style.left=L; a.style.top=T; a.style.setProperty('--tx','-50%'); a.style.setProperty('--ty','0');
-  a.innerHTML=`<span class="stage">10</span><span class="nm"><b>${pe.short||pe.t}</b> `+
-    `<span class="he native">${pe.native||''}</span><small>${pe.date}</small></span>`;
+  a.innerHTML=`<span class="stage">${pe.n}</span><span class="nm"><b>${pe.short||pe.t}</b> `+
+    `<span class="he native">${pe.native||''}</span></span>`;
   a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openEntryPop(pe,ev.clientX,ev.clientY);});
   fcards.appendChild(a);
 })();
