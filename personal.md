@@ -3,6 +3,7 @@ layout: default
 title: vita
 ---
 
+<p style="margin-bottom:1em;">&rarr; <a href="dinner.html">Workshop dinner at Le Paris (RSVP)</a></p>
 
 
 <!--Converted from existing html with https://www.browserling.com/tools/html-to-markdown-->
