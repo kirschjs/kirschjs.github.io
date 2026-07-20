@@ -109,7 +109,7 @@
     const isLatest=d.slug===latestSlug;
     const flip=d.x>820;
     const g=document.createElementNS(ns,'a');
-    g.setAttribute('href',isLatest?LATEST_ENTRY.href:`reise-${d.slug}.html`);
+    g.setAttribute('href',`reise-${d.slug}.html`);
     let mk;
     if(isLatest){
       mk=document.createElementNS(ns,'path');
@@ -141,10 +141,10 @@
   order.forEach((d,i)=>{
     const isLatest=d.slug===latestSlug;
     const a=document.createElement('a');
-    a.href=isLatest?LATEST_ENTRY.href:`reise-${d.slug}.html`;
+    a.href=`reise-${d.slug}.html`;
     a.className='stamp'+(isLatest?' stamp-latest':'');
     const tag=isLatest?`<span class="latest-tag">★ Neuester Eintrag · ${LATEST_ENTRY.date}</span>`:'';
-    const go=isLatest?'→ Neuesten Eintrag lesen':'→ Tagebuch öffnen';
+    const go='→ Tagebuch öffnen';
     a.innerHTML=`<div class="seal" style="--rot:${rots[i%rots.length]}">
         <div class="no">№ ${d.order}</div><div class="nm">${d.name}</div><div class="co">${d.country}</div>
       </div><p>${tag}${d.desc}</p><span class="go">${go}</span>`;

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renate in Japan – Reisetagebuch</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{   /* Japan · rot & weiß (Hinomaru) */
+    --parch:#FBFAFA; --parch2:#F4F0F1; --card:#FFFFFF; --edge:#E6CFD2; --ink:#1A1A1A;
+    --stamp:#BC002D; --stamp2:#7A0020; --sea:#CFE4F5; --coast:#BC002D;
+    --muted:#8a6a6e;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--parch);color:var(--ink);font-family:'Crimson Text',Georgia,serif;
+    background-image:radial-gradient(rgba(188,0,45,.05) 1px,transparent 1px);background-size:14px 14px}
+  .native{font-family:'Noto Serif JP','Crimson Text',serif}
+
+  .bar{position:sticky;top:0;z-index:30;background:rgba(244,240,241,.93);backdrop-filter:blur(5px);
+    border-bottom:1px solid var(--edge);padding:9px 22px;display:flex;align-items:center;gap:14px;font-size:14px}
+  .bar a{color:var(--stamp);text-decoration:none}
+  .bar a:hover{text-decoration:underline}
+  .crumb{color:var(--muted)}.crumb b{color:var(--ink)}
+
+  header{text-align:center;padding:46px 24px 6px}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,54px);margin-top:4px;line-height:1.1}
+  header h1 .native{font-size:.5em;color:var(--stamp);font-style:normal}
+  header .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--stamp2);margin-top:10px}
+  header p{max-width:640px;margin:14px auto 0;font-size:18px;font-style:italic;color:#5a4044}
+
+  .section{max-width:1040px;margin:32px auto 0;padding:0 24px}
+  .map-frame{position:relative;background:var(--card);border:1px solid var(--edge);
+    box-shadow:0 8px 26px rgba(120,20,40,.14);padding:18px}
+  .map-frame::after{content:'';position:absolute;inset:7px;border:1px dashed var(--edge);pointer-events:none}
+  .map-wrap{position:relative}
+  svg.map{width:100%;height:auto;display:block;overflow:hidden}
+  .sea{fill:var(--sea)}
+  .land{fill:#FFFFFF;stroke:var(--coast);stroke-width:1.6;stroke-linejoin:round}
+  .sealbl{font-family:'Noto Serif JP','Crimson Text',serif;font-size:15px;fill:#7fb0d8;opacity:.85}
+  .isllbl{font-family:'Playfair Display',serif;fill:#C9AEB2;opacity:.85;text-anchor:middle}
+  .sun{fill:var(--stamp);opacity:.10}
+  .leader{stroke:#E3B9C0;stroke-width:1;fill:none}
+  .anch{fill:#E3B9C0}
+
+  .pin{cursor:pointer}
+  .pin .dot{fill:var(--stamp);stroke:var(--card);stroke-width:2.5;transition:transform .2s}
+  .pin .dot.multi{fill:var(--stamp2)}
+  .pin:hover .dot,.pin.open .dot{transform:scale(1.25);transform-box:fill-box;transform-origin:center}
+
+  .cards{position:absolute;inset:0;pointer-events:none}
+  .lbl{position:absolute;pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:190px;
+    background:#fff;border:1px solid var(--edge);border-radius:9px;padding:5px 9px;
+    box-shadow:0 3px 10px rgba(120,20,40,.13);text-decoration:none;color:inherit;cursor:pointer;
+    transform:translate(var(--tx,0),var(--ty,-50%));transition:box-shadow .15s}
+  .lbl:hover{box-shadow:0 7px 18px rgba(120,20,40,.24);z-index:5}
+  .lbl.l{flex-direction:row-reverse;text-align:right}
+  .lbl .nm{font-family:'Playfair Display',serif;font-size:15px;line-height:1.14;color:var(--ink)}
+  .lbl .nm .he{display:block;font-size:12px;font-style:italic;color:var(--stamp2)}
+  .lbl:hover .nm{color:var(--stamp2)}
+  .lbl .stage{flex:0 0 auto;min-width:23px;max-width:84px;min-height:23px;border-radius:12px;
+    background:var(--stamp);color:#fff;font-family:'Playfair Display',serif;font-weight:700;
+    font-size:12px;line-height:1.18;padding:3px 7px;display:flex;align-items:center;
+    justify-content:center;text-align:center;flex-wrap:wrap;box-shadow:0 1px 3px rgba(120,20,40,.3)}
+  .lbl.multi .stage{background:var(--stamp2)}
+
+  .pop{position:absolute;z-index:40;width:250px;background:var(--card);border:1px solid var(--edge);
+    border-radius:8px;box-shadow:0 12px 30px rgba(120,20,40,.26);padding:12px 14px;display:none}
+  .pop.show{display:block}
+  .pop h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:2px}
+  .pop .pnative{font-family:'Noto Serif JP','Crimson Text',serif;font-size:13px;color:var(--stamp2);font-style:italic;margin-bottom:8px}
+  .pop a.row{display:block;text-decoration:none;color:inherit;padding:6px 0;border-top:1px dashed var(--edge)}
+  .pop a.row:first-of-type{border-top:0}
+  .pop a.row:hover h5{text-decoration:underline}
+  .pop a.row .pn{font-family:'Caveat',cursive;font-size:16px;color:var(--stamp2)}
+  .pop a.row h5{font-family:'Crimson Text',serif;font-size:15.5px;font-weight:600;line-height:1.25}
+  .pop .close{position:absolute;top:6px;right:9px;cursor:pointer;color:var(--stamp);font-size:18px;line-height:1}
+
+  footer{background:var(--stamp2);color:#f6dfe4;text-align:center;padding:24px;font-size:14px;font-family:'Caveat',cursive}
+  footer span{font-size:18px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a href="home-C-tagebuch.html">← Startseite</a>
+  <span class="crumb">Startseite › Renate in <b>Japan</b></span>
+</div>
+
+<header>
+  <h1>Renate in Japan <span class="native">日本</span></h1>
+  <div class="region">Reisetagebuch № 5 · Ostasien · 2026</div>
+  <p>Erste Schritte in Nippon, dem Land der aufgehenden Sonne: von der Ankunft bei Freundin
+     Yasuko in Nagoya zur Kirschblütenzeit bis nach Matsumoto am Fuße der japanischen
+     Nordalpen – mit Ramen, Soba und Matcha.</p>
+</header>
+
+<div class="section">
+  <div class="map-frame">
+    <div class="map-wrap">
+      <svg class="map" id="map" viewBox="0 0 520 593" aria-label="Karte von Japan mit Reisestationen"></svg>
+      <div class="cards" id="cards"></div>
+    </div>
+  </div>
+</div>
+
+<div class="pop" id="pop"><span class="close" id="popClose">×</span><div id="popInner"></div></div>
+
+<footer><span>Mit Liebe gereist und gekocht</span> · jewishgermanculturecooking.com</footer>
+
+<script>
+/* ── Japan entries so far ─────────────────────────────────────────────── */
+const ENTRIES=[
+ {n:1, date:'31. März 2026', loc:'Nagoya',    t:'Ankunft in Japan – Nippon'},
+ {n:2, date:'31. Mai 2026',  loc:'Matsumoto', t:'Matsumoto – Tor zu den Nordalpen'},
+ {n:3, date:'16. Juli 2026', loc:'Matsumoto', t:'Matsumoto City Museum'},
+];
+const PLACES={
+ Matsumoto:{name:'Matsumoto', sub:'松本 · Nordalpen', pin:[274.8,375.0], card:[430,332,'r']},
+ Nagoya:   {name:'Nagoya',    sub:'名古屋 · Ankunft',  pin:[243.0,415.5], card:[204,372,'l']},
+};
+const href=n=>`eintrag-japan-${n}.html`;
+const ns="http://www.w3.org/2000/svg";
+const VB={x:0,y:0,w:520,h:593};
+const pctX=x=>(x-VB.x)/VB.w*100, pctY=y=>(y-VB.y)/VB.h*100;
+
+const byLoc={};
+ENTRIES.forEach(e=>{(byLoc[e.loc]=byLoc[e.loc]||[]).push(e)});
+
+const map=document.getElementById('map');
+const svgEl=(tag,attrs,parent)=>{const e=document.createElementNS(ns,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||map).appendChild(e);return e;};
+
+/* blue sea, a faint rising sun, then the white islands with red coasts */
+svgEl('rect',{x:0,y:0,width:VB.w,height:VB.h,class:'sea'});
+svgEl('circle',{cx:430,cy:120,r:66,class:'sun'});
+
+const ISLANDS=[
+ /* Honshū & Kyūshū */
+ 'M392.3,262.6 L364.5,301.1 L365.0,340.5 L353.7,371.0 L358.9,390.2 L343.3,417.1 L305.0,435.1 '+
+ 'L252.3,437.4 L209.5,481.1 L189.4,466.4 L188.1,437.8 L135.9,446.2 L100.4,464.2 L65.3,465.0 '+
+ 'L95.7,493.1 L75.7,558.0 L56.3,574.1 L41.8,559.3 L49.2,524.8 L30.2,513.7 L18.0,487.5 '+
+ 'L46.4,475.7 L62.1,451.7 L92.3,431.9 L114.3,405.8 L174.0,394.4 L206.1,402.2 L237.4,334.3 '+
+ 'L257.4,352.5 L301.5,314.3 L318.5,299.5 L337.4,252.7 L332.2,209.8 L344.9,185.6 L376.8,178.6 '+
+ 'L393.1,231.6 L392.3,262.6 Z',
+ /* Hokkaidō */
+ 'M474.1,79.9 L495.3,63.7 L502.0,106.6 L457.5,117.1 L431.2,155.0 L384.1,128.9 L367.7,170.7 '+
+ 'L334.4,171.3 L330.2,133.3 L345.1,103.9 L377.1,101.8 L385.9,48.9 L394.7,19.1 L430.0,58.9 '+
+ 'L453.0,71.8 L474.1,79.9 Z',
+ /* Shikoku */
+ 'M106.9,481.1 L123.5,458.3 L140.5,462.7 L152.9,446.7 L174.9,454.9 L178.7,468.0 L161.8,491.1 '+
+ 'L149.5,478.9 L134.1,487.8 L126.2,510.1 L106.6,499.2 L106.9,481.1 Z',
+];
+ISLANDS.forEach(d=>svgEl('path',{d:d,class:'land'}));
+
+/* sea & island labels */
+svgEl('text',{x:70,y:250,class:'sealbl native'}).textContent='日本海';
+svgEl('text',{x:415,y:520,class:'sealbl native'}).textContent='太平洋';
+/* the four main islands, sized to sit inside each coastline */
+svgEl('text',{x:423,y:112,class:'isllbl',style:'font-size:11px;letter-spacing:2px'}).textContent='HOKKAIDŌ';
+svgEl('text',{x:299,y:358,class:'isllbl',style:'font-size:12px;letter-spacing:2.5px'}).textContent='HONSHŪ';
+svgEl('text',{x:145,y:475,class:'isllbl',style:'font-size:9px;letter-spacing:.5px'}).textContent='SHIKOKU';
+svgEl('text',{x:58,y:499,class:'isllbl',style:'font-size:9.5px;letter-spacing:1px'}).textContent='KYŪSHŪ';
+
+/* ── popover for a location with several Beiträge (Matsumoto: 2 & 3) ── */
+const pop=document.getElementById('pop'), popInner=document.getElementById('popInner');
+document.getElementById('popClose').onclick=()=>pop.classList.remove('show');
+function positionPop(cx,cy){const w=pop.offsetWidth,h=pop.offsetHeight;
+  let x=cx+14,y=cy-10;
+  if(x+w>innerWidth-8)x=cx-w-14; if(y+h>innerHeight-8)y=innerHeight-h-8; if(y<8)y=8;
+  pop.style.left=(x+scrollX)+'px';pop.style.top=(y+scrollY)+'px';}
+function openPop(loc,cx,cy){const list=byLoc[loc],P=PLACES[loc];
+  popInner.innerHTML=`<h4>${P.name}</h4><div class="pnative">${P.sub||''}</div>`+
+    list.map(e=>`<a class="row" href="${href(e.n)}"><span class="pn">№ ${e.n} · ${e.date}</span>
+        <h5>${e.t}</h5></a>`).join('');
+  pop.classList.add('show');positionPop(cx,cy);}
+
+const cards=document.getElementById('cards');
+Object.keys(byLoc).forEach(loc=>{
+  const P=PLACES[loc], list=byLoc[loc], multi=list.length>1;
+  const [x,y]=P.pin, [cx,cy,side]=P.card;
+
+  svgEl('line',{x1:cx,y1:cy,x2:x,y2:y,class:'leader'});
+  svgEl('circle',{cx:cx,cy:cy,r:1.8,class:'anch'});
+
+  const g=svgEl('g',{class:'pin'+(multi?' multi':'')});
+  const dot=svgEl('circle',{cx:x,cy:y,r:multi?12:9,class:'dot'+(multi?' multi':'')},g);
+  g.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();
+    document.querySelectorAll('.pin.open').forEach(p=>p.classList.remove('open'));
+    g.classList.add('open');
+    if(!multi){location.href=href(list[0].n);return;}
+    const r=dot.getBoundingClientRect();openPop(loc,r.left+r.width/2,r.top+r.height/2);});
+
+  const nums=list.map(e=>e.n).sort((a,b)=>a-b).join(' · ');
+  const a=document.createElement('a');
+  a.className='lbl '+side+(multi?' multi':'');
+  a.href=multi?'#':href(list[0].n);
+  a.style.left=pctX(cx)+'%';a.style.top=pctY(cy)+'%';a.style.setProperty('--tx',side==='l'?'-100%':'0');
+  a.innerHTML=`<span class="stage">${nums}</span><span class="nm"><b>${P.name}</b>`+
+    `<span class="he">${P.sub||''}</span></span>`;
+  if(multi)a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openPop(loc,ev.clientX,ev.clientY);});
+  cards.appendChild(a);
+});
+
+document.addEventListener('click',e=>{if(!pop.contains(e.target))pop.classList.remove('show')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')pop.classList.remove('show')});
+</script>
+</body>
+</html>

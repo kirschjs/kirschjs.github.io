@@ -23,7 +23,6 @@
   .crumb{color:var(--muted)}.crumb b{color:var(--ink)}
 
   header{text-align:center;padding:46px 24px 6px}
-  header .sub{font-family:'Caveat',cursive;font-size:26px;color:var(--stamp);transform:rotate(-2deg)}
   header h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,52px);margin-top:4px;line-height:1.1}
   header .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-top:10px}
   header p{max-width:640px;margin:14px auto 0;font-size:18px;font-style:italic;color:#5c5236}
@@ -76,11 +75,11 @@
   .legend .num{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--stamp);color:#fff;
     font-family:'Playfair Display',serif;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;
     box-shadow:0 0 0 2px var(--gold2)}
+  .legend .tx{display:flex;flex-direction:column}
   .legend .tx .t{font-family:'Playfair Display',serif;font-size:16px;line-height:1.18;color:var(--ink)}
   .legend a:hover .t{color:var(--stamp)}
   .legend .tx .d{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:3px}
 
-  .end{text-align:center;font-family:'Caveat',cursive;font-size:22px;color:var(--stamp);padding:38px 0 14px}
   .feedback{text-align:center;padding:0 0 40px}
   .feedback a{display:inline-block;font-family:'Caveat',cursive;font-size:19px;color:var(--stamp2);
     text-decoration:none;border:1px dashed var(--gold);border-radius:24px;padding:8px 20px;background:rgba(212,160,23,.10)}
@@ -99,7 +98,6 @@
 </div>
 
 <header>
-  <div class="sub">Reisetagebuch &amp; Kochbuch</div>
   <h1>Renate in Nürnberg &amp; Franken</h1>
   <div class="region">Reisetagebuch № 3 · Heimat · 2024</div>
   <p>Kein fernes Land, sondern das eigene Zuhause: vom Schulweg und der fränkischen Eisenbahn
@@ -108,19 +106,13 @@
 </header>
 
 <div class="section">
-  <h2>Ein Gang durch das alte Langenzenn</h2>
-  <p class="lead">Renates Heimatstadt im Mittelalter – innerhalb der Stadtmauer mit ihren Toren,
-     dem Augustiner-Klosterhof, der Stiftskirche und dem Marktplatz. Jeder Beitrag hat seinen Platz
-     in der Stadt gefunden. <b>Tippen Sie auf eine Marke</b> – oder wählen Sie unten aus der Liste.</p>
   <div class="map-frame">
-    <div class="hint">↓ Tippen Sie auf eine nummerierte Marke</div>
     <svg class="plan" id="plan" viewBox="0 0 860 640" aria-label="Stadtplan des alten Langenzenn mit den Beiträgen"></svg>
   </div>
 </div>
 
 <div class="legend" id="legend"></div>
 
-<div class="end">~ 9 Beiträge aus der Heimat · mit Liebe gelebt und gekocht ~</div>
 <div class="feedback">
   <a href="mailto:kirscjo@gmail.com?subject=Reisetagebuch%20Franken&body=Liebe%20Gr%C3%BC%C3%9Fe%2C%20hier%20mein%20Feedback%20zum%20Franken-Kapitel%3A%0A%0A">✎ Mir gefällt … / Bitte ändern …</a>
 </div>
@@ -256,7 +248,7 @@ function drawIcon(parent,name,x,y,box){
 const legend=document.getElementById('legend');
 /* caption offset per entry so the short label never lands on a building */
 const CAP={1:[44,4,'start'],9:[0,34,'middle'],3:[0,-26,'middle'],8:[40,4,'start'],
-  6:[28,4,'start'],7:[0,34,'middle'],4:[0,-26,'middle'],2:[26,4,'start'],5:[-26,4,'end']};
+  6:[-24,4,'end'],7:[0,34,'middle'],4:[4,-32,'start'],2:[26,4,'start'],5:[-26,4,'end']};
 ENTRIES.forEach(e=>{
   const a=el('a',{class:'stop',tabindex:0}); a.setAttribute('href',href(e.n));
   el('circle',{cx:e.x,cy:e.y,r:17,class:'disc'},a);

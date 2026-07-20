@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renate in Ecuador – Reisetagebuch</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{   /* Ecuador · gelb · blau · rot (Nationalflagge) */
+    --parch:#FFFDF1; --parch2:#FFF6D6; --card:#FFFFFF; --edge:#E6CE86; --ink:#2A2410;
+    --stamp:#0072CE; --stamp2:#004E9A; --red:#EF3340; --gold:#E0A800; --yellow:#FFD100;
+    --land:#FBE7A0; --land2:#F6DE97; --sea:#D7ECFF; --jungle:#3E7D52;
+    --muted:#7a6c3f;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--parch);color:var(--ink);font-family:'Crimson Text',Georgia,serif;
+    background-image:radial-gradient(rgba(224,168,0,.06) 1px,transparent 1px);background-size:14px 14px}
+
+  .bar{position:sticky;top:0;z-index:30;background:rgba(255,246,214,.93);backdrop-filter:blur(5px);
+    border-bottom:1px solid var(--edge);padding:9px 22px;display:flex;align-items:center;gap:14px;font-size:14px}
+  .bar a{color:var(--stamp);text-decoration:none}
+  .bar a:hover{text-decoration:underline}
+  .crumb{color:var(--muted)}.crumb b{color:var(--ink)}
+
+  header{text-align:center;padding:46px 24px 6px}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,54px);margin-top:4px;line-height:1.1}
+  header h1 .native{font-size:.55em;color:var(--red);font-style:italic}
+  header .region{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--stamp2);margin-top:10px}
+  header p{max-width:640px;margin:14px auto 0;font-size:18px;font-style:italic;color:#5a5024}
+
+  .section{max-width:1040px;margin:32px auto 0;padding:0 24px}
+  .section>h2{font-family:'Playfair Display',serif;font-size:26px;text-align:center;margin-bottom:3px}
+  .section>.lead{font-style:italic;color:#5a5024;text-align:center;font-size:16px;max-width:720px;margin:0 auto 18px}
+
+  .map-frame{position:relative;background:var(--card);border:1px solid var(--edge);
+    box-shadow:0 8px 26px rgba(120,90,20,.16);padding:18px}
+  .map-frame::after{content:'';position:absolute;inset:7px;border:1px dashed var(--edge);pointer-events:none}
+  .map-frame .hint{font-family:'Caveat',cursive;font-size:18px;color:var(--stamp2);text-align:center;margin-bottom:10px}
+  .map-wrap{position:relative}
+  svg.map{width:100%;height:auto;display:block;overflow:hidden}
+  .sea{fill:var(--sea)}
+  .land{fill:var(--land);stroke:var(--gold);stroke-width:1.6;stroke-linejoin:round}
+  .neighbour{fill:#ECE4CD;stroke:#DBCB9E;stroke-width:.8}
+  .nbrlbl{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:3px;fill:#B7A46A;opacity:.6;text-anchor:middle}
+  .equator{fill:none;stroke:var(--red);stroke-width:1.6;stroke-dasharray:7 5;opacity:.8}
+  .eqlbl{font-family:'Crimson Text',serif;font-size:11px;font-style:italic;fill:var(--red);letter-spacing:1px}
+  .sealbl{font-family:'Caveat',cursive;font-size:18px;fill:#5aa0e0}
+  .junglbl{font-family:'Caveat',cursive;font-size:16px;fill:var(--jungle)}
+  .jungedge{fill:none;stroke:var(--jungle);stroke-width:1.4;stroke-dasharray:2 5;opacity:.55}
+  .volc{fill:none;stroke:#9a7b2e;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .volc-cap{fill:#fff;stroke:#9a7b2e;stroke-width:1}
+  .leader{stroke:#D8BE72;stroke-width:1;fill:none}
+  .leader.gate{stroke:#B9C7A6;stroke-dasharray:3 3}
+  .anch{fill:#D8BE72}
+
+  .pin{cursor:pointer}
+  .pin .dot{fill:var(--red);stroke:var(--card);stroke-width:2.5;transition:transform .2s}
+  .pin .dot.multi{fill:var(--stamp)}
+  .pin:hover .dot,.pin.open .dot{transform:scale(1.25);transform-box:fill-box;transform-origin:center}
+  .pin .pnum{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;fill:var(--card);
+    text-anchor:middle;pointer-events:none}
+
+  .cards{position:absolute;inset:0;pointer-events:none}
+  .lbl{position:absolute;pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:190px;
+    background:#fff;border:1px solid var(--edge);border-radius:9px;padding:5px 9px;
+    box-shadow:0 3px 10px rgba(120,90,20,.14);text-decoration:none;color:inherit;cursor:pointer;
+    transform:translate(var(--tx,0),var(--ty,-50%));transition:box-shadow .15s}
+  .lbl:hover{box-shadow:0 7px 18px rgba(120,90,20,.26);z-index:5}
+  .lbl.l{flex-direction:row-reverse;text-align:right}
+  .lbl.c{flex-direction:column;text-align:center;gap:3px}
+  .lbl .nm{font-family:'Playfair Display',serif;font-size:15px;line-height:1.14;color:var(--ink)}
+  .lbl .nm .he{display:block;font-size:12px;font-style:italic;color:var(--stamp2)}
+  .lbl .nm small{display:block;font-size:12px;font-style:italic;color:var(--muted)}
+  .lbl:hover .nm{color:var(--stamp2)}
+  .lbl .stage{flex:0 0 auto;min-width:23px;max-width:84px;min-height:23px;border-radius:12px;
+    background:var(--red);color:#fff;font-family:'Playfair Display',serif;font-weight:700;
+    font-size:12px;line-height:1.18;padding:3px 7px;display:flex;align-items:center;
+    justify-content:center;text-align:center;flex-wrap:wrap;box-shadow:0 1px 3px rgba(120,90,20,.3)}
+  .lbl.multi .stage{background:var(--stamp)}
+
+  /* die zwei »Tore zur Welt« – Beiträge 1 & 2 (ortlos: Israel & Deutschland) */
+  .lbl.gate{background:#FFFCF0;border:1px dashed var(--stamp);box-shadow:0 3px 10px rgba(0,114,206,.12);max-width:156px}
+  .lbl.gate .stage{background:var(--stamp2)}
+  .lbl.gate .ico{flex:0 0 auto;width:22px;height:22px}
+  .lbl.gate .ico path{fill:none;stroke:var(--stamp2);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+  .pop{position:absolute;z-index:40;width:250px;background:var(--card);border:1px solid var(--edge);
+    border-radius:8px;box-shadow:0 12px 30px rgba(120,90,20,.26);padding:12px 14px;display:none}
+  .pop.show{display:block}
+  .pop h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:2px}
+  .pop .pnative{font-family:'Crimson Text',serif;font-size:13px;color:var(--stamp2);font-style:italic;margin-bottom:8px}
+  .pop a.row{display:block;text-decoration:none;color:inherit;padding:6px 0;border-top:1px dashed var(--edge)}
+  .pop a.row:first-of-type{border-top:0}
+  .pop a.row:hover h5{text-decoration:underline}
+  .pop a.row .pn{font-family:'Caveat',cursive;font-size:16px;color:var(--stamp2)}
+  .pop a.row h5{font-family:'Crimson Text',serif;font-size:15.5px;font-weight:600;line-height:1.25}
+  .pop .close{position:absolute;top:6px;right:9px;cursor:pointer;color:var(--stamp);font-size:18px;line-height:1}
+
+  footer{background:var(--stamp2);color:#dcecff;text-align:center;padding:24px;font-size:14px;font-family:'Caveat',cursive}
+  footer span{font-size:18px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a href="home-C-tagebuch.html">← Startseite</a>
+  <span class="crumb">Startseite › Renate in <b>Ecuador</b></span>
+</div>
+
+<header>
+  <h1>Renate in Ecuador <span class="native">Mitad del Mundo</span></h1>
+  <div class="region">Reisetagebuch № 2 · Südamerika · 2023–2024</div>
+  <p>Vom Flug aus Erez-Israel über Quito und die »Mitte der Welt« am Äquator, hinauf zum
+     Cotopaxi und zur türkisen Lagune Quilotoa, durch Cuenca und Ingapirca bis an die
+     Pazifikküste von Atacames und Salinas – mit Rezepten von Quinoa bis Ceviche.</p>
+</header>
+
+<div class="section">
+  <div class="map-frame">
+    <div class="map-wrap">
+      <svg class="map" id="map" viewBox="-40 30 680 500" aria-label="Karte von Ecuador mit Reisestationen"></svg>
+      <div class="cards" id="cards"></div>
+    </div>
+  </div>
+</div>
+
+<div class="pop" id="pop"><span class="close" id="popClose">×</span><div id="popInner"></div></div>
+
+<footer><span>Mit Liebe gereist und gekocht</span> · jewishgermanculturecooking.com</footer>
+
+<script>
+/* ── all 12 Ecuador entries ─────────────────────────────────────────────
+   loc: key into PLACES (map pin) · gate: an off-map »Tor zur Welt« (1 & 2) */
+const ENTRIES=[
+ {n:1, date:'14. März 2023',     gate:'israel',      t:'Von Israel nach Ecuador', short:'aus Israel'},
+ {n:2, date:'26. März 2023',     gate:'deutschland', t:'Zwischendurch – Frühling in Deutschland', short:'Zwischendurch'},
+ {n:3, date:'7. April 2023',     loc:'Quito',        t:'Quito – El Panecillo'},
+ {n:4, date:'28. April 2023',    loc:'Mitad',        t:'Mitad del Mundo'},
+ {n:5, date:'16. Mai 2023',      loc:'Quito',        t:'Quito’s Altstadt'},
+ {n:6, date:'6. Juli 2023',      loc:'Atacames',     t:'Atacames'},
+ {n:7, date:'24. Juli 2023',     loc:'Cotopaxi',     t:'Cotopaxi, Ruminahui und eine alte Hazienda'},
+ {n:8, date:'31. August 2023',   loc:'Latacunga',    t:'Von Latacunga zur Lagune Quilotoa'},
+ {n:9, date:'20. September 2023',loc:'Riobamba',     t:'Latacunga – Riobamba – Cuenca'},
+ {n:10,date:'25. November 2023', loc:'Cuenca',       t:'Ingapirca, Las Cajas'},
+ {n:11,date:'31. Dezember 2023', loc:'Banos',        t:'Baños'},
+ {n:12,date:'21. Februar 2024',  loc:'Salinas',      t:'Salinas'},
+];
+
+/* map locations: label + a Spanish/Kichwa subtitle + pin position (viewBox) + card anchor+side */
+const PLACES={
+ Mitad:   {name:'Mitad del Mundo', sub:'0° · Äquator',        pin:[281.0,138.5], card:[380, 92,'r']},
+ Quito:   {name:'Quito',           sub:'El Panecillo & Altstadt', pin:[289.9,160.7], card:[380,150,'r']},
+ Cotopaxi:{name:'Cotopaxi',        sub:'5897 m · Vulkan',      pin:[292.1,197.8], card:[380,208,'r']},
+ Latacunga:{name:'Latacunga',      sub:'Laguna Quilotoa',      pin:[272.6,214.1], card:[380,262,'r']},
+ Banos:   {name:'Baños',           sub:'Tor zum Oriente',      pin:[292.9,251.1], card:[380,316,'r']},
+ Riobamba:{name:'Riobamba',        sub:'Nariz del Diablo → Cuenca', pin:[276.5,270.9], card:[380,372,'r']},
+ Cuenca:  {name:'Cuenca',          sub:'Ingapirca & Las Cajas', pin:[250.0,347.9], card:[380,428,'r']},
+ Atacames:{name:'Atacames',        sub:'Pazifikküste',         pin:[188.0, 82.4], card:[95, 66,'l']},
+ Salinas: {name:'Salinas',         sub:'Pazifik · Malecón',    pin:[104.0,311.8], card:[95,392,'l']},
+};
+/* the two ortlose »Tore zur Welt« (Beiträge 1 & 2) */
+const GATES={
+ israel:     {name:'Von Israel',   sub:'die Anreise',          card:[560, 44,'r'], leadTo:[612,32],  ico:'plane'},
+ deutschland:{name:'Deutschland',  sub:'Frühling in Franken',  card:[560, 98,'r'], leadTo:[612,110], ico:'leaf'},
+};
+
+const href=n=>`eintrag-ecuador-${n}.html`;
+const ns="http://www.w3.org/2000/svg";
+const VB={x:-40,y:30,w:680,h:500};
+const pctX=x=>(x-VB.x)/VB.w*100, pctY=y=>(y-VB.y)/VB.h*100;
+
+const byLoc={};
+ENTRIES.filter(e=>e.loc).forEach(e=>{(byLoc[e.loc]=byLoc[e.loc]||[]).push(e)});
+
+const map=document.getElementById('map');
+const svgEl=(tag,attrs,parent)=>{const e=document.createElementNS(ns,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||map).appendChild(e);return e;};
+
+/* clip everything east of the Andes – the Oriente/Amazonas is cut away so the
+   travelled Sierra & coast fill the frame (no entries lie in the rainforest) */
+const CLIPX=366;
+const defs=svgEl('defs',{});
+const cp=svgEl('clipPath',{id:'ec'},defs);
+svgEl('rect',{x:VB.x,y:VB.y,width:CLIPX-VB.x,height:VB.h},cp);
+const clipG=svgEl('g',{'clip-path':'url(#ec)'});
+
+/* faint neighbouring lands as backdrop, the Pacific hugging the west coast,
+   then the yellow country on top */
+svgEl('rect',{x:VB.x,y:VB.y,width:VB.w,height:VB.h,class:'neighbour'},clipG);
+svgEl('path',{class:'sea',d:'M169.3,90.1 L174.4,120.5 L146.3,168.3 L132.6,214.6 '+
+  'L106.6,225.8 L119.1,293.3 L104.1,314.3 L148.6,346.8 L-40,362 L-40,86 Z'},clipG);
+const ECUADOR_PATH='M519.9,158.5 L530.3,215.0 L507.1,263.3 L426.1,341.1 L336.7,370.5 '+
+  'L291.2,435.1 L277.1,485.3 L235.1,515.8 L203.9,478.3 L173.8,470.3 L143.1,476.2 '+
+  'L141.1,449.0 L162.3,431.3 L153.5,400.3 L193.1,344.8 L177.0,312.3 L148.6,346.8 '+
+  'L104.1,314.3 L119.1,293.3 L106.6,225.8 L132.6,214.6 L146.3,168.3 L174.4,120.5 '+
+  'L169.3,90.1 L210.0,74.2 L261.1,44.6 L335.4,87.0 L349.3,85.9 L367.4,117.8 '+
+  'L430.5,128.1 L451.6,116.3 L488.1,140.9 L519.9,158.5 Z';
+svgEl('path',{d:ECUADOR_PATH,class:'land'},clipG);
+
+/* the equator – runs right through Quito & la Mitad del Mundo (lat 0°) */
+svgEl('line',{x1:VB.x,y1:150,x2:CLIPX,y2:150,class:'equator'});
+svgEl('text',{x:-34,y:145,class:'eqlbl'}).textContent='Äquator · 0° · la línea equinoccial';
+svgEl('text',{x:-30,y:250,class:'sealbl'}).textContent='Océano Pacífico';
+svgEl('text',{x:172,y:48,class:'nbrlbl'}).textContent='C O L O M B I A';
+svgEl('text',{x:312,y:492,class:'nbrlbl'}).textContent='P E R Ú';
+
+/* jungle edge where the map is cut, with a hint toward the Oriente */
+svgEl('line',{x1:CLIPX,y1:VB.y+6,x2:CLIPX,y2:VB.y+VB.h-6,class:'jungedge'});
+const jl=svgEl('text',{x:398,y:502,class:'junglbl'});
+jl.textContent='→ Oriente · Amazonas';
+
+/* ── popover for a location with several Beiträge (only Quito: 3 & 5) ── */
+const pop=document.getElementById('pop'), popInner=document.getElementById('popInner');
+document.getElementById('popClose').onclick=()=>pop.classList.remove('show');
+function positionPop(cx,cy){const w=pop.offsetWidth,h=pop.offsetHeight;
+  let x=cx+14,y=cy-10;
+  if(x+w>innerWidth-8)x=cx-w-14; if(y+h>innerHeight-8)y=innerHeight-h-8; if(y<8)y=8;
+  pop.style.left=(x+scrollX)+'px';pop.style.top=(y+scrollY)+'px';}
+function openPop(loc,cx,cy){const list=byLoc[loc],P=PLACES[loc];
+  popInner.innerHTML=`<h4>${P.name}</h4><div class="pnative">${P.sub||''}</div>`+
+    list.map(e=>`<a class="row" href="${href(e.n)}"><span class="pn">№ ${e.n} · ${e.date}</span>
+        <h5>${e.t}</h5></a>`).join('');
+  pop.classList.add('show');positionPop(cx,cy);}
+
+const cards=document.getElementById('cards');
+
+/* draw the map pins + leader lines + on-map cards */
+Object.keys(byLoc).forEach(loc=>{
+  const P=PLACES[loc], list=byLoc[loc], multi=list.length>1;
+  const [x,y]=P.pin, [cx,cy,side]=P.card;
+
+  svgEl('line',{x1:cx,y1:cy,x2:x,y2:y,class:'leader'});
+  svgEl('circle',{cx:cx,cy:cy,r:1.8,class:'anch'});
+
+  const g=svgEl('g',{class:'pin'+(multi?' multi':'')});
+  const dot=svgEl('circle',{cx:x,cy:y,r:multi?12:9,class:'dot'+(multi?' multi':'')},g);
+  g.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();
+    document.querySelectorAll('.pin.open').forEach(p=>p.classList.remove('open'));
+    g.classList.add('open');
+    if(!multi){location.href=href(list[0].n);return;}
+    const r=dot.getBoundingClientRect();openPop(loc,r.left+r.width/2,r.top+r.height/2);});
+
+  const nums=list.map(e=>e.n).sort((a,b)=>a-b).join(' · ');
+  const a=document.createElement('a');
+  a.className='lbl '+side+(multi?' multi':'');
+  a.href=multi?'#':href(list[0].n);
+  a.style.left=pctX(cx)+'%';a.style.top=pctY(cy)+'%';a.style.setProperty('--tx',side==='l'?'-100%':'0');
+  a.innerHTML=`<span class="stage">${nums}</span><span class="nm"><b>${P.name}</b>`+
+    `<span class="he">${P.sub||''}</span></span>`;
+  if(multi)a.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openPop(loc,ev.clientX,ev.clientY);});
+  cards.appendChild(a);
+});
+
+/* Sierra volcano carets (Chimborazo & Cotopaxi zone) – drawn last so the
+   mountains overlay the red pins/dots rather than the other way round */
+[[276,232],[300,205],[262,300]].forEach(([x,y])=>{
+  svgEl('path',{d:`M${x-9},${y} L${x},${y-15} L${x+9},${y} Z`,class:'volc'});
+  svgEl('path',{d:`M${x-3.4},${y-5.7} L${x},${y-15} L${x+3.4},${y-5.7} Z`,class:'volc-cap'});
+});
+
+/* ── the two »Tore zur Welt«: Beiträge 1 (Israel) & 2 (Deutschland) ── */
+const ICO={
+  plane:'M2 13l20-6-8 15-3-6-9-3z',
+  leaf:'M12 21c7-1 9-7 9-15-8 0-14 2-15 9 4 1 6 4 6 6z M12 21c0-4-1-7-3-9',
+};
+ENTRIES.filter(e=>e.gate).forEach((e,i)=>{
+  const G=GATES[e.gate];
+  const a=document.createElement('a');
+  a.className='lbl gate'; a.href=href(e.n);
+  a.style.right='2.5%'; a.style.top=(3.5+i*12)+'%';
+  a.style.setProperty('--tx','0'); a.style.setProperty('--ty','0');
+  a.innerHTML=`<span class="stage">${e.n}</span>`+
+    `<svg class="ico" viewBox="0 0 24 24"><path d="${ICO[G.ico]}"/></svg>`+
+    `<span class="nm"><b>${G.name}</b><span class="he">${G.sub}</span></span>`;
+  cards.appendChild(a);
+});
+
+document.addEventListener('click',e=>{if(!pop.contains(e.target))pop.classList.remove('show')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')pop.classList.remove('show')});
+</script>
+</body>
+</html>

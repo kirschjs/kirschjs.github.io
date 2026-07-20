@@ -54,8 +54,8 @@ const DESTINATIONS = {
 // whichever destination it points to with a star, a date and a direct link.
 const LATEST_ENTRY = {
   "slug": "japan",
-  "nr": 20,
-  "title": "Matsumoto – Tor zu den Nordalpen",
-  "date": "31. Mai 2026",
-  "href": "eintrag-japan-20.html"
+  "nr": 3,
+  "title": "Matsumoto City Museum",
+  "date": "16. Juli 2026",
+  "href": "eintrag-japan-3.html"
 };
