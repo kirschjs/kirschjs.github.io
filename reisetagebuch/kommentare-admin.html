@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kommentare freigeben · Reisetagebuch</title>
+<link rel="stylesheet" href="assets/entry.css">
+<style>
+  body{max-width:760px;margin:0 auto;padding:0 18px 60px}
+  h1{font-family:'Playfair Display',serif;font-size:30px;color:var(--accent);margin:34px 0 6px}
+  .lead{font-size:17px;line-height:1.6;margin-bottom:26px}
+  .setup{background:var(--side);border:1px solid var(--rule);border-radius:7px;
+    padding:16px 18px;margin-bottom:28px}
+  .setup label{font-family:'Caveat',cursive;font-size:20px;color:var(--accent2);display:block}
+  .setup input{width:100%;font:inherit;font-size:16px;padding:7px 9px;margin-top:4px;
+    border:1px solid var(--rule);border-radius:4px;background:#fff}
+  .setup .row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+  .setup .row>div{flex:1 1 240px}
+  button{font-family:'Caveat',cursive;font-size:19px;color:#fff;background:var(--accent);
+    border:0;border-radius:5px;padding:7px 16px 9px;cursor:pointer}
+  button.ghost{background:none;color:var(--accent2);border:1px solid var(--rule)}
+  button:hover{filter:brightness(1.12)}
+  .item{border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;
+    background:#fff;padding:14px 16px;margin-bottom:16px}
+  .item .meta{font-size:14px;color:var(--side-ink)}
+  .item .meta b{color:var(--accent);font-family:'Playfair Display',serif;font-size:16px}
+  .item .txt{font-size:17px;line-height:1.65;margin:8px 0 12px;white-space:pre-wrap}
+  .item .acts{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  .item textarea{width:100%;font:inherit;font-size:16px;line-height:1.55;min-height:76px;
+    padding:7px 9px;border:1px solid var(--rule);border-radius:4px;margin:10px 0 8px}
+  .empty{font-style:italic;color:var(--side-ink);opacity:.75}
+  .err{color:#a11;font-style:italic}
+</style>
+</head>
+<body data-land="japan">
+
+<h1>Kommentare freigeben</h1>
+<p class="lead">Neue Zuschriften erscheinen erst auf der Seite, wenn sie hier
+freigegeben werden. Das Passwort ist das <code>ADMIN_TOKEN</code> aus der
+Worker-Einrichtung; es bleibt nur in diesem Browser gespeichert.</p>
+
+<div class="setup">
+  <div class="row">
+    <div>
+      <label for="api">Adresse des Kommentar-Workers</label>
+      <input id="api" type="url" placeholder="https://reisetagebuch-kommentare.….workers.dev">
+    </div>
+    <div>
+      <label for="tok">Passwort</label>
+      <input id="tok" type="password" placeholder="ADMIN_TOKEN">
+    </div>
+    <div style="flex:0 0 auto"><button id="load">laden</button></div>
+  </div>
+</div>
+
+<div id="out"><p class="empty">Noch nichts geladen.</p></div>
+
+<script>
+(function () {
+  var api = document.getElementById('api'), tok = document.getElementById('tok');
+  var out = document.getElementById('out');
+  api.value = localStorage.getItem('rtb-api') || '';
+  tok.value = localStorage.getItem('rtb-tok') || '';
+
+  var MON = ['Januar','Februar','März','April','Mai','Juni','Juli','August',
+             'September','Oktober','November','Dezember'];
+  function german(iso) {
+    var d = new Date(iso);
+    return isNaN(d) ? iso : d.getDate() + '. ' + MON[d.getMonth()] + ' ' + d.getFullYear() +
+      ', ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  }
+  function base() { return api.value.trim().replace(/\/+$/, ''); }
+  function call(path, body) {
+    return fetch(base() + path, {
+      method: body ? 'POST' : 'GET',
+      headers: { 'X-Admin-Token': tok.value, 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function (r) {
+      return r.json().then(function (d) {
+        if (!r.ok) throw new Error(d.error || r.status); return d;
+      });
+    });
+  }
+
+  function load() {
+    localStorage.setItem('rtb-api', api.value);
+    localStorage.setItem('rtb-tok', tok.value);
+    if (!base()) { out.innerHTML = '<p class="err">Bitte zuerst die Worker-Adresse eintragen.</p>'; return; }
+    out.innerHTML = '<p class="empty">lädt …</p>';
+    call('/admin/pending').then(function (d) {
+      var items = d.items || [];
+      if (!items.length) { out.innerHTML = '<p class="empty">Keine offenen Zuschriften – alles freigegeben.</p>'; return; }
+      out.innerHTML = '';
+      items.forEach(function (c) { out.appendChild(card(c)); });
+    }).catch(function (e) {
+      out.innerHTML = '<p class="err">Fehler: ' + e.message +
+        ' – stimmen Adresse und Passwort?</p>';
+    });
+  }
+
+  function card(c) {
+    var d = document.createElement('div');
+    d.className = 'item';
+    var meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.innerHTML = '<b></b> · <span></span> · zu <code></code>';
+    meta.querySelector('b').textContent = c.name;
+    meta.querySelector('span').textContent = german(c.date);
+    meta.querySelector('code').textContent = c.entry + (c.parent ? ' (Antwort)' : '');
+    var txt = document.createElement('div');
+    txt.className = 'txt';
+    txt.textContent = c.text;
+    var acts = document.createElement('div');
+    acts.className = 'acts';
+    var ok = document.createElement('button'); ok.textContent = '✓ freigeben';
+    var no = document.createElement('button'); no.className = 'ghost'; no.textContent = '✕ löschen';
+    var re = document.createElement('button'); re.className = 'ghost'; re.textContent = '↩ freigeben & antworten';
+    acts.appendChild(ok); acts.appendChild(re); acts.appendChild(no);
+    d.appendChild(meta); d.appendChild(txt); d.appendChild(acts);
+
+    function fail(e) { var p = document.createElement('p'); p.className = 'err';
+                       p.textContent = 'Fehler: ' + e.message; d.appendChild(p); }
+    ok.onclick = function () { call('/admin/approve', { id: c.id }).then(load).catch(fail); };
+    no.onclick = function () {
+      if (!confirm('Diesen Kommentar endgültig löschen?')) return;
+      call('/admin/delete', { id: c.id }).then(load).catch(fail);
+    };
+    re.onclick = function () {
+      if (d.querySelector('textarea')) return;
+      var ta = document.createElement('textarea');
+      ta.placeholder = 'Renates Antwort …';
+      var send = document.createElement('button'); send.textContent = 'freigeben & antworten';
+      send.onclick = function () {
+        if (ta.value.trim().length < 2) return;
+        call('/admin/approve', { id: c.id })
+          .then(function () { return call('/admin/reply',
+            { entry: c.entry, text: ta.value.trim(), parent: c.id }); })
+          .then(load).catch(fail);
+      };
+      d.appendChild(ta); d.appendChild(send); ta.focus();
+    };
+    return d;
+  }
+
+  document.getElementById('load').onclick = load;
+  if (api.value && tok.value) load();
+})();
+</script>
+</body>
+</html>

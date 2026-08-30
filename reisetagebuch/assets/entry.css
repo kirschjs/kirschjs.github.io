@@ -148,3 +148,56 @@ figure.fig figcaption{font-family:'Caveat',cursive;font-size:18px;color:var(--si
   .col-right{order:2;border-top:2px dashed var(--rule)}
   .col-left{order:3;border-top:2px dashed var(--rule)}
 }
+
+/* ═══════════════ LESERKOMMENTARE (linke Spalte) ═══════════════
+   Injiziert von assets/comments.js unter den »Kultureller Kommentar«-Notizen.
+   Erbt die Flaggenpalette der jeweiligen Reise über die Theme-Tokens.      */
+.comments{margin-top:34px;border-top:2px solid var(--accent);padding-top:16px}
+.comments .side-title{margin-bottom:12px}
+
+/* »Mein Kommentar« – deutlich hervorgehoben gegenüber den Notizen */
+.side-title.mine{background:var(--accent);color:var(--band-ink);border-radius:7px;
+  padding:9px 8px 10px;box-shadow:0 2px 9px rgba(40,30,20,.22)}
+.side-title.mine small{color:var(--band-sub)}
+
+.cbox{position:relative;background:var(--center);border:1px solid var(--rule);
+  border-radius:6px;padding:13px 12px 12px;margin-bottom:26px}
+.cbox label{display:block;font-family:'Caveat',cursive;font-size:18px;
+  color:var(--accent2);margin-bottom:1px}
+.cbox input,.cbox textarea{display:block;width:100%;font-family:'Crimson Text',Georgia,serif;
+  font-size:15px;color:var(--ink);background:var(--page);border:1px solid var(--rule);
+  border-radius:4px;padding:6px 8px;margin-bottom:10px}
+.cbox textarea{min-height:96px;resize:vertical;line-height:1.55}
+.cbox input:focus,.cbox textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.cbox .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.cbox button{width:100%;font-family:'Caveat',cursive;font-size:20px;color:var(--band-ink);
+  background:var(--accent);border:0;border-radius:5px;padding:7px 0 9px;cursor:pointer}
+.cbox button:hover{background:var(--accent2)}
+.cbox button[disabled]{opacity:.55;cursor:default}
+.cbox .hint{font-size:12.5px;line-height:1.5;color:var(--side-ink);opacity:.72;margin-top:9px}
+.cbox .msg{font-size:13.5px;line-height:1.5;margin-top:9px;padding:7px 9px;border-radius:4px;
+  border-left:3px solid var(--accent);background:var(--side);color:var(--side-ink)}
+.cbox .msg.bad{border-left-color:var(--accent2);font-style:italic}
+.cbox .replyto{font-size:13px;color:var(--accent);margin-bottom:8px}
+.cbox .replyto a{color:var(--accent2);cursor:pointer}
+
+/* »Stimmen der Leser« */
+.side-title.voices{margin-top:4px}
+.side-title.voices .cnt{display:block;font-family:'Crimson Text',serif;font-size:13px;
+  letter-spacing:1px;color:var(--accent2);margin-top:3px}
+.clist{list-style:none;margin:0;padding:0}
+.cmt{background:var(--center);border:1px solid var(--rule);border-left:3px solid var(--rule);
+  border-radius:5px;padding:9px 11px 10px;margin-bottom:11px}
+.cmt.reply{margin-left:13px}
+.cmt.owner{border-left-color:var(--accent);background:var(--recipe-bg)}
+.cmt .who{font-family:'Playfair Display',serif;font-size:14.5px;color:var(--accent);
+  display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.cmt .when{font-family:'Crimson Text',serif;font-size:11.5px;font-style:italic;
+  color:var(--side-ink);opacity:.68;white-space:nowrap}
+.cmt .body{font-size:14.5px;line-height:1.62;color:var(--side-ink);margin-top:5px}
+.cmt .body p+p{margin-top:.6em}
+.cmt .re{font-family:'Caveat',cursive;font-size:16px;color:var(--accent2);
+  background:none;border:0;padding:3px 0 0;cursor:pointer}
+.cmt .re:hover{text-decoration:underline}
+.cmt.pending{border-style:dashed;opacity:.8}
+.cmt.pending .when::after{content:' · wartet auf Freigabe'}

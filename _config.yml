@@ -70,6 +70,7 @@ exclude:
    - minima
    - ghostly/skeleton
    - Ghostly-make-skeleton.sh #bash shell I use for copying files for skeleton
+   - reisetagebuch/_backend   # Cloudflare-Worker (Kommentare) – kein Website-Inhalt
 
 # This paragraph is reproduced from Jekyll's default Minima theme
 ##################################################################

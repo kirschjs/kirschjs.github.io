@@ -6,7 +6,7 @@ const DESTINATIONS = {
     "name": "Japan",
     "country": "Ostasien",
     "order": 5,
-    "desc": "Neu seit 2026 – erste Schritte in Nippon: von der Ankunft zur Kirschblütenzeit bis nach Matsumoto, dem Tor zu den japanischen Nordalpen.",
+    "desc": "Neu seit 2026 – erste Schritte in Nippon: von der Ankunft zur Kirschblütenzeit über Matsumoto, das Tor zu den japanischen Nordalpen, zurück in Yasukos Nagoya.",
     "x": 888.0,
     "y": 150.9,
     "slug": "japan"
@@ -54,8 +54,8 @@ const DESTINATIONS = {
 // whichever destination it points to with a star, a date and a direct link.
 const LATEST_ENTRY = {
   "slug": "japan",
-  "nr": 3,
-  "title": "Matsumoto City Museum",
-  "date": "16. Juli 2026",
-  "href": "eintrag-japan-3.html"
+  "nr": 4,
+  "title": "Nagoya \u2013 ein Tag auf eigene Faust",
+  "date": "30. August 2026",
+  "href": "eintrag-japan-4.html"
 };
