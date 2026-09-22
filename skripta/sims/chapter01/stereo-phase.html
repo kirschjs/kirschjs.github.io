@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block 1 · Two speakers, one relative phase</title>
+<style>
+  :root { --ink:#1a1a1a; --blue:#1d4ed8; --red:#b91c1c; --grey:#8a8a8a; --line:#d4d4d4; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         color:var(--ink); background:#fff; padding:18px 22px; }
+  h1 { font-size:20px; font-weight:600; margin:0 0 2px; }
+  .sub { color:var(--grey); font-size:14px; margin:0 0 14px; }
+  .wrap { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+  canvas { border:1px solid var(--line); border-radius:6px; background:#fff; }
+  .col { display:flex; flex-direction:column; gap:12px; min-width:420px; }
+  .ctrl { display:flex; align-items:center; gap:12px; font-size:16px; }
+  .ctrl label { width:190px; }
+  input[type=range] { flex:1; min-width:200px; height:34px; }
+  .val { width:78px; text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  button { font-size:16px; padding:12px 18px; border:1px solid var(--line); background:#fafafa;
+           border-radius:6px; cursor:pointer; }
+  button.play { background:#1d4ed8; color:#fff; border-color:#1d4ed8; }
+  .presets { display:flex; gap:8px; flex-wrap:wrap; }
+  .presets button { padding:9px 13px; font-size:15px; }
+  .note { font-size:14px; color:var(--grey); line-height:1.5; max-width:520px; }
+  .ms { border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:#fffdf2; font-size:16px; }
+  .bar { height:14px; background:#eee; border-radius:3px; overflow:hidden; margin:5px 0 10px; }
+  .bar span { display:block; height:100%; background:#1d4ed8; }
+</style>
+</head>
+<body>
+<h1>Two speakers, one relative phase</h1>
+<p class="sub">Block 1 · the same mathematics as the polarization ellipse, but audible</p>
+
+<div class="wrap">
+  <canvas id="gon" width="420" height="420"></canvas>
+  <div class="col">
+    <canvas id="wav" width="480" height="200"></canvas>
+    <div class="ms" id="ms"></div>
+    <div class="ctrl">
+      <button id="play" class="play">play</button>
+      <span class="note">headphones or stereo speakers required</span>
+    </div>
+    <div class="ctrl">
+      <label>frequency</label>
+      <input type="range" id="freq" min="120" max="800" step="5" value="320">
+      <span class="val" id="freqV"></span>
+    </div>
+    <div class="ctrl">
+      <label>relative phase &delta;</label>
+      <input type="range" id="delta" min="-180" max="180" step="1" value="0">
+      <span class="val" id="deltaV"></span>
+    </div>
+    <div class="ctrl">
+      <label>balance L : R</label>
+      <input type="range" id="bal" min="0" max="90" step="1" value="45">
+      <span class="val" id="balV"></span>
+    </div>
+    <div class="ctrl">
+      <label>volume</label>
+      <input type="range" id="vol" min="0" max="100" step="1" value="25">
+      <span class="val" id="volV"></span>
+    </div>
+    <div class="presets">
+      <button data-b="45" data-d="0">in phase</button>
+      <button data-b="45" data-d="90">quarter cycle</button>
+      <button data-b="45" data-d="180">opposed</button>
+      <button data-b="0"  data-d="0">L only</button>
+      <button data-b="90" data-d="0">R only</button>
+    </div>
+    <p class="note">
+      L and R play the same tone. Only their relative phase changes. Two loudness numbers
+      cannot distinguish these settings; the figure on the left and the ear both can.
+      Audio engineers call that figure a goniometer, and the mid/side pair below is
+      how the same signal is stored in one common encoding.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var gon = document.getElementById('gon'), gc = gon.getContext('2d');
+  var wav = document.getElementById('wav'), wc = wav.getContext('2d');
+  var fEl = document.getElementById('freq'), dEl = document.getElementById('delta');
+  var bEl = document.getElementById('bal'), vEl = document.getElementById('vol');
+  var playBtn = document.getElementById('play');
+  var ctx = null, osc = null, delay = null, gL = null, gR = null, master = null;
+  var playing = false, t = 0, last = 0;
+
+  function rad(d) { return d * Math.PI / 180; }
+  function amps() {
+    var b = rad(+bEl.value);
+    return { L: Math.cos(b), R: Math.sin(b) };
+  }
+
+  function build() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = +fEl.value;
+    delay = ctx.createDelay(0.05);
+    gL = ctx.createGain(); gR = ctx.createGain();
+    master = ctx.createGain(); master.gain.value = 0;
+    var merger = ctx.createChannelMerger(2);
+    osc.connect(gL); gL.connect(merger, 0, 0);
+    osc.connect(delay); delay.connect(gR); gR.connect(merger, 0, 1);
+    merger.connect(master); master.connect(ctx.destination);
+    osc.start();
+    applyAudio();
+  }
+
+  function applyAudio() {
+    if (!ctx) return;
+    var f = +fEl.value, d = +dEl.value, a = amps();
+    osc.frequency.value = f;
+    // a phase lag of d degrees at frequency f is a delay of d/360/f seconds
+    var lag = (((d % 360) + 360) % 360) / 360 / f;
+    delay.delayTime.value = Math.min(lag, 0.049);
+    gL.gain.value = a.L; gR.gain.value = a.R;
+    master.gain.value = playing ? (+vEl.value / 100) * 0.35 : 0;
+  }
+
+  playBtn.addEventListener('click', function () {
+    if (!ctx) build();
+    if (ctx.state === 'suspended') ctx.resume();
+    playing = !playing;
+    playBtn.textContent = playing ? 'stop' : 'play';
+    playBtn.classList.toggle('play', !playing);
+    applyAudio();
+  });
+
+  function drawGon(ph) {
+    var W = gon.width, H = gon.height, cx = W / 2, cy = H / 2, R = 140;
+    var a = amps(), d = rad(+dEl.value);
+    gc.clearRect(0, 0, W, H);
+    gc.strokeStyle = '#9a9a9a'; gc.lineWidth = 1;
+    gc.beginPath(); gc.moveTo(30, cy); gc.lineTo(W - 30, cy);
+    gc.moveTo(cx, 30); gc.lineTo(cx, H - 30); gc.stroke();
+    gc.fillStyle = '#6a6a6a'; gc.font = '16px Georgia, serif';
+    gc.fillText('R', W - 26, cy - 10);
+    gc.fillText('L', cx + 10, 30);
+    gc.strokeStyle = '#1d4ed8'; gc.globalAlpha = 0.45; gc.lineWidth = 2;
+    gc.beginPath();
+    for (var k = 0; k <= 240; k++) {
+      var p = k / 240 * 2 * Math.PI;
+      var px = cx + a.R * Math.cos(p - d) * R, py = cy - a.L * Math.cos(p) * R;
+      if (k === 0) gc.moveTo(px, py); else gc.lineTo(px, py);
+    }
+    gc.closePath(); gc.stroke(); gc.globalAlpha = 1;
+    var vx = cx + a.R * Math.cos(ph - d) * R, vy = cy - a.L * Math.cos(ph) * R;
+    gc.strokeStyle = '#1d4ed8'; gc.lineWidth = 3;
+    gc.beginPath(); gc.moveTo(cx, cy); gc.lineTo(vx, vy); gc.stroke();
+    gc.fillStyle = '#1d4ed8';
+    gc.beginPath(); gc.arc(vx, vy, 6, 0, 7); gc.fill();
+  }
+
+  function drawWav(ph) {
+    var W = wav.width, H = wav.height;
+    wc.clearRect(0, 0, W, H);
+    var m = 30, span = W - 2 * m, amp = 40, yL = 58, yR = 148;
+    var a = amps(), d = rad(+dEl.value);
+    wc.strokeStyle = '#dcdcdc'; wc.lineWidth = 1;
+    [yL, yR].forEach(function (y) { wc.beginPath(); wc.moveTo(m, y); wc.lineTo(W - m, y); wc.stroke(); });
+    wc.fillStyle = '#6a6a6a'; wc.font = '15px Georgia, serif';
+    wc.fillText('L', 8, yL + 5); wc.fillText('R', 8, yR + 5);
+    function c(off, y0, col, sc) {
+      wc.strokeStyle = col; wc.lineWidth = 2.2; wc.beginPath();
+      for (var i = 0; i <= span; i++) {
+        var p = i / span * 4 * Math.PI;
+        var px = m + i, py = y0 - sc * Math.cos(p - off) * amp;
+        if (i === 0) wc.moveTo(px, py); else wc.lineTo(px, py);
+      }
+      wc.stroke();
+    }
+    c(0, yL, '#1d4ed8', a.L);
+    c(d, yR, '#b91c1c', a.R);
+  }
+
+  function drawMS() {
+    var a = amps(), d = rad(+dEl.value);
+    // time-averaged power of M=(L+R)/sqrt2 and S=(L-R)/sqrt2 for two sines with phase offset
+    var M = (a.L * a.L + a.R * a.R + 2 * a.L * a.R * Math.cos(d)) / 2;
+    var S = (a.L * a.L + a.R * a.R - 2 * a.L * a.R * Math.cos(d)) / 2;
+    document.getElementById('ms').innerHTML =
+      'mid  M = (L+R)/&radic;2' +
+      '<div class="bar"><span style="width:' + (M * 100).toFixed(0) + '%"></span></div>' +
+      'side S = (L&minus;R)/&radic;2' +
+      '<div class="bar"><span style="width:' + (S * 100).toFixed(0) + '%"></span></div>';
+  }
+
+  function frame(now) {
+    var dt = last ? (now - last) / 1000 : 0; last = now;
+    t += dt * 2.0;
+    drawGon(t); drawWav(t);
+    requestAnimationFrame(frame);
+  }
+
+  function sync() {
+    document.getElementById('freqV').textContent = fEl.value + ' Hz';
+    document.getElementById('deltaV').textContent = dEl.value + '\u00B0';
+    var a = amps();
+    document.getElementById('balV').textContent = a.L.toFixed(2) + ':' + a.R.toFixed(2);
+    document.getElementById('volV').textContent = vEl.value + '%';
+    drawMS();
+    applyAudio();
+  }
+  [fEl, dEl, bEl, vEl].forEach(function (el) { el.addEventListener('input', sync); });
+  Array.prototype.forEach.call(document.querySelectorAll('.presets button'), function (b) {
+    b.addEventListener('click', function () {
+      bEl.value = b.getAttribute('data-b');
+      dEl.value = b.getAttribute('data-d');
+      sync();
+    });
+  });
+
+  sync();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

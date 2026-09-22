@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Stern&ndash;Gerlach filters</title>
+<style>
+  :root{
+    --qcblue:#12347D; --qcorange:#CD4619; --qcgreen:#197D3C; --qcpurple:#732891;
+    --panelbg:#F9FAFD; --panelborder:#BEC8D7; --goldbg:#FEFAEB; --goldborder:#DCB43C;
+    --ink:#1a1a1a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);
+    font-family:"Latin Modern Roman","CMU Serif",Georgia,"Times New Roman",serif;}
+  body{padding:14px 18px 22px;}
+
+  .titlebar{display:flex;align-items:baseline;justify-content:space-between;gap:1em;}
+  .titlebar h1{font-size:30px;font-weight:700;margin:0;}
+  .titlebar h1 .accent{color:var(--qcblue);}
+  .tag{font-size:16px;font-weight:700;color:#8a8a8a;white-space:nowrap;}
+  .rule{border:0;border-top:1.2px solid #cfcfcf;margin:8px 0 14px;}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start;}
+  @media (max-width:1150px){.layout{grid-template-columns:minmax(0,1fr);}}
+
+  .panel{border:1px solid var(--panelborder);border-radius:8px;background:var(--panelbg);padding:12px 14px;}
+  .panel > h2{font-size:19px;font-weight:700;color:var(--qcblue);margin:0 0 10px;}
+  .gold{background:var(--goldbg);border:1.4px solid var(--goldborder);}
+  .gold > h2{color:#8a6a10;}
+  .dark{background:#262626;border:0;color:#f0f0f0;}
+  .dark > h2{color:#f2cf4a;}
+
+  canvas{display:block;width:100%;height:auto;background:#fff;
+    border:1px solid var(--panelborder);border-radius:6px;}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:flex-end;margin-top:12px;}
+  .ctl{display:flex;flex-direction:column;gap:5px;}
+  .ctl label{font-size:15px;font-weight:700;color:#3c3c3c;}
+  .ctl .val{font-variant-numeric:tabular-nums;color:var(--qcblue);}
+  input[type=range]{width:230px;height:26px;accent-color:var(--qcblue);cursor:pointer;}
+  .btn{font-family:inherit;font-size:16px;font-weight:700;padding:9px 18px;cursor:pointer;
+    border:1.4px solid var(--qcblue);border-radius:6px;background:#fff;color:var(--qcblue);}
+  .btn:hover{background:#eef1f8;}
+  .btn.primary{background:var(--qcblue);color:#fff;}
+  .btn.primary:hover{background:#0d2660;}
+  .btn.warn{border-color:var(--qcorange);color:var(--qcorange);}
+  .btn.warn:hover{background:#fdeee8;}
+  .btn[aria-pressed=true]{background:var(--qcorange);color:#fff;border-color:var(--qcorange);}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;}
+  .presets .btn{padding:7px 13px;font-size:15px;}
+
+  .tally{display:grid;grid-template-columns:auto auto auto;gap:5px 12px;font-size:16px;align-items:baseline;}
+  .tally .k{color:#555;} .tally .h{font-size:13.5px;color:#888;font-weight:700;}
+  .tally .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;}
+  .up{color:var(--qcblue);} .dn{color:var(--qcorange);}
+
+  .cmp{width:100%;border-collapse:collapse;font-size:16px;margin-top:2px;}
+  .cmp th,.cmp td{padding:6px 8px;text-align:right;border-bottom:1px solid #d8dce4;}
+  .cmp th:first-child,.cmp td:first-child{text-align:left;color:#555;}
+  .cmp th{font-size:13.5px;color:#888;}
+  .cmp td{font-variant-numeric:tabular-nums;font-weight:700;}
+  .cmp tr.hi td{background:#fdeee8;}
+
+  .eq{font-size:17px;line-height:1.9;}
+  .eq .num{font-variant-numeric:tabular-nums;color:var(--qcblue);font-weight:700;}
+  .eq .lhs{color:#444;}
+  .dark .eq{color:#f0f0f0;} .dark .eq .lhs{color:#bdbdbd;} .dark .eq .num{color:#f2cf4a;}
+  .note{font-size:14px;color:#666;line-height:1.5;margin:10px 0 0;}
+  .dark .note{color:#b8b8b8;}
+  .kill{margin-top:10px;padding:10px 12px;border-radius:6px;background:#fdeee8;
+    border-left:4px solid var(--qcorange);font-size:15.5px;line-height:1.5;}
+  sub{font-size:.72em;} sup{font-size:.72em;}
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <h1>Three filters &nbsp;&ndash;&nbsp; <span class="accent">inserting one makes the count go up</span></h1>
+  <span class="tag">[&#8501;<sub>I</sub>] &nbsp;measurements on two-state systems</span>
+</div>
+<hr class="rule">
+
+<div class="layout">
+
+  <div>
+    <div class="panel">
+      <canvas id="scene" width="1180" height="520"></canvas>
+
+      <div class="controls">
+        <div class="ctl">
+          <label>SG<sub>2</sub> axis &nbsp;n&#770; = <span class="val" id="th2Lab">90&deg;</span> from z&#770;</label>
+          <input type="range" id="th2" min="0" max="180" step="1" value="90">
+        </div>
+        <div class="ctl">
+          <label>middle filter</label>
+          <button class="btn warn" id="drop" aria-pressed="false">SG<sub>2</sub> in place</button>
+        </div>
+        <div class="ctl">
+          <label>rate</label>
+          <input type="range" id="rate" min="1" max="70" step="1" value="22">
+        </div>
+        <button class="btn primary" id="run">run</button>
+        <button class="btn" id="step">one atom</button>
+        <button class="btn" id="reset">reset</button>
+      </div>
+
+      <div class="controls" style="margin-top:6px;">
+        <div class="ctl">
+          <label>presets</label>
+          <div class="presets">
+            <button class="btn" data-p="off">SG<sub>2</sub> removed</button>
+            <button class="btn" data-p="0">n&#770; = z&#770; (0&deg;)</button>
+            <button class="btn" data-p="45">45&deg;</button>
+            <button class="btn" data-p="90">90&deg; &nbsp;(the puzzle)</button>
+            <button class="btn" data-p="180">180&deg;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>Counted</h2>
+      <div class="tally">
+        <span class="k">left the oven</span><span class="v" id="n0">0</span><span class="h">&nbsp;</span>
+        <span class="k">passed SG<sub>1</sub> (z&#770;, keep +)</span><span class="v" id="n1">0</span><span class="h" id="f1">&nbsp;</span>
+        <span class="k">passed SG<sub>2</sub> (n&#770;, keep +)</span><span class="v" id="n2">0</span><span class="h" id="f2">&nbsp;</span>
+        <span class="k up">SG<sub>3</sub> reads &sigma;<sub>z</sub> = +1</span><span class="v up" id="n3p">0</span><span class="h" id="f3p">&nbsp;</span>
+        <span class="k dn">SG<sub>3</sub> reads &sigma;<sub>z</sub> = &minus;1</span><span class="v dn" id="n3m">0</span><span class="h" id="f3m">&nbsp;</span>
+      </div>
+    </div>
+
+    <div class="panel gold" style="margin-top:12px;">
+      <h2>Measured against predicted</h2>
+      <table class="cmp">
+        <tr><th>fraction of the oven output</th><th>measured</th><th>predicted</th></tr>
+        <tr><td>after SG<sub>1</sub></td><td id="m1">&mdash;</td><td id="p1">0.500</td></tr>
+        <tr><td>after SG<sub>2</sub></td><td id="m2">&mdash;</td><td id="p2">&mdash;</td></tr>
+        <tr><td class="up">SG<sub>3</sub> &rarr; +1</td><td id="m3p">&mdash;</td><td id="p3p">&mdash;</td></tr>
+        <tr class="hi"><td class="dn">SG<sub>3</sub> &rarr; &minus;1</td><td id="m3m">&mdash;</td><td id="p3m">&mdash;</td></tr>
+      </table>
+      <p class="note">Predicted from P<sub>&plusmn;</sub> = cos<sup>2</sup>(&theta;/2), sin<sup>2</sup>(&theta;/2) applied once at each filter, with &theta; the angle between successive axes.</p>
+    </div>
+
+    <div class="panel dark" style="margin-top:12px;">
+      <h2>The no-go, in one line</h2>
+      <div class="eq">
+        <div><span class="lhs">SG<sub>2</sub> removed:</span> &nbsp; T<sub>13</sub> &nbsp;=&nbsp; <span class="num">&empty;</span></div>
+        <div><span class="lhs">SG<sub>2</sub> in place:</span> &nbsp; T<sub>123</sub> &nbsp;=&nbsp; <span class="num" id="t123">0.250</span></div>
+      </div>
+      <p class="note">If every atom carried a fixed label &lambda; and each filter passed or stopped it according to &lambda; alone, transmission would be set intersection:
+      T<sub>123</sub> = T<sub>1</sub> &cap; T<sub>2</sub> &cap; T<sub>3</sub> &sube; T<sub>1</sub> &cap; T<sub>3</sub> = &empty;.
+      Adding a filter cannot increase a count. The data say otherwise, and they say it about each atom separately.</p>
+      <div class="kill" id="kill" style="background:#3a2a24;border-left-color:#CD4619;color:#f4d9cf;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+(function(){
+
+var C = {blue:"#12347D", orange:"#CD4619", green:"#197D3C", purple:"#732891", ink:"#1a1a1a"};
+
+var S = {
+  th2:90,            // SG2 axis, degrees from z-hat
+  hasSG2:true,
+  rate:22,
+  running:false,          // nothing moves until the lecturer says so
+  n0:0, n1:0, n2:0, n3p:0, n3m:0,
+  atoms:[]
+};
+
+var cv = document.getElementById("scene"), cx = cv.getContext("2d");
+var W = cv.width, H = cv.height;
+
+// ---- geometry ---------------------------------------------------------
+var AX = 250;                                   // beam axis, y
+var DUMP = 420;                                 // where stopped atoms pile up
+var X0 = 86;                                    // oven mouth
+var SG = [{x:300}, {x:570}, {x:840}];           // three filters
+var DET = 1096;                                 // detector plane
+var DETP = 176, DETM = 324;                     // the two SG3 exits
+var BOX = {w:92, h:112};
+
+function rad(d){ return d*Math.PI/180; }
+
+// ---- physics ----------------------------------------------------------
+// P(+) for an analyzer at angle th to the axis the state was last prepared along
+function pPass(thDeg){ var t = rad(thDeg); return 0.5*(1 + Math.cos(t)); }
+
+function predictions(){
+  var f1 = 0.5;                       // oven is unpolarized
+  if(!S.hasSG2){
+    return {f1:f1, f2:null, f3p:f1, f3m:0};
+  }
+  var a = pPass(S.th2);               // z-hat -> n-hat
+  var b = pPass(S.th2);               // n-hat -> z-hat, same angle
+  return {f1:f1, f2:f1*a, f3p:f1*a*b, f3m:f1*a*(1-b)};
+}
+
+// ---- atoms ------------------------------------------------------------
+// waypoints, walked at constant speed
+function makeAtom(){
+  var pts = [{x:X0,y:AX}];
+  var s1 = Math.random() < 0.5 ? +1 : -1;
+  S.n0++;
+
+  if(s1 < 0){                                   // stopped by SG1
+    pts.push({x:SG[0].x, y:AX});
+    pts.push({x:SG[0].x + 54, y:DUMP});
+    return {pts:pts, col:C.orange, fate:"stop1", done:false};
+  }
+  S.n1++;
+  pts.push({x:SG[0].x, y:AX});
+
+  if(S.hasSG2){
+    var s2 = Math.random() < pPass(S.th2) ? +1 : -1;
+    if(s2 < 0){                                 // stopped by SG2
+      pts.push({x:SG[1].x, y:AX});
+      pts.push({x:SG[1].x + 54, y:DUMP});
+      return {pts:pts, col:C.orange, fate:"stop2", done:false};
+    }
+    S.n2++;
+    pts.push({x:SG[1].x, y:AX});
+  }
+
+  // SG3, always along z-hat. If SG2 stood in the way the state now points
+  // along n-hat, so the angle back to z-hat is th2; otherwise it is 0.
+  var thBack = S.hasSG2 ? S.th2 : 0;
+  var s3 = Math.random() < pPass(thBack) ? +1 : -1;
+  pts.push({x:SG[2].x, y:AX});
+  pts.push({x:DET, y:(s3 > 0 ? DETP : DETM)});
+  if(s3 > 0) S.n3p++; else S.n3m++;
+  return {pts:pts, col:(s3 > 0 ? C.blue : C.orange), fate:(s3 > 0 ? "p" : "m"), done:false};
+}
+
+function walk(a, dist){
+  var d = dist;
+  while(d > 0 && a.pts.length > 1){
+    var p = a.pts[0], q = a.pts[1];
+    var dx = q.x - p.x, dy = q.y - p.y, L = Math.hypot(dx,dy);
+    if(L <= d){ d -= L; a.pts.shift(); }
+    else { a.pts[0] = {x:p.x + dx*d/L, y:p.y + dy*d/L}; d = 0; }
+  }
+  if(a.pts.length <= 1) a.done = true;
+}
+
+// ---- drawing ----------------------------------------------------------
+function clear(){ cx.clearRect(0,0,W,H); cx.fillStyle="#fff"; cx.fillRect(0,0,W,H); }
+
+function roundRect(x,y,w,h,r){
+  cx.beginPath();
+  cx.moveTo(x+r,y); cx.lineTo(x+w-r,y); cx.quadraticCurveTo(x+w,y,x+w,y+r);
+  cx.lineTo(x+w,y+h-r); cx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  cx.lineTo(x+r,y+h); cx.quadraticCurveTo(x,y+h,x,y+h-r);
+  cx.lineTo(x,y+r); cx.quadraticCurveTo(x,y,x+r,y); cx.closePath();
+}
+
+function label(t,x,y,size,col,align,weight){
+  cx.font = (weight||"") + " " + (size||15) + "px 'Latin Modern Roman',Georgia,serif";
+  cx.fillStyle = col||C.ink; cx.textAlign = align||"center"; cx.textBaseline = "middle";
+  cx.fillText(t,x,y);
+}
+
+function arrow(x1,y1,x2,y2,col,lw,head){
+  var a = Math.atan2(y2-y1,x2-x1), h = head||9;
+  cx.strokeStyle = col; cx.lineWidth = lw||2; cx.lineCap = "round";
+  cx.beginPath(); cx.moveTo(x1,y1); cx.lineTo(x2-h*0.8*Math.cos(a), y2-h*0.8*Math.sin(a)); cx.stroke();
+  cx.fillStyle = col; cx.beginPath(); cx.moveTo(x2,y2);
+  cx.lineTo(x2-h*Math.cos(a-0.42), y2-h*Math.sin(a-0.42));
+  cx.lineTo(x2-h*Math.cos(a+0.42), y2-h*Math.sin(a+0.42));
+  cx.closePath(); cx.fill();
+}
+
+function drawOven(){
+  cx.fillStyle="#e4e4e4"; cx.strokeStyle="#5a5a5a"; cx.lineWidth=1.4;
+  roundRect(10, AX-38, 74, 76, 4); cx.fill(); cx.stroke();
+  label("Ag oven", 47, AX, 15, "#333","center","bold");
+  cx.fillStyle="#4a4a4a";
+  cx.fillRect(X0-8, AX-42, 9, 30); cx.fillRect(X0-8, AX+12, 9, 30);
+}
+
+// one filter, with its axis drawn as a rotated arrow on top of the box
+function drawFilter(i, thDeg, name, faded){
+  var x = SG[i].x, y = AX;
+  cx.globalAlpha = faded ? 0.22 : 1;
+
+  cx.fillStyle = "#dfe3ea"; cx.strokeStyle = "#5a5a5a"; cx.lineWidth = 1.5;
+  roundRect(x - BOX.w/2, y - BOX.h/2, BOX.w, BOX.h, 5); cx.fill(); cx.stroke();
+  label(name, x, y + 32, 20, "#2a2a2a", "center", "bold");
+
+  // the axis of this filter
+  var a = rad(thDeg), ux = Math.sin(a), uy = -Math.cos(a);
+  arrow(x, y - 8, x + ux*34, y - 8 + uy*34, C.green, 2.4, 10);
+  cx.setLineDash([3,4]); cx.strokeStyle="#9aa3b4"; cx.lineWidth=1;
+  cx.beginPath(); cx.moveTo(x - ux*34, y - 8 - uy*34); cx.lineTo(x, y-8); cx.stroke();
+  cx.setLineDash([]);
+
+  cx.globalAlpha = 1;
+}
+
+function drawBlocker(i){
+  var x = SG[i].x + 54;
+  cx.fillStyle = "#6a6a6a";
+  roundRect(x - 22, DUMP - 12, 44, 26, 3); cx.fill();
+  label("stop", x, DUMP + 1, 12, "#fff", "center", "bold");
+}
+
+function drawDetectors(){
+  [[DETP, C.blue, "+1"], [DETM, C.orange, "−1"]].forEach(function(d){
+    cx.fillStyle = "#f2f2f4"; cx.strokeStyle = d[1]; cx.lineWidth = 2;
+    roundRect(DET - 10, d[0] - 30, 76, 60, 5); cx.fill(); cx.stroke();
+    // sigma-sub-z: there is no subscript z in Unicode, so it is set by hand
+    cx.font = "bold 17px 'Latin Modern Roman',Georgia,serif";
+    var wSig = cx.measureText("σ").width;
+    label("σ", DET + 22 - wSig/2, d[0] - 9, 17, d[1], "center", "bold");
+    label("z", DET + 22 + wSig/2 + 3, d[0] - 4, 11.5, d[1], "center", "bold");
+    label("= " + d[2], DET + 28, d[0] + 13, 17, d[1], "center", "bold");
+  });
+}
+
+function drawRails(){
+  cx.setLineDash([4,6]); cx.strokeStyle = "#cfcfcf"; cx.lineWidth = 1;
+  cx.beginPath(); cx.moveTo(X0, AX); cx.lineTo(SG[2].x, AX); cx.stroke();
+  cx.setLineDash([]);
+}
+
+function drawFlow(){
+  // running fractions annotated between the stages, like the filter chain
+  var P = predictions(), N = S.n0 || 1;
+  function frac(x, v){
+    if(v === null) return;
+    label(v, x, AX - 78, 16, "#444", "center", "bold");
+  }
+  frac((X0 + SG[0].x)/2, "1");
+  frac((SG[0].x + SG[1].x)/2, P.f1.toFixed(3));
+  if(S.hasSG2) frac((SG[1].x + SG[2].x)/2, P.f2.toFixed(3));
+  else         frac((SG[1].x + SG[2].x)/2, P.f1.toFixed(3));
+  label(P.f3p.toFixed(3), (SG[2].x + DET)/2 + 10, DETP - 40, 16, C.blue, "center", "bold");
+  label(P.f3m.toFixed(3), (SG[2].x + DET)/2 + 10, DETM + 40, 16, C.orange, "center", "bold");
+}
+
+// An atom carries no visible mark of an outcome it has not yet had: grey out
+// of the oven, navy once SG1 has passed it, and its final colour only after
+// the filter that decided its fate.
+function colourAt(a, x){
+  if(x < SG[0].x) return "rgba(120,124,132,0.85)";
+  if(a.fate === "stop1") return C.orange;
+  if(x < SG[1].x) return C.blue;
+  if(a.fate === "stop2") return C.orange;
+  if(x < SG[2].x) return C.blue;
+  return a.col;
+}
+
+function drawAtoms(){
+  for(var i = 0; i < S.atoms.length; i++){
+    var a = S.atoms[i], p = a.pts[0];
+    cx.fillStyle = colourAt(a, p.x);
+    cx.beginPath(); cx.arc(p.x, p.y, 3.6, 0, 6.2832); cx.fill();
+  }
+}
+
+function render(){
+  clear();
+  drawRails();
+  drawOven();
+  drawFilter(0, 0, "SG₁", false);
+  drawFilter(1, S.th2, "SG₂", !S.hasSG2);
+  drawFilter(2, 0, "SG₃", false);
+  drawBlocker(0);
+  if(S.hasSG2) drawBlocker(1);
+  drawDetectors();
+  drawFlow();
+  drawAtoms();
+
+  if(!S.hasSG2){
+    label("SG₂ removed", SG[1].x, AX - 108, 17, C.orange, "center", "bold");
+  }
+  label("each filter keeps its + channel and dumps its − channel; SG₁ and SG₃ are both along ẑ",
+        W/2, H - 16, 13.5, "#8a8a8a");
+}
+
+// ---- readout ----------------------------------------------------------
+function pc(x){ return (100*x).toFixed(1) + "%"; }
+
+function updateReadout(){
+  var P = predictions(), N = S.n0;
+  document.getElementById("n0").textContent  = S.n0;
+  document.getElementById("n1").textContent  = S.n1;
+  document.getElementById("n2").textContent  = S.hasSG2 ? S.n2 : "—";
+  document.getElementById("n3p").textContent = S.n3p;
+  document.getElementById("n3m").textContent = S.n3m;
+
+  document.getElementById("f1").textContent  = N ? pc(S.n1/N) : "";
+  document.getElementById("f2").textContent  = (N && S.hasSG2) ? pc(S.n2/N) : "";
+  document.getElementById("f3p").textContent = N ? pc(S.n3p/N) : "";
+  document.getElementById("f3m").textContent = N ? pc(S.n3m/N) : "";
+
+  document.getElementById("m1").textContent  = N ? (S.n1/N).toFixed(3) : "—";
+  document.getElementById("m2").textContent  = (N && S.hasSG2) ? (S.n2/N).toFixed(3) : "—";
+  document.getElementById("m3p").textContent = N ? (S.n3p/N).toFixed(3) : "—";
+  document.getElementById("m3m").textContent = N ? (S.n3m/N).toFixed(3) : "—";
+
+  document.getElementById("p1").textContent  = P.f1.toFixed(3);
+  document.getElementById("p2").textContent  = S.hasSG2 ? P.f2.toFixed(3) : "—";
+  document.getElementById("p3p").textContent = P.f3p.toFixed(3);
+  document.getElementById("p3m").textContent = P.f3m.toFixed(3);
+
+  document.getElementById("t123").textContent = P.f3m.toFixed(3);
+
+  var k = document.getElementById("kill");
+  if(!S.hasSG2){
+    k.innerHTML = "With SG<sub>2</sub> out of the beam the &minus; detector is <b>dead</b>: whatever passed SG<sub>1</sub> passes SG<sub>3</sub>. Put SG<sub>2</sub> back at 90&deg; and watch it come alive.";
+  } else if(P.f3m < 1e-9){
+    k.innerHTML = "At this angle SG<sub>2</sub> changes nothing &mdash; its axis agrees with SG<sub>1</sub> and SG<sub>3</sub>, so the &minus; detector stays dead. Turn it away from 0&deg;.";
+  } else {
+    k.innerHTML = "An <b>extra obstacle</b> in the beam is now feeding a detector that fired <b>never</b> without it: " +
+      P.f3m.toFixed(3) + " of the oven output against 0. Set theory forbids this, so atoms do not carry labels.";
+  }
+}
+
+// ---- loop -------------------------------------------------------------
+var last = 0, carry = 0, SPEED = 320;   // px per second
+function frame(ts){
+  var dt = last ? Math.min((ts-last)/1000, 0.05) : 0;
+  last = ts;
+  if(S.running){ carry += S.rate*dt; while(carry >= 1){ S.atoms.push(makeAtom()); carry -= 1; } }
+  for(var i = S.atoms.length-1; i >= 0; i--){
+    walk(S.atoms[i], SPEED*dt);
+    if(S.atoms[i].done) S.atoms.splice(i,1);
+  }
+  render(); updateReadout();
+  requestAnimationFrame(frame);
+}
+
+// ---- controls ---------------------------------------------------------
+function resetTally(){
+  S.n0=0; S.n1=0; S.n2=0; S.n3p=0; S.n3m=0; S.atoms.length=0;
+}
+function syncDrop(){
+  var b = document.getElementById("drop");
+  b.setAttribute("aria-pressed", S.hasSG2 ? "false" : "true");
+  b.innerHTML = S.hasSG2 ? "SG<sub>2</sub> in place" : "SG<sub>2</sub> removed";
+  document.getElementById("th2").disabled = !S.hasSG2;
+  document.getElementById("th2").style.opacity = S.hasSG2 ? 1 : 0.35;
+}
+
+document.getElementById("th2").addEventListener("input", function(e){
+  S.th2 = +e.target.value;
+  document.getElementById("th2Lab").textContent = S.th2 + "°";
+  resetTally();
+});
+document.getElementById("drop").addEventListener("click", function(){
+  S.hasSG2 = !S.hasSG2; syncDrop(); resetTally();
+});
+document.getElementById("rate").addEventListener("input", function(e){ S.rate = +e.target.value; });
+document.getElementById("run").addEventListener("click", function(e){
+  S.running = !S.running; e.target.textContent = S.running ? "pause" : "run";
+});
+document.getElementById("step").addEventListener("click", function(){
+  S.running = false; document.getElementById("run").textContent = "run";
+  S.atoms.push(makeAtom());
+});
+document.getElementById("reset").addEventListener("click", resetTally);
+
+Array.prototype.forEach.call(document.querySelectorAll(".presets .btn"), function(b){
+  b.addEventListener("click", function(){
+    var p = b.dataset.p;
+    if(p === "off"){ S.hasSG2 = false; }
+    else { S.hasSG2 = true; S.th2 = +p;
+           document.getElementById("th2").value = S.th2;
+           document.getElementById("th2Lab").textContent = S.th2 + "°"; }
+    syncDrop(); resetTally();
+  });
+});
+
+syncDrop();
+requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>

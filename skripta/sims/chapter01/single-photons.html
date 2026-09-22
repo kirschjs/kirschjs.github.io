@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block 2 · Single photons through polarizers</title>
+<style>
+  :root { --ink:#1a1a1a; --blue:#1d4ed8; --red:#b91c1c; --grey:#8a8a8a; --line:#d4d4d4; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         color:var(--ink); background:#fff; padding:18px 22px; }
+  h1 { font-size:20px; font-weight:600; margin:0 0 2px; }
+  .sub { color:var(--grey); font-size:14px; margin:0 0 14px; }
+  canvas { border:1px solid var(--line); border-radius:6px; background:#fff; max-width:100%; }
+  .row { display:flex; gap:26px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+  .ctrl { display:flex; align-items:center; gap:10px; font-size:16px; margin-bottom:8px; }
+  .ctrl label { width:150px; }
+  input[type=range] { width:210px; height:34px; }
+  input[type=checkbox] { width:22px; height:22px; }
+  .val { width:56px; text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  button { font-size:15px; padding:10px 15px; border:1px solid var(--line); background:#fafafa;
+           border-radius:6px; cursor:pointer; }
+  button.on { background:#1d4ed8; color:#fff; border-color:#1d4ed8; }
+  .counts { border:1px solid var(--line); border-radius:6px; padding:14px 18px; background:#fffdf2;
+            font-size:18px; line-height:1.8; min-width:290px; }
+  .big { font-size:30px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .tag { font-size:14px; color:var(--grey); }
+  .bar { height:16px; background:#eee; border-radius:3px; overflow:hidden; margin:4px 0 8px; }
+  .bar span { display:block; height:100%; }
+  .presets { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  body.puzzle .hideInPuzzle { display:none; }
+  body.puzzle .val { visibility:hidden; }
+</style>
+</head>
+<body>
+<h1>Single photons through polarizers</h1>
+<p class="sub">Block 2 · one photon at a time, and the statistics that build up behind them</p>
+
+<canvas id="bench" width="1000" height="330"></canvas>
+
+<div class="row">
+  <div>
+    <div class="ctrl hideInPuzzle">
+      <label>source angle &theta;</label>
+      <input type="range" id="src" min="0" max="180" step="1" value="0">
+      <span class="val" id="srcV"></span>
+    </div>
+    <div class="ctrl hideInPuzzle">
+      <label><input type="checkbox" id="p0on" checked> polarizer 1</label>
+      <input type="range" id="p0" min="0" max="180" step="1" value="0">
+      <span class="val" id="p0V"></span>
+    </div>
+    <div class="ctrl" id="row1">
+      <label><input type="checkbox" id="p1on"> <span id="lab1">polarizer 2</span></label>
+      <input type="range" id="p1" min="0" max="180" step="1" value="45" class="hideInPuzzle">
+      <span class="val" id="p1V"></span>
+    </div>
+    <div class="ctrl hideInPuzzle">
+      <label><input type="checkbox" id="p2on" checked> polarizer 3</label>
+      <input type="range" id="p2" min="0" max="180" step="1" value="90">
+      <span class="val" id="p2V"></span>
+    </div>
+    <div class="ctrl">
+      <label>rate</label>
+      <input type="range" id="rate" min="1" max="300" step="1" value="6">
+      <span class="val" id="rateV"></span>
+    </div>
+    <div class="presets">
+      <button id="mode" class="hideInPuzzle">classical beam</button>
+      <button id="puzzleBtn">puzzle mode</button>
+      <button id="reset">reset counts</button>
+    </div>
+  </div>
+
+  <div class="counts" id="counts"></div>
+</div>
+
+<script>
+(function () {
+  var cv = document.getElementById('bench'), ctx = cv.getContext('2d');
+  var srcEl = document.getElementById('src'), rateEl = document.getElementById('rate');
+  var P = [
+    { x: 300, on: document.getElementById('p0on'), ang: document.getElementById('p0'), v: document.getElementById('p0V') },
+    { x: 470, on: document.getElementById('p1on'), ang: document.getElementById('p1'), v: document.getElementById('p1V') },
+    { x: 640, on: document.getElementById('p2on'), ang: document.getElementById('p2'), v: document.getElementById('p2V') }
+  ];
+  var SCREEN_X = 880, START_X = 120, BEAM_Y = 150;
+  var photons = [], spots = [], emitted = 0, detected = 0, acc = 0, last = 0;
+  var classical = false;
+  var puzzle = /[?&]puzzle=1/.test(location.search);
+
+  function rad(d) { return d * Math.PI / 180; }
+  function dir(a) { return { x: Math.sin(rad(a)), y: -Math.cos(rad(a)) }; }
+
+  function theory() {
+    var cur = +srcEl.value, I = 1;
+    P.forEach(function (p) {
+      if (!p.on.checked) return;
+      var a = +p.ang.value;
+      var c = Math.cos(rad(cur - a));
+      I *= c * c;
+      cur = a;
+    });
+    return I;
+  }
+
+  function emit() {
+    photons.push({ x: START_X, y: BEAM_Y + (Math.random() - 0.5) * 26, a: +srcEl.value, dead: 0 });
+    emitted++;
+  }
+
+  function step(dt) {
+    if (classical) return;
+    acc += dt * (+rateEl.value);
+    while (acc >= 1) { emit(); acc -= 1; }
+    var speed = 260 + (+rateEl.value) * 1.2;
+    for (var i = photons.length - 1; i >= 0; i--) {
+      var ph = photons[i];
+      if (ph.dead) { ph.dead -= dt; if (ph.dead <= 0) photons.splice(i, 1); continue; }
+      var xNew = ph.x + speed * dt;
+      for (var k = 0; k < P.length; k++) {
+        var p = P[k];
+        if (!p.on.checked) continue;
+        if (ph.x < p.x && xNew >= p.x) {
+          var a = +p.ang.value;
+          var c = Math.cos(rad(ph.a - a));
+          if (Math.random() < c * c) { ph.a = a; }
+          else { ph.x = p.x; ph.dead = 0.28; break; }
+        }
+      }
+      if (ph.dead) continue;
+      ph.x = xNew;
+      if (ph.x >= SCREEN_X) {
+        detected++;
+        spots.push({ y: ph.y + (Math.random() - 0.5) * 30, x: SCREEN_X + 8 + Math.random() * 26, t: 1 });
+        if (spots.length > 600) spots.shift();
+        photons.splice(i, 1);
+      }
+    }
+  }
+
+  function hatch(p, idx) {
+    if (puzzle) {
+      ctx.fillStyle = '#ececec'; ctx.strokeStyle = '#555'; ctx.lineWidth = 1.4;
+      ctx.fillRect(p.x - 18, BEAM_Y - 62, 36, 124);
+      ctx.strokeRect(p.x - 18, BEAM_Y - 62, 36, 124);
+      ctx.fillStyle = '#333'; ctx.font = 'bold 22px Georgia, serif';
+      ctx.fillText('ABC'.charAt(idx), p.x - 8, BEAM_Y + 8);
+      return;
+    }
+    var a = +p.ang.value, d = dir(a);
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(p.x - 16, BEAM_Y - 62, 32, 124);
+    ctx.clip();
+    ctx.fillStyle = '#f4f4f4'; ctx.fillRect(p.x - 16, BEAM_Y - 62, 32, 124);
+    ctx.strokeStyle = '#9a9a9a'; ctx.lineWidth = 1.4;
+    for (var s = -140; s < 140; s += 11) {
+      ctx.beginPath();
+      ctx.moveTo(p.x - d.x * 90, BEAM_Y + s - d.y * 90);
+      ctx.lineTo(p.x + d.x * 90, BEAM_Y + s + d.y * 90);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.strokeStyle = '#555'; ctx.lineWidth = 1.2;
+    ctx.strokeRect(p.x - 16, BEAM_Y - 62, 32, 124);
+    ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.moveTo(p.x - d.x * 46, BEAM_Y - d.y * 46);
+    ctx.lineTo(p.x + d.x * 46, BEAM_Y + d.y * 46);
+    ctx.stroke();
+    ctx.fillStyle = '#333'; ctx.font = '15px Georgia, serif';
+    ctx.fillText(a + '\u00B0', p.x - 14, BEAM_Y + 86);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    // source
+    ctx.fillStyle = '#333'; ctx.font = '15px Georgia, serif';
+    ctx.fillText('source', 74, BEAM_Y + 92);
+    ctx.strokeStyle = '#555'; ctx.lineWidth = 1.4;
+    ctx.strokeRect(START_X - 52, BEAM_Y - 32, 44, 64);
+    if (!puzzle) {
+      var ds = dir(+srcEl.value);
+      ctx.strokeStyle = '#b91c1c'; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(START_X - 30 - ds.x * 22, BEAM_Y - ds.y * 22);
+      ctx.lineTo(START_X - 30 + ds.x * 22, BEAM_Y + ds.y * 22);
+      ctx.stroke();
+    }
+    // axis line
+    ctx.strokeStyle = '#e2e2e2'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(START_X, BEAM_Y); ctx.lineTo(SCREEN_X, BEAM_Y); ctx.stroke();
+
+    P.forEach(function (p, i) { if (p.on.checked) hatch(p, i); });
+
+    // screen
+    ctx.fillStyle = '#fafafa'; ctx.strokeStyle = '#555'; ctx.lineWidth = 1.4;
+    ctx.fillRect(SCREEN_X, BEAM_Y - 92, 44, 184);
+    ctx.strokeRect(SCREEN_X, BEAM_Y - 92, 44, 184);
+    ctx.fillStyle = '#333'; ctx.font = '15px Georgia, serif';
+    ctx.fillText('screen', SCREEN_X - 6, BEAM_Y + 116);
+
+    if (classical) {
+      var cur = +srcEl.value, I = 1, x0 = START_X;
+      var stops = [];
+      P.forEach(function (p) {
+        if (!p.on.checked) return;
+        stops.push({ x: p.x, I: I });
+        var c = Math.cos(rad(cur - (+p.ang.value)));
+        I *= c * c; cur = +p.ang.value;
+      });
+      stops.push({ x: SCREEN_X, I: I });
+      var prevX = START_X, prevI = 1;
+      stops.forEach(function (s) {
+        ctx.globalAlpha = Math.max(prevI, 0.02);
+        ctx.strokeStyle = '#b91c1c'; ctx.lineWidth = 16;
+        ctx.beginPath(); ctx.moveTo(prevX, BEAM_Y); ctx.lineTo(s.x, BEAM_Y); ctx.stroke();
+        prevX = s.x; prevI = s.I;
+      });
+      ctx.globalAlpha = Math.max(I, 0.02);
+      ctx.fillStyle = '#b91c1c';
+      ctx.fillRect(SCREEN_X + 2, BEAM_Y - 40, 40, 80);
+      ctx.globalAlpha = 1;
+    } else {
+      spots.forEach(function (s) {
+        ctx.globalAlpha = 0.65;
+        ctx.fillStyle = '#b91c1c';
+        ctx.beginPath(); ctx.arc(s.x, s.y, 2.6, 0, 7); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      photons.forEach(function (ph) {
+        if (ph.dead) {
+          ctx.globalAlpha = Math.max(ph.dead / 0.28, 0);
+          ctx.strokeStyle = '#b91c1c'; ctx.lineWidth = 2;
+          for (var k = 0; k < 6; k++) {
+            var an = k * Math.PI / 3;
+            ctx.beginPath();
+            ctx.moveTo(ph.x + Math.cos(an) * 5, ph.y + Math.sin(an) * 5);
+            ctx.lineTo(ph.x + Math.cos(an) * 13, ph.y + Math.sin(an) * 13);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+          return;
+        }
+        ctx.fillStyle = '#1d4ed8';
+        ctx.beginPath(); ctx.arc(ph.x, ph.y, puzzle ? 5 : 4, 0, 7); ctx.fill();
+        if (puzzle) return;
+        var d = dir(ph.a);
+        ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(ph.x - d.x * 11, ph.y - d.y * 11);
+        ctx.lineTo(ph.x + d.x * 11, ph.y + d.y * 11);
+        ctx.stroke();
+      });
+    }
+  }
+
+  function counts() {
+    var th = theory(), meas = emitted ? detected / emitted : 0;
+    document.getElementById('counts').innerHTML =
+      '<span class="tag">detected / emitted</span><br>' +
+      '<span class="big">' + detected + '</span> <span class="tag">/ ' + emitted + '</span><br>' +
+      '<span class="tag">measured fraction</span>' +
+      '<div class="bar"><span style="width:' + (meas * 100).toFixed(1) + '%;background:#b91c1c"></span></div>' +
+      (meas * 100).toFixed(1) + ' %<br>' +
+      (puzzle ? '' :
+        '<span class="tag">predicted &prod; cos<sup>2</sup></span>' +
+        '<div class="bar"><span style="width:' + (th * 100).toFixed(1) + '%;background:#1d4ed8"></span></div>' +
+        (th * 100).toFixed(1) + ' %');
+  }
+
+  function frame(now) {
+    var dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
+    step(dt); draw(); counts();
+    requestAnimationFrame(frame);
+  }
+
+  function sync() {
+    document.getElementById('srcV').textContent = srcEl.value + '\u00B0';
+    document.getElementById('rateV').textContent = rateEl.value + '/s';
+    P.forEach(function (p) { p.v.textContent = p.ang.value + '\u00B0'; });
+  }
+  function reset() { emitted = 0; detected = 0; photons = []; spots = []; }
+
+  [srcEl, rateEl].forEach(function (e) { e.addEventListener('input', function () { sync(); reset(); }); });
+  P.forEach(function (p) {
+    p.ang.addEventListener('input', function () { sync(); reset(); });
+    p.on.addEventListener('change', reset);
+  });
+  document.getElementById('reset').addEventListener('click', reset);
+  document.getElementById('mode').addEventListener('click', function () {
+    classical = !classical;
+    this.textContent = classical ? 'photon by photon' : 'classical beam';
+    this.classList.toggle('on', classical);
+    reset();
+  });
+
+  function applyPuzzle() {
+    document.body.classList.toggle('puzzle', puzzle);
+    document.getElementById('lab1').textContent = puzzle ? 'insert box B' : 'polarizer 2';
+    document.getElementById('puzzleBtn').classList.toggle('on', puzzle);
+    document.getElementById('puzzleBtn').textContent = puzzle ? 'reveal' : 'puzzle mode';
+    if (puzzle) {
+      srcEl.value = 0; P[0].ang.value = 0; P[1].ang.value = 45; P[2].ang.value = 90;
+      P[0].on.checked = true; P[2].on.checked = true;
+      classical = false;
+      document.getElementById('mode').textContent = 'classical beam';
+      document.getElementById('mode').classList.remove('on');
+    }
+    sync(); reset();
+  }
+  document.getElementById('puzzleBtn').addEventListener('click', function () {
+    puzzle = !puzzle; applyPuzzle();
+  });
+
+  applyPuzzle();
+  sync();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

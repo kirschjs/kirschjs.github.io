@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block 1 · Polarization ellipse</title>
+<style>
+  :root { --ink:#1a1a1a; --blue:#1d4ed8; --red:#b91c1c; --grey:#8a8a8a; --line:#d4d4d4; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         color:var(--ink); background:#fff; padding:18px 22px; }
+  h1 { font-size:20px; font-weight:600; margin:0 0 2px; }
+  .sub { color:var(--grey); font-size:14px; margin:0 0 16px; }
+  .wrap { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+  canvas { border:1px solid var(--line); border-radius:6px; background:#fff; touch-action:none; }
+  .col { display:flex; flex-direction:column; gap:12px; }
+  .ctrl { display:flex; align-items:center; gap:12px; font-size:16px; }
+  .ctrl label { width:200px; }
+  input[type=range] { flex:1; min-width:220px; height:34px; }
+  .val { width:74px; text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  .presets { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+  button { font-size:15px; padding:10px 14px; border:1px solid var(--line); background:#fafafa;
+           border-radius:6px; cursor:pointer; }
+  button:hover { background:#f0f0f0; }
+  button.on { background:#1d4ed8; color:#fff; border-color:#1d4ed8; }
+  .readout { border:1px solid var(--line); border-radius:6px; padding:14px 16px; font-size:19px;
+             line-height:1.7; background:#fffdf2; }
+  .tag { font-size:15px; color:var(--grey); }
+</style>
+</head>
+<body>
+<h1>Polarization ellipse</h1>
+<p class="sub">Block 1 · the two components and their relative phase</p>
+
+<div class="wrap">
+  <canvas id="plane" width="480" height="480"></canvas>
+  <div class="col">
+    <canvas id="traces" width="520" height="240"></canvas>
+    <div class="readout" id="readout"></div>
+    <div class="ctrl">
+      <label>amplitude ratio &alpha;</label>
+      <input type="range" id="alpha" min="0" max="90" step="1" value="45">
+      <span class="val" id="alphaV">45&deg;</span>
+    </div>
+    <div class="ctrl">
+      <label>relative phase &delta;</label>
+      <input type="range" id="delta" min="-180" max="180" step="1" value="0">
+      <span class="val" id="deltaV">0&deg;</span>
+    </div>
+    <div class="ctrl">
+      <label>speed</label>
+      <input type="range" id="speed" min="0" max="100" step="1" value="35">
+      <span class="val" id="speedV"></span>
+    </div>
+    <div class="presets">
+      <button data-a="0"  data-d="0">x&#770;</button>
+      <button data-a="90" data-d="0">y&#770;</button>
+      <button data-a="45" data-d="0">+45&deg;</button>
+      <button data-a="45" data-d="180">&minus;45&deg;</button>
+      <button data-a="45" data-d="90">circular +</button>
+      <button data-a="45" data-d="-90">circular &minus;</button>
+      <button id="proj" class="on">projections</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var plane = document.getElementById('plane');
+  var traces = document.getElementById('traces');
+  var pc = plane.getContext('2d');
+  var tc = traces.getContext('2d');
+  var aEl = document.getElementById('alpha');
+  var dEl = document.getElementById('delta');
+  var sEl = document.getElementById('speed');
+  var projBtn = document.getElementById('proj');
+  var showProj = true;
+  var t = 0;
+  var last = 0;
+
+  function rad(d) { return d * Math.PI / 180; }
+
+  function state() {
+    var a = rad(+aEl.value), d = rad(+dEl.value);
+    return { ax: Math.cos(a), ay: Math.sin(a), d: d };
+  }
+  // x is the vertical axis, y the horizontal axis, matching the lecture sheet
+  function field(s, ph) {
+    return { x: s.ax * Math.cos(ph), y: s.ay * Math.cos(ph - s.d) };
+  }
+
+  function arrow(ctx, x0, y0, x1, y1, col, w) {
+    var dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = w || 2.5;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    if (L < 8) return;
+    var ux = dx / L, uy = dy / L, h = 12, wd = 5;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - h * ux + wd * uy, y1 - h * uy - wd * ux);
+    ctx.lineTo(x1 - h * ux - wd * uy, y1 - h * uy + wd * ux);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function drawPlane(s, ph) {
+    var W = plane.width, H = plane.height, cx = W / 2, cy = H / 2, R = 150;
+    pc.clearRect(0, 0, W, H);
+    // axes
+    pc.strokeStyle = '#9a9a9a'; pc.lineWidth = 1;
+    pc.beginPath(); pc.moveTo(30, cy); pc.lineTo(W - 30, cy);
+    pc.moveTo(cx, 30); pc.lineTo(cx, H - 30); pc.stroke();
+    pc.fillStyle = '#6a6a6a'; pc.font = 'italic 17px Georgia, serif';
+    pc.fillText('y', W - 26, cy - 10);
+    pc.fillText('x', cx + 10, 30);
+    // ellipse trace
+    pc.strokeStyle = '#1d4ed8'; pc.lineWidth = 2; pc.globalAlpha = 0.45;
+    pc.beginPath();
+    for (var k = 0; k <= 240; k++) {
+      var f = field(s, k / 240 * 2 * Math.PI);
+      var px = cx + f.y * R, py = cy - f.x * R;
+      if (k === 0) pc.moveTo(px, py); else pc.lineTo(px, py);
+    }
+    pc.closePath(); pc.stroke(); pc.globalAlpha = 1;
+    // instantaneous vector
+    var f = field(s, ph);
+    var vx = cx + f.y * R, vy = cy - f.x * R;
+    if (showProj) {
+      pc.setLineDash([5, 5]); pc.lineWidth = 1.5; pc.strokeStyle = '#b91c1c';
+      pc.beginPath(); pc.moveTo(vx, vy); pc.lineTo(vx, cy); pc.stroke();
+      pc.beginPath(); pc.moveTo(vx, vy); pc.lineTo(cx, vy); pc.stroke();
+      pc.setLineDash([]);
+      pc.fillStyle = '#b91c1c';
+      pc.beginPath(); pc.arc(vx, cy, 4, 0, 7); pc.fill();
+      pc.beginPath(); pc.arc(cx, vy, 4, 0, 7); pc.fill();
+    }
+    arrow(pc, cx, cy, vx, vy, '#1d4ed8', 3);
+  }
+
+  function drawTraces(s, ph) {
+    var W = traces.width, H = traces.height;
+    tc.clearRect(0, 0, W, H);
+    var m = 34, span = W - 2 * m, amp = 62;
+    var yx = 70, yy = 172;
+    tc.strokeStyle = '#dcdcdc'; tc.lineWidth = 1;
+    [yx, yy].forEach(function (y0) {
+      tc.beginPath(); tc.moveTo(m, y0); tc.lineTo(W - m, y0); tc.stroke();
+    });
+    tc.fillStyle = '#6a6a6a'; tc.font = 'italic 16px Georgia, serif';
+    tc.fillText('x(t)', 6, yx + 5);
+    tc.fillText('y(t)', 6, yy + 5);
+    function curve(off, y0, col) {
+      tc.strokeStyle = col; tc.lineWidth = 2.2; tc.beginPath();
+      for (var i = 0; i <= span; i++) {
+        var p = i / span * 4 * Math.PI;
+        var v = Math.cos(p - off);
+        var px = m + i, py = y0 - v * amp * (off === 0 ? s.ax : s.ay);
+        if (i === 0) tc.moveTo(px, py); else tc.lineTo(px, py);
+      }
+      tc.stroke();
+    }
+    curve(0, yx, '#1d4ed8');
+    curve(s.d, yy, '#b91c1c');
+    // moving marker
+    var frac = (ph % (4 * Math.PI)) / (4 * Math.PI);
+    var mx = m + frac * span;
+    tc.strokeStyle = '#111'; tc.setLineDash([3, 4]); tc.lineWidth = 1.2;
+    tc.beginPath(); tc.moveTo(mx, 18); tc.lineTo(mx, H - 12); tc.stroke();
+    tc.setLineDash([]);
+    // phase offset marker between the two peaks
+    var shift = s.d / (4 * Math.PI) * span;
+    tc.strokeStyle = '#b91c1c'; tc.lineWidth = 1.6;
+    var x0 = m + span * 0.25, x1 = x0 + shift;
+    tc.beginPath(); tc.moveTo(x0, 118); tc.lineTo(x1, 118); tc.stroke();
+    tc.fillStyle = '#b91c1c'; tc.font = '15px Georgia, serif';
+    tc.fillText('\u03B4', (x0 + x1) / 2 - 4, 112);
+  }
+
+  function classify(s) {
+    var d = +dEl.value, a = +aEl.value;
+    var ad = Math.abs(d);
+    if (ad < 1 || ad > 179) return 'linear';
+    if (Math.abs(ad - 90) < 1 && Math.abs(a - 45) < 1) return d > 0 ? 'circular (one handedness)' : 'circular (the other)';
+    return 'elliptical';
+  }
+
+  function readout(s) {
+    var a = +aEl.value, d = +dEl.value;
+    var c = Math.cos(rad(a)).toFixed(3), sn = Math.sin(rad(a)).toFixed(3);
+    var ph = d === 0 ? '' : ' e<sup>i&middot;' + d + '&deg;</sup>';
+    document.getElementById('readout').innerHTML =
+      '&epsilon; = ( ' + c + ' ,&nbsp; ' + sn + ph + ' )<sup>T</sup>' +
+      '<br><span class="tag">' + classify(s) +
+      ' &nbsp;·&nbsp; |&epsilon;|<sup>2</sup> = ' +
+      (Math.cos(rad(a)) * Math.cos(rad(a)) + Math.sin(rad(a)) * Math.sin(rad(a))).toFixed(3) + '</span>';
+  }
+
+  function frame(now) {
+    var dt = last ? (now - last) / 1000 : 0;
+    last = now;
+    t += dt * (+sEl.value / 100) * 3.2;
+    var s = state();
+    var ph = t;
+    drawPlane(s, ph);
+    drawTraces(s, ph);
+    requestAnimationFrame(frame);
+  }
+
+  function sync() {
+    document.getElementById('alphaV').textContent = aEl.value + '\u00B0';
+    document.getElementById('deltaV').textContent = dEl.value + '\u00B0';
+    document.getElementById('speedV').textContent = (+sEl.value === 0 ? 'paused' : '');
+    readout(state());
+  }
+
+  [aEl, dEl, sEl].forEach(function (el) { el.addEventListener('input', sync); });
+  Array.prototype.forEach.call(document.querySelectorAll('.presets button[data-a]'), function (b) {
+    b.addEventListener('click', function () {
+      aEl.value = b.getAttribute('data-a');
+      dEl.value = b.getAttribute('data-d');
+      sync();
+    });
+  });
+  projBtn.addEventListener('click', function () {
+    showProj = !showProj;
+    projBtn.classList.toggle('on', showProj);
+  });
+
+  sync();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Mechanics · simulations</title>
+<style>
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         color:#1a1a1a; background:#fff; padding:34px 40px; max-width:900px; }
+  h1 { font-size:26px; font-weight:600; margin:0 0 4px; }
+  .sub { color:#8a8a8a; font-size:15px; margin:0 0 30px; }
+  h2 { font-size:17px; font-weight:600; margin:30px 0 12px; padding-bottom:6px;
+       border-bottom:1px solid #e4e4e4; color:#444; }
+  a.card { display:block; text-decoration:none; color:inherit; border:1px solid #d4d4d4;
+           border-radius:8px; padding:16px 20px; margin-bottom:12px; }
+  a.card:hover { background:#f6f8ff; border-color:#1d4ed8; }
+  .t { font-size:18px; font-weight:600; color:#1d4ed8; }
+  .d { font-size:15px; color:#555; margin-top:5px; line-height:1.5; }
+  .step { font-size:13px; color:#8a8a8a; margin-top:6px; }
+  footer { margin-top:40px; font-size:13px; color:#8a8a8a; line-height:1.6; }
+</style>
+</head>
+<body>
+<h1>Simulations</h1>
+<p class="sub">Offline. No installation, no network. Open any file directly in a browser.</p>
+
+<h2>Chapter I &nbsp;·&nbsp; Polarization: the state as a vector</h2>
+
+<a class="card" href="chapter01/stern-gerlach.html">
+  <div class="t">Stern&ndash;Gerlach: the beam splits in two</div>
+  <div class="d">A silver beam through a rotatable analyzer. Switch between the continuous band a
+  classical magnetic moment would paint and the two spots actually collected, or superimpose them. With
+  the source prepared along m&#770; the two frequencies follow P<sub>&plusmn;</sub> = (1 &plusmn; cos&thinsp;&theta;)/2
+  and the running average follows n&#770;&middot;m&#770;. A compass shows the transverse plane.</div>
+  <div class="step">measurements on two-state systems &nbsp;&middot;&nbsp; start with the oven, then prepare along m&#770;</div>
+</a>
+
+<a class="card" href="chapter01/stern-gerlach-three.html">
+  <div class="t">Three filters in a row</div>
+  <div class="d">SG<sub>1</sub> and SG<sub>3</sub> along z&#770;, a third analyzer between them at any angle,
+  each keeping its + channel. Take the middle one out and the &minus; detector is dead; put it back at
+  90&deg; and a quarter of the surviving atoms land there. Adding an obstacle raised a count, which no
+  assignment of labels to atoms can do.</div>
+  <div class="step">measurements on two-state systems &nbsp;&middot;&nbsp; remove SG<sub>2</sub> first, then insert it</div>
+</a>
+
+<a class="card" href="chapter01/single-photons.html?puzzle=1">
+  <div class="t">The three boxes</div>
+  <div class="d">The opening puzzle. Anonymous grey boxes, objects with no visible properties, hidden
+  angles, and one control that inserts box B. Nothing on the screen gives the answer away. Press
+  <b>reveal</b> to turn the boxes back into polarizers.</div>
+  <div class="step">step 2 &nbsp;·&nbsp; let the class propose mechanisms before you touch anything</div>
+</a>
+
+<a class="card" href="chapter01/polarization-ellipse.html">
+  <div class="t">Polarization ellipse</div>
+  <div class="d">Amplitude ratio and relative phase as sliders. The field vector traces its figure in the
+  transverse plane while the two component traces run below with the phase offset marked. The Jones
+  vector is printed live.</div>
+  <div class="step">step 5 &nbsp;·&nbsp; fix &alpha; = 45&deg; and walk &delta; from 0 to 90&deg;</div>
+</a>
+
+<a class="card" href="chapter01/stereo-phase.html">
+  <div class="t">Two speakers, one relative phase</div>
+  <div class="d">Real sound. One tone into both channels, only the relative phase changes. The display is
+  a goniometer, the same figure as the polarization ellipse, plus the mid/side levels.</div>
+  <div class="step">step 5, analogy &nbsp;·&nbsp; needs headphones or stereo speakers &nbsp;·&nbsp; press play first</div>
+</a>
+
+<h2>Chapter II &nbsp;·&nbsp; The state as an element of a vector space</h2>
+
+<a class="card" href="chapter01/single-photons.html">
+  <div class="t">Single photons through polarizers</div>
+  <div class="d">One photon at a time across the bench, each carrying its polarization tick. Three
+  polarizer slots with independent angles and switches, an accumulating screen, and a classical-beam
+  toggle for comparison.</div>
+  <div class="step">steps 8 and 9 &nbsp;·&nbsp; start with 1 photon per second, then raise the rate</div>
+</a>
+
+<a class="card" href="chapter01/superposition-vs-mixture.html">
+  <div class="t">Superposition is not ignorance</div>
+  <div class="d">Two beams in parallel under one analyzer: 45&deg; photons above, an even mixture of
+  x and y below. Identical at 0&deg;, maximally different at 45&deg;.</div>
+  <div class="step">step 9 &nbsp;·&nbsp; the central board of the block</div>
+</a>
+
+<footer>
+  Each file is self-contained: one HTML file, no libraries, no external requests. Copy a single file to a
+  memory stick and it still works. Controls are sized for a touchscreen.
+</footer>
+</body>
+</html>

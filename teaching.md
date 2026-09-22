@@ -3,6 +3,15 @@ layout: default
 title: courses
 ---
 
+## <span style='color:red;font-size: 100%;'>Quantum Mechanics I</span>
+<span style="font-size: 80%;color: darkgray;"> New Uzbekistan University, Fall semester 2026</span>
+{: .centered}
+
+### Course material
+- [syllabus and scriptum (Week I in full) ](/skripta/QM-I_Fall26_scriptum.pdf)
+
+<hr style="margin-top: 10px;margin-bottom: 10px;" />
+
 ## <span style='color:red;font-size: 100%;'>Quantum Computing Architectures and Algorithms (PHYS731)</span>
 <span style="font-size: 80%;color: darkgray;"> New Uzbekistan University, Spring semester 2026</span>
 {: .centered}

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stern&ndash;Gerlach: the beam splits in two</title>
+<style>
+  :root{
+    --qcblue:#12347D; --qcorange:#CD4619; --qcgreen:#197D3C; --qcpurple:#732891;
+    --panelbg:#F9FAFD; --panelborder:#BEC8D7; --goldbg:#FEFAEB; --goldborder:#DCB43C;
+    --ink:#1a1a1a; --dark:#262626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);
+    font-family:"Latin Modern Roman","CMU Serif",Georgia,"Times New Roman",serif;}
+  body{padding:14px 18px 22px;}
+
+  /* ---- title bar, after the slide ---- */
+  .titlebar{display:flex;align-items:baseline;justify-content:space-between;gap:1em;}
+  .titlebar h1{font-size:30px;font-weight:700;margin:0;letter-spacing:.1px;}
+  .titlebar h1 .accent{color:var(--qcblue);}
+  .tag{font-size:16px;font-weight:700;color:#8a8a8a;white-space:nowrap;}
+  .rule{border:0;border-top:1.2px solid #cfcfcf;margin:8px 0 14px;}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:start;}
+  @media (max-width:1100px){.layout{grid-template-columns:minmax(0,1fr);}}
+
+  .panel{border:1px solid var(--panelborder);border-radius:8px;background:var(--panelbg);padding:12px 14px;}
+  .panel > h2{font-size:19px;font-weight:700;color:var(--qcblue);margin:0 0 10px;}
+  .gold{background:var(--goldbg);border:1.4px solid var(--goldborder);}
+  .gold > h2{color:#8a6a10;}
+
+  canvas{display:block;width:100%;height:auto;background:#fff;
+    border:1px solid var(--panelborder);border-radius:6px;}
+
+  /* ---- controls ---- */
+  .controls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:flex-end;margin-top:12px;}
+  .ctl{display:flex;flex-direction:column;gap:5px;}
+  .ctl label{font-size:15px;font-weight:700;color:#3c3c3c;}
+  .ctl .val{font-variant-numeric:tabular-nums;color:var(--qcblue);}
+  input[type=range]{width:210px;height:26px;accent-color:var(--qcblue);cursor:pointer;}
+  .seg{display:flex;border:1.4px solid var(--panelborder);border-radius:6px;overflow:hidden;}
+  .seg button{font-family:inherit;font-size:15px;font-weight:700;padding:8px 14px;border:0;
+    background:#fff;color:#4a4a4a;cursor:pointer;border-right:1px solid var(--panelborder);}
+  .seg button:last-child{border-right:0;}
+  .seg button[aria-pressed=true]{background:var(--qcblue);color:#fff;}
+  .btn{font-family:inherit;font-size:16px;font-weight:700;padding:9px 20px;cursor:pointer;
+    border:1.4px solid var(--qcblue);border-radius:6px;background:#fff;color:var(--qcblue);}
+  .btn:hover{background:#eef1f8;}
+  .btn.primary{background:var(--qcblue);color:#fff;}
+  .btn.primary:hover{background:#0d2660;}
+
+  /* ---- readout ---- */
+  .tally{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:17px;align-items:baseline;}
+  .tally .k{color:#555;}
+  .tally .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;}
+  .up{color:var(--qcblue);} .dn{color:var(--qcorange);}
+  .bars{margin:12px 0 4px;}
+  .bar{height:20px;background:#e6e9f0;border-radius:3px;overflow:hidden;margin:4px 0 9px;}
+  .bar > i{display:block;height:100%;width:0;transition:width .12s linear;}
+  .bar.p > i{background:var(--qcblue);} .bar.m > i{background:var(--qcorange);}
+  .barlab{display:flex;justify-content:space-between;font-size:15px;}
+
+  .eq{font-size:18px;line-height:1.85;}
+  .eq .num{font-variant-numeric:tabular-nums;color:var(--qcblue);font-weight:700;}
+  .eq .lhs{color:#444;}
+  .note{font-size:14px;color:#666;line-height:1.5;margin:10px 0 0;}
+  .wide{margin-top:14px;}
+  .verdicts{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:1100px){.verdicts{grid-template-columns:1fr;}}
+  .verdict{padding:10px 12px;border-radius:6px;font-size:15.5px;line-height:1.45;}
+  .verdict.q{background:#eef1f8;border-left:4px solid var(--qcblue);}
+  .verdict.c{background:#fdeee8;border-left:4px solid var(--qcorange);}
+  sub{font-size:.72em;}
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <h1>Stern&ndash;Gerlach &nbsp;&ndash;&nbsp; <span class="accent">the beam splits in two</span></h1>
+  <span class="tag">[&#8501;<sub>I</sub>] &nbsp;measurements on two-state systems</span>
+</div>
+<hr class="rule">
+
+<div class="layout">
+
+  <div>
+    <div class="panel">
+      <canvas id="scene" width="1180" height="560"></canvas>
+
+      <div class="controls">
+        <div class="ctl">
+          <label>source</label>
+          <div class="seg" id="src">
+            <button data-v="oven" aria-pressed="true">Ag oven</button>
+            <button data-v="prep" aria-pressed="false">prepared along m&#770;</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <label>show</label>
+          <div class="seg" id="mode">
+            <button data-v="q" aria-pressed="true">quantum</button>
+            <button data-v="c" aria-pressed="false">classical</button>
+            <button data-v="b" aria-pressed="false">both</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <label>analyzer &nbsp;n&#770; = <span class="val" id="thnLab">0&deg;</span></label>
+          <input type="range" id="thn" min="0" max="360" step="1" value="0">
+        </div>
+        <div class="ctl">
+          <label>preparation &nbsp;m&#770; = <span class="val" id="thmLab">0&deg;</span></label>
+          <input type="range" id="thm" min="0" max="360" step="1" value="0">
+        </div>
+        <div class="ctl">
+          <label>rate</label>
+          <input type="range" id="rate" min="1" max="60" step="1" value="14">
+        </div>
+        <button class="btn primary" id="run">run</button>
+        <button class="btn" id="step">one atom</button>
+        <button class="btn" id="reset">reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>What the screen counts</h2>
+      <div class="tally">
+        <span class="k up">N<sub>+</sub> &nbsp;(&sigma; = +1)</span><span class="v up" id="np">0</span>
+        <span class="k dn">N<sub>&minus;</sub> &nbsp;(&sigma; = &minus;1)</span><span class="v dn" id="nm">0</span>
+        <span class="k">N total</span><span class="v" id="nt">0</span>
+      </div>
+      <div class="bars">
+        <div class="barlab"><span class="up">P<sub>+</sub> measured</span><span class="up" id="fp">&mdash;</span></div>
+        <div class="bar p"><i id="bp"></i></div>
+        <div class="barlab"><span class="dn">P<sub>&minus;</sub> measured</span><span class="dn" id="fm">&mdash;</span></div>
+        <div class="bar m"><i id="bm"></i></div>
+      </div>
+    </div>
+
+    <div class="panel gold" style="margin-top:12px;">
+      <h2>Against the prediction</h2>
+      <div class="eq">
+        <div><span class="lhs">&theta; = &#8738;(m&#770;, n&#770;) =</span> <span class="num" id="thv">0&deg;</span></div>
+        <div><span class="lhs">P<sub>&plusmn;</sub> = (1 &plusmn; cos&thinsp;&theta;)/2 =</span>
+             <span class="num" id="ppred">1.000</span> , <span class="num" id="mpred">0.000</span></div>
+        <div><span class="lhs">&#10216;&sigma;&#10217; measured =</span> <span class="num" id="avg">&mdash;</span></div>
+        <div><span class="lhs">n&#770;&middot;m&#770; = cos&thinsp;&theta; =</span> <span class="num" id="cth">1.000</span></div>
+      </div>
+      <p class="note" id="srcnote"></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel wide">
+  <h2>The point</h2>
+  <div class="verdicts">
+    <div class="verdict c" id="vc"></div>
+    <div class="verdict q" id="vq"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+(function(){
+
+// ----------------------------------------------------------------- palette
+var C = {blue:"#12347D", orange:"#CD4619", green:"#197D3C", purple:"#732891",
+         border:"#BEC8D7", ink:"#1a1a1a", grey:"#8a8a8a"};
+
+// ----------------------------------------------------------------- state
+var S = {
+  src:"oven",        // "oven" (unpolarized) | "prep" (prepared along m-hat)
+  mode:"q",          // "q" | "c" | "b"
+  thn:0,             // analyzer angle, degrees, from +z, in the plane drawn
+  thm:0,             // preparation angle, degrees
+  rate:14,           // atoms per second
+  running:false,          // nothing moves until the lecturer says so
+  np:0, nm:0, sum:0, // quantum tallies
+  atoms:[],          // in flight
+  hitsQ:[],          // {u: signed position along n-hat in [-1,1], s:+1/-1}
+  hitsC:[]           // {u: continuous in [-1,1]}
+};
+
+var cv = document.getElementById("scene"), cx = cv.getContext("2d");
+var W = cv.width, H = cv.height;
+
+// --- apparatus geometry, in canvas units -------------------------------
+var OVEN = {x:30,  y:H/2, w:90, h:74};
+var SLIT = {x:158, y:H/2, h:76, gap:14};
+var MAG  = {x:400, y:H/2, len:200, gapIn:24, gapOut:56};  // centre of the magnet
+var PLATE = {x:892, y:H/2, w:186, h:382};                 // photographic plate, face on
+var XEND = PLATE.x + PLATE.w/2;                            // where atoms land
+var SPREAD = 116;   // pixels of deflection for |u| = 1
+
+// ----------------------------------------------------------------- physics
+function rad(d){ return d*Math.PI/180; }
+
+// angle between preparation and analysis axes
+function theta(){
+  if(S.src === "oven") return null;               // no preparation axis
+  var d = ((S.thn - S.thm) % 360 + 360) % 360;
+  return d > 180 ? 360 - d : d;                   // in [0,180]
+}
+function cosTheta(){ var t = theta(); return t === null ? 0 : Math.cos(rad(t)); }
+function pPlus(){ return 0.5*(1 + cosTheta()); }  // = cos^2(theta/2); = 1/2 for the oven
+
+// one quantum outcome
+function drawOutcome(){ return Math.random() < pPlus() ? +1 : -1; }
+
+// one classical outcome: a magnetic moment of unit length, isotropically
+// oriented, projected on the analyzer axis -> mu.n is uniform on [-1,1]
+// (Archimedes). For a prepared moment along m-hat the classical answer is the
+// single sharp value cos(theta).
+function drawClassical(){
+  if(S.src === "oven") return 2*Math.random() - 1;
+  return cosTheta();
+}
+
+// ----------------------------------------------------------------- atoms
+// Gaussian, Box-Muller: the finite width of the collimated beam, which is what
+// turns each landing point into a spot of finite size rather than a pixel.
+function gauss(){
+  var u = 1 - Math.random(), v = Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
+function spawn(){
+  S.atoms.push({
+    t:0,
+    s:drawOutcome(),
+    uc:drawClassical(),
+    jitter:gauss()*3.0,                   // across the beam, at the collimator
+    blur:gauss()*8.5                      // beam width at the plate
+  });
+}
+
+function step(dt){
+  var speed = 0.42;                        // fraction of the path per second
+  for(var i = S.atoms.length - 1; i >= 0; i--){
+    var a = S.atoms[i];
+    a.t += speed*dt;
+    if(a.t >= 1){
+      register(a);
+      S.atoms.splice(i,1);
+    }
+  }
+}
+
+function register(a){
+  if(a.s > 0) S.np++; else S.nm++;
+  S.sum += a.s;
+  S.hitsQ.push({u:a.s, s:a.s, j:a.blur, k:gauss()*7});
+  S.hitsC.push({u:a.uc, j:a.blur, k:gauss()*7});
+  if(S.hitsQ.length > 4000){ S.hitsQ.shift(); S.hitsC.shift(); }
+}
+
+// ----------------------------------------------------------------- drawing
+// n-hat turns inside the plane perpendicular to the beam, so it cannot be
+// drawn tilted in a side view without giving the deflection a component along
+// the beam. The side view is therefore always drawn with n-hat "up" -- the
+// page turns with the apparatus -- and how n-hat and m-hat lie against the
+// laboratory axes is carried by the compass inset instead.
+
+function clear(){ cx.clearRect(0,0,W,H); cx.fillStyle="#fff"; cx.fillRect(0,0,W,H); }
+
+function roundRect(x,y,w,h,r){
+  cx.beginPath();
+  cx.moveTo(x+r,y); cx.lineTo(x+w-r,y); cx.quadraticCurveTo(x+w,y,x+w,y+r);
+  cx.lineTo(x+w,y+h-r); cx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  cx.lineTo(x+r,y+h); cx.quadraticCurveTo(x,y+h,x,y+h-r);
+  cx.lineTo(x,y+r); cx.quadraticCurveTo(x,y,x+r,y); cx.closePath();
+}
+
+function label(txt,x,y,size,col,align,weight){
+  cx.font = (weight||"") + " " + (size||15) + "px 'Latin Modern Roman',Georgia,serif";
+  cx.fillStyle = col || C.ink;
+  cx.textAlign = align || "center";
+  cx.textBaseline = "middle";
+  cx.fillText(txt,x,y);
+}
+
+function arrow(x1,y1,x2,y2,col,lw,head){
+  var a = Math.atan2(y2-y1, x2-x1), h = head||9;
+  cx.strokeStyle = col; cx.lineWidth = lw||2; cx.lineCap="round";
+  cx.beginPath(); cx.moveTo(x1,y1); cx.lineTo(x2 - h*0.8*Math.cos(a), y2 - h*0.8*Math.sin(a)); cx.stroke();
+  cx.fillStyle = col; cx.beginPath();
+  cx.moveTo(x2,y2);
+  cx.lineTo(x2 - h*Math.cos(a-0.42), y2 - h*Math.sin(a-0.42));
+  cx.lineTo(x2 - h*Math.cos(a+0.42), y2 - h*Math.sin(a+0.42));
+  cx.closePath(); cx.fill();
+}
+
+function drawOven(){
+  cx.fillStyle = "#e4e4e4"; cx.strokeStyle = "#5a5a5a"; cx.lineWidth = 1.4;
+  roundRect(OVEN.x, OVEN.y - OVEN.h/2, OVEN.w, OVEN.h, 4); cx.fill(); cx.stroke();
+  label("Ag oven", OVEN.x + OVEN.w/2, OVEN.y - 8, 16, "#333","center","bold");
+  label(S.src === "oven" ? "no axis" : "prepared", OVEN.x + OVEN.w/2, OVEN.y + 13, 13, "#777");
+}
+
+function drawSlit(){
+  cx.fillStyle = "#4a4a4a";
+  cx.fillRect(SLIT.x, SLIT.y - SLIT.h, 11, SLIT.h - SLIT.gap);
+  cx.fillRect(SLIT.x, SLIT.y + SLIT.gap, 11, SLIT.h - SLIT.gap);
+  label("collimator", SLIT.x + 5, SLIT.y + SLIT.h + 16, 13, "#777");
+}
+
+// the magnet; its axis is n-hat, which the page is drawn with pointing up
+function drawMagnet(){
+  cx.save();
+  cx.translate(MAG.x, MAG.y);
+
+  // north pole piece: wedge pointing down (strong field, sharp edge)
+  cx.strokeStyle = "#5a5a5a"; cx.lineWidth = 1.4;
+  cx.fillStyle = "#c8ccd6";
+  cx.beginPath();
+  cx.moveTo(-MAG.len/2, -80); cx.lineTo(MAG.len/2, -80);
+  cx.lineTo(MAG.len/2, -MAG.gapIn - 10); cx.lineTo(MAG.len/2 - 42, -MAG.gapIn);
+  cx.lineTo(-MAG.len/2 + 42, -MAG.gapIn); cx.lineTo(-MAG.len/2, -MAG.gapIn - 10);
+  cx.closePath(); cx.fill(); cx.stroke();
+  label("N", 0, -52, 21, C.blue, "center", "bold");
+
+  // south pole piece: flat, hollowed. Reset the fill: the label above left
+  // the context painting in blue.
+  cx.fillStyle = "#c8ccd6"; cx.strokeStyle = "#5a5a5a"; cx.lineWidth = 1.4;
+  cx.beginPath();
+  cx.moveTo(-MAG.len/2, 80); cx.lineTo(MAG.len/2, 80);
+  cx.lineTo(MAG.len/2, MAG.gapOut); cx.lineTo(MAG.len/2 - 34, MAG.gapOut - 12);
+  cx.lineTo(-MAG.len/2 + 34, MAG.gapOut - 12); cx.lineTo(-MAG.len/2, MAG.gapOut);
+  cx.closePath(); cx.fill(); cx.stroke();
+  label("S", 0, 60, 21, C.orange, "center", "bold");
+
+  // the field gradient: in the gap, pointing towards the sharp pole, but drawn
+  // just upstream of the magnet and above the beam so no atom runs through it
+  arrow(-MAG.len/2 - 26, -18, -MAG.len/2 - 26, -68, "#555", 1.8, 8);
+  label("∇B", -MAG.len/2 - 50, -44, 15, "#555");
+  cx.restore();
+
+  // the analyzer axis, drawn clear of the pole pieces
+  arrow(MAG.x, MAG.y, MAG.x, MAG.y - 130, C.green, 2.6, 12);
+  label("n̂", MAG.x, MAG.y - 148, 20, C.green, "center", "bold");
+}
+
+// The transverse plane, seen looking back along the beam: the laboratory axes
+// stand still, n-hat and m-hat turn, and the angle between them is theta.
+function drawCompass(){
+  var cxp = 152, cyp = 126, R = 54;
+
+  cx.fillStyle = "#fbfbfc"; cx.strokeStyle = "#c9cfdb"; cx.lineWidth = 1.2;
+  cx.beginPath(); cx.arc(cxp, cyp, R, 0, 6.2832); cx.fill(); cx.stroke();
+
+  cx.strokeStyle = "#dde1e8"; cx.lineWidth = 1;
+  cx.beginPath(); cx.moveTo(cxp - R, cyp); cx.lineTo(cxp + R, cyp);
+  cx.moveTo(cxp, cyp - R); cx.lineTo(cxp, cyp + R); cx.stroke();
+  label("ẑ", cxp, cyp - R - 11, 13, "#9aa0ab");
+  label("x̂", cxp + R + 12, cyp, 13, "#9aa0ab");
+
+  var t = theta();
+  if(t !== null && t > 1){
+    var a0 = rad(S.thm) - Math.PI/2, a1 = rad(S.thn) - Math.PI/2;
+    if(a1 < a0){ var tmp = a0; a0 = a1; a1 = tmp; }
+    if(a1 - a0 > Math.PI){ var b = a0 + 2*Math.PI; a0 = a1; a1 = b; }
+    cx.strokeStyle = "#8a8a8a"; cx.lineWidth = 1.2;
+    cx.beginPath(); cx.arc(cxp, cyp, 25, a0, a1); cx.stroke();
+    var am = (a0 + a1)/2;
+    label("\u03b8", cxp + Math.cos(am)*37, cyp + Math.sin(am)*37, 15, "#555", "center", "bold");
+  }
+
+  function ray(deg, col, txt){
+    var a = rad(deg), ux = Math.sin(a), uy = -Math.cos(a);
+    arrow(cxp, cyp, cxp + ux*45, cyp + uy*45, col, 2.2, 9);
+    label(txt, cxp + ux*60, cyp + uy*60, 15, col, "center", "bold");
+  }
+  if(S.src === "prep") ray(S.thm, C.purple, "m̂");
+  ray(S.thn, C.green, "n̂");
+
+  label("transverse plane", cxp, cyp + R + 17, 13, "#8a8a8a");
+}
+
+// the photographic plate, seen face on
+function drawScreen(){
+  cx.fillStyle = "#fbfbfc"; cx.strokeStyle = "#5a5a5a"; cx.lineWidth = 1.5;
+  roundRect(PLATE.x - PLATE.w/2, PLATE.y - PLATE.h/2, PLATE.w, PLATE.h, 4);
+  cx.fill(); cx.stroke();
+
+  var cap, col;
+  if(S.mode === "c"){ cap = "classical: one band"; col = C.orange; }
+  else if(S.mode === "q"){ cap = "quantum: two spots"; col = C.blue; }
+  else { cap = "both, superimposed"; col = "#555"; }
+  label(cap, PLATE.x, PLATE.y - PLATE.h/2 - 16, 15.5, col, "center", "bold");
+}
+
+// accumulated hit pattern on the plate; n-hat is up by construction
+function drawHits(){
+  var ox = PLATE.x, oy = PLATE.y;
+
+  cx.save();
+  roundRect(PLATE.x - PLATE.w/2, PLATE.y - PLATE.h/2, PLATE.w, PLATE.h, 4);
+  cx.clip();
+
+  if(S.mode === "c" || S.mode === "b"){
+    cx.fillStyle = "rgba(205,70,25,0.30)";
+    for(var i = 0; i < S.hitsC.length; i++){
+      var h = S.hitsC[i], d = h.u*SPREAD;
+      cx.beginPath();
+      cx.arc(ox + h.k, oy - d, 2.2, 0, 6.2832);
+      cx.fill();
+    }
+  }
+  if(S.mode === "q" || S.mode === "b"){
+    for(var k = 0; k < S.hitsQ.length; k++){
+      var g = S.hitsQ[k], e = g.u*SPREAD + g.j;
+      cx.fillStyle = g.s > 0 ? "rgba(18,52,125,0.38)" : "rgba(205,70,25,0.38)";
+      cx.beginPath();
+      cx.arc(ox + g.k, oy - e, 2.5, 0, 6.2832);
+      cx.fill();
+    }
+  }
+  cx.restore();
+
+  // the two quantum landing points, ringed and named
+  if(S.mode !== "c"){
+    var pts = [{u:+1, c:C.blue, t:"σ = +1"}, {u:-1, c:C.orange, t:"σ = −1"}];
+    for(var p = 0; p < 2; p++){
+      var q = pts[p], X = ox, Y = oy - q.u*SPREAD;
+      cx.strokeStyle = q.c; cx.lineWidth = 1.5;
+      cx.beginPath(); cx.arc(X, Y, 22, 0, 6.2832); cx.stroke();
+      // captions sit outside the plate, clear of the incoming beam
+      label(q.t, PLATE.x + PLATE.w/2 + 14, Y, 16, q.c, "left", "bold");
+    }
+  }
+}
+
+// Transverse displacement: a parabola inside the magnet, a straight line after
+// it. With L the magnet length and R the drift to the plate, matching value and
+// slope at the exit gives  y_plate = k L (L/2 + R), which fixes k.
+function deflect(x){
+  var xEnter = MAG.x - MAG.len/2, xLeave = MAG.x + MAG.len/2;
+  var L = MAG.len, R = XEND - xLeave;
+  var k = 1/(L*(L/2 + R));                    // normalised to 1 at the plate
+  if(x <= xEnter) return 0;
+  if(x <= xLeave) return 0.5*k*(x - xEnter)*(x - xEnter);
+  return k*(0.5*L*L + L*(x - xLeave));
+}
+
+function drawAtoms(){
+  var xEnter = MAG.x - MAG.len/2;
+  var x0 = OVEN.x + OVEN.w;
+  for(var i = 0; i < S.atoms.length; i++){
+    var a = S.atoms[i];
+    var x = x0 + (XEND - x0)*a.t;
+    var u = (S.mode === "c") ? a.uc : a.s;
+
+    // before the magnet the outcome has not happened yet, so it is not shown
+    var col;
+    if(x < xEnter) col = "rgba(120,124,132,0.85)";
+    else if(S.mode === "c") col = "rgba(205,70,25,0.92)";
+    else col = a.s > 0 ? "rgba(18,52,125,0.95)" : "rgba(205,70,25,0.95)";
+
+    var d = u*SPREAD*deflect(x);
+    var px = x, py = MAG.y + a.jitter - d;
+    cx.fillStyle = col;
+    cx.beginPath(); cx.arc(px, py, 3.3, 0, 6.2832); cx.fill();
+  }
+}
+
+function drawBeamAxis(){
+  cx.setLineDash([4,6]); cx.strokeStyle = "#c4c4c4"; cx.lineWidth = 1;
+  cx.beginPath(); cx.moveTo(OVEN.x + OVEN.w, MAG.y); cx.lineTo(XEND, MAG.y); cx.stroke();
+  cx.setLineDash([]);
+}
+
+function render(){
+  clear();
+  drawBeamAxis();
+  drawOven(); drawSlit(); drawMagnet(); drawScreen();
+  drawHits(); drawAtoms(); drawCompass();
+  label("side view drawn with n̂ up; the compass shows how n̂ and m̂ lie against the laboratory axes",
+        W/2, H - 14, 13, "#8a8a8a");
+}
+
+// ----------------------------------------------------------------- readout
+function fmt(x,n){ return x.toFixed(n === undefined ? 3 : n); }
+
+function updateReadout(){
+  var N = S.np + S.nm;
+  document.getElementById("np").textContent = S.np;
+  document.getElementById("nm").textContent = S.nm;
+  document.getElementById("nt").textContent = N;
+
+  var fp = N ? S.np/N : 0, fm = N ? S.nm/N : 0;
+  document.getElementById("fp").textContent = N ? fmt(fp) : "—";
+  document.getElementById("fm").textContent = N ? fmt(fm) : "—";
+  document.getElementById("bp").style.width = (100*fp).toFixed(1) + "%";
+  document.getElementById("bm").style.width = (100*fm).toFixed(1) + "%";
+
+  var t = theta();
+  document.getElementById("thv").textContent  = (t === null) ? "— (no m̂)" : t.toFixed(0) + "°";
+  document.getElementById("ppred").textContent = fmt(pPlus());
+  document.getElementById("mpred").textContent = fmt(1 - pPlus());
+  document.getElementById("cth").textContent   = (t === null) ? "—" : fmt(cosTheta());
+  document.getElementById("avg").textContent   = N ? fmt(S.sum/N) : "—";
+
+  document.getElementById("srcnote").textContent = (S.src === "oven")
+    ? "The oven emits atoms with no preparation axis, so θ is undefined and both outcomes are equally likely whatever n̂ is. Turn the analyzer: the two spots turn with it, the ratio does not budge."
+    : "Atoms leave prepared along m̂. Now the two frequencies do depend on the angle, and the running average follows n̂·m̂.";
+
+  document.getElementById("vc").innerHTML = "<b>Classical.</b> A magnetic moment is a vector of some length pointing somewhere. Its projection on n̂ can take any value in [−1, 1], so the screen should show <b>one continuous band</b>. For the oven, the band is filled uniformly.";
+  document.getElementById("vq").innerHTML  = "<b>Quantum.</b> Whatever the orientation, the apparatus reports <b>σ = &plusmn;1 and nothing else</b>. Two spots, no band, no gap filling. The vector picture is not merely inaccurate here — it predicts the wrong <i>kind</i> of answer.";
+}
+
+// ----------------------------------------------------------------- loop
+var last = 0, carry = 0;
+function frame(ts){
+  var dt = last ? Math.min((ts - last)/1000, 0.05) : 0;
+  last = ts;
+  if(S.running){
+    carry += S.rate*dt;
+    while(carry >= 1){ spawn(); carry -= 1; }
+    step(dt);
+  } else {
+    step(dt);                     // let atoms already in flight land
+  }
+  render(); updateReadout();
+  requestAnimationFrame(frame);
+}
+
+// ----------------------------------------------------------------- controls
+function segment(id, key, after){
+  var box = document.getElementById(id);
+  box.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    S[key] = b.dataset.v;
+    Array.prototype.forEach.call(box.querySelectorAll("button"), function(x){
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    if(after) after();
+  });
+}
+function resetTally(){
+  S.np = 0; S.nm = 0; S.sum = 0; S.hitsQ.length = 0; S.hitsC.length = 0; S.atoms.length = 0;
+}
+
+segment("src","src",  function(){ resetTally(); syncPrep(); });
+segment("mode","mode", resetTally);
+
+function syncPrep(){
+  document.getElementById("thm").disabled = (S.src === "oven");
+  document.getElementById("thm").style.opacity = (S.src === "oven") ? 0.35 : 1;
+}
+
+document.getElementById("thn").addEventListener("input", function(e){
+  S.thn = +e.target.value;
+  document.getElementById("thnLab").textContent = S.thn + "°";
+  resetTally();
+});
+document.getElementById("thm").addEventListener("input", function(e){
+  S.thm = +e.target.value;
+  document.getElementById("thmLab").textContent = S.thm + "°";
+  resetTally();
+});
+document.getElementById("rate").addEventListener("input", function(e){ S.rate = +e.target.value; });
+
+document.getElementById("run").addEventListener("click", function(e){
+  S.running = !S.running;
+  e.target.textContent = S.running ? "pause" : "run";
+});
+document.getElementById("step").addEventListener("click", function(){
+  S.running = false;
+  document.getElementById("run").textContent = "run";
+  spawn();
+});
+document.getElementById("reset").addEventListener("click", resetTally);
+
+syncPrep();
+requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>
