@@ -9,6 +9,7 @@ title: courses
 
 ### Course material
 - [syllabus and scriptum (Week I in full) ](/skripta/QM-I_Fall26_scriptum.pdf)
+- [simulation: BB84 quantum key distribution ](/skripta/sims/chapter03/bb84.html)
 
 <hr style="margin-top: 10px;margin-bottom: 10px;" />
 
