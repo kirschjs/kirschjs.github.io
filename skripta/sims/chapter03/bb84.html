@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BB84 key distribution</title>
+<style>
+  :root{
+    --qcblue:#12347D; --qcorange:#CD4619; --qcgreen:#197D3C; --qcpurple:#732891;
+    --panelbg:#F9FAFD; --panelborder:#BEC8D7; --goldbg:#FEFAEB; --goldborder:#DCB43C;
+    --ink:#1a1a1a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);
+    font-family:"Latin Modern Roman","CMU Serif",Georgia,"Times New Roman",serif;}
+  body{padding:14px 18px 22px;}
+
+  .titlebar{display:flex;align-items:baseline;justify-content:space-between;gap:1em;}
+  .titlebar h1{font-size:30px;font-weight:700;margin:0;}
+  .titlebar h1 .accent{color:var(--qcblue);}
+  .tag{font-size:16px;font-weight:700;color:#8a8a8a;white-space:nowrap;}
+  .rule{border:0;border-top:1.2px solid #cfcfcf;margin:8px 0 14px;}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start;}
+  @media (max-width:1150px){.layout{grid-template-columns:minmax(0,1fr);}}
+
+  .panel{border:1px solid var(--panelborder);border-radius:8px;background:var(--panelbg);padding:12px 14px;}
+  .panel > h2{font-size:19px;font-weight:700;color:var(--qcblue);margin:0 0 10px;}
+  .gold{background:var(--goldbg);border:1.4px solid var(--goldborder);}
+  .gold > h2{color:#8a6a10;}
+
+  canvas{display:block;width:100%;height:auto;background:#fff;
+    border:1px solid var(--panelborder);border-radius:6px;}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:flex-end;margin-top:12px;}
+  .ctl{display:flex;flex-direction:column;gap:5px;}
+  .ctl label{font-size:15px;font-weight:700;color:#3c3c3c;}
+  .ctl .val{font-variant-numeric:tabular-nums;color:var(--qcblue);}
+  input[type=range]{width:230px;height:26px;accent-color:var(--qcblue);cursor:pointer;}
+  .btn{font-family:inherit;font-size:16px;font-weight:700;padding:9px 18px;cursor:pointer;
+    border:1.4px solid var(--qcblue);border-radius:6px;background:#fff;color:var(--qcblue);}
+  .btn:hover{background:#eef1f8;}
+  .btn.primary{background:var(--qcblue);color:#fff;}
+  .btn.primary:hover{background:#0d2660;}
+  .btn.warn{border-color:var(--qcorange);color:var(--qcorange);}
+  .btn.warn:hover{background:#fdeee8;}
+  .btn[aria-pressed=true]{background:var(--qcorange);color:#fff;border-color:var(--qcorange);}
+  .btn:disabled{opacity:.4;cursor:default;}
+  .btn:disabled:hover{background:#fff;}
+  .btn.primary:disabled:hover{background:var(--qcblue);}
+  .btn[aria-pressed=true]:disabled:hover{background:var(--qcorange);}
+
+  .tblwrap{overflow-x:auto;margin-top:4px;}
+  table.key{border-collapse:collapse;font-size:18px;}
+  table.key th{text-align:left;font-size:15px;color:#555;padding:5px 12px 5px 2px;white-space:nowrap;
+    font-weight:700;border-bottom:1px solid #d8dce4;}
+  table.key td{min-width:40px;height:38px;text-align:center;padding:2px 3px;border-bottom:1px solid #d8dce4;
+    border-left:1px solid #e6e9ef;font-variant-numeric:tabular-nums;font-weight:700;}
+  table.key tr.idx td{font-size:13px;color:#999;font-weight:400;height:22px;}
+  table.key tr.alice td{color:var(--qcblue);}
+  table.key tr.eve td,table.key tr.eve th{color:var(--qcpurple);}
+  table.key tr.bob td{color:var(--qcgreen);}
+  table.key tr.pub th{color:#8a6a10;}
+  table.key tr.sep th,table.key tr.sep td{border-top:2px solid #b9c1cf;}
+  table.key td.cur{background:#eef1f8;}
+  table.key td.drop{color:#c4c4c4 !important;}
+  table.key td.err{background:#fdeee8;color:var(--qcorange) !important;}
+  table.key td.shown{background:#fff4cf;}
+  table.key td.hid{color:#c4c4c4;font-weight:400;}
+  svg.pol{display:block;margin:auto;}
+
+  .tally{display:grid;grid-template-columns:1fr auto auto;gap:5px 12px;font-size:16px;align-items:baseline;}
+  .tally .k{color:#555;} .tally .h{font-size:13.5px;color:#888;font-weight:700;}
+  .tally .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;}
+  .cmp{width:100%;border-collapse:collapse;font-size:16px;margin-top:2px;}
+  .cmp th,.cmp td{padding:6px 8px;text-align:right;border-bottom:1px solid #d8dce4;}
+  .cmp th:first-child,.cmp td:first-child{text-align:left;color:#555;}
+  .cmp th{font-size:13.5px;color:#888;}
+  .cmp td{font-variant-numeric:tabular-nums;font-weight:700;}
+  .eq{font-size:17px;line-height:1.9;}
+  .eq .num{font-variant-numeric:tabular-nums;color:var(--qcblue);font-weight:700;}
+  .eq .lhs{color:#444;}
+  .note{font-size:14px;color:#666;line-height:1.5;margin:10px 0 0;}
+  .verdict{margin-top:10px;padding:10px 12px;border-radius:6px;font-size:16px;line-height:1.5;font-weight:700;}
+  .verdict.ok{background:#e8f4ec;border-left:4px solid var(--qcgreen);color:var(--qcgreen);}
+  .verdict.bad{background:#fdeee8;border-left:4px solid var(--qcorange);color:var(--qcorange);}
+  sub{font-size:.72em;} sup{font-size:.72em;}
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <h1>BB84 &nbsp;&ndash;&nbsp; <span class="accent">a key from two incompatible bases</span></h1>
+  <span class="tag">[&#8502;<sub>III</sub>] &nbsp;BB84</span>
+</div>
+<hr class="rule">
+
+<div class="layout">
+
+  <div>
+    <div class="panel">
+      <canvas id="scene" width="1180" height="250"></canvas>
+      <div class="controls">
+        <button class="btn primary" id="send">send one photon</button>
+        <button class="btn" id="send8">send 8</button>
+        <button class="btn" id="announce">announce bases</button>
+        <button class="btn" id="check">publish half of the sifted key</button>
+        <button class="btn" id="reset">reset</button>
+      </div>
+      <div class="controls" style="margin-top:6px;">
+        <div class="ctl">
+          <label>eavesdropper</label>
+          <button class="btn warn" id="eve" aria-pressed="false">Eve absent</button>
+        </div>
+        <div class="ctl">
+          <label>Eve intercepts &nbsp;<span class="val" id="fLab">100%</span> of the photons</label>
+          <input type="range" id="frac" min="0" max="100" step="5" value="100">
+        </div>
+        <div class="ctl">
+          <label>&nbsp;</label>
+          <button class="btn" id="show" aria-pressed="true">hidden rows: shown</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px;">
+      <h2>The protocol table</h2>
+      <div class="tblwrap"><table class="key" id="tbl"></table></div>
+      <p class="note">Polarization angle from the vertical: |z+&#10217; = 0&deg;, |z&minus;&#10217; = 90&deg;,
+        |x+&#10217; = 45&deg;, |x&minus;&#10217; = 135&deg;. Bit 0 &harr; +, bit 1 &harr; &minus;.
+        Grey dots: not yet public. Orange: Bob's bit differs from Alice's.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>Last photon</h2>
+      <div class="eq" id="last"><span class="lhs">nothing sent yet</span></div>
+    </div>
+
+    <div class="panel gold" style="margin-top:12px;">
+      <h2>Measured against predicted</h2>
+      <table class="cmp">
+        <tr><th>this table</th><th>measured</th><th>predicted</th></tr>
+        <tr><td>sifted / sent</td><td id="mS">&mdash;</td><td>0.500</td></tr>
+        <tr><td>error rate, sifted</td><td id="mE">&mdash;</td><td id="pE">0.000</td></tr>
+      </table>
+      <div id="verdict"></div>
+    </div>
+
+    <div class="panel" style="margin-top:12px;">
+      <h2>Many photons</h2>
+      <div class="controls" style="margin-top:0;">
+        <button class="btn" id="bulk">send 1000</button>
+        <button class="btn" id="bulkReset">clear</button>
+      </div>
+      <div class="tally" style="margin-top:10px;">
+        <span class="k">sent</span><span class="v" id="bN">0</span><span class="h">&nbsp;</span>
+        <span class="k">bases agree</span><span class="v" id="bS">0</span><span class="h" id="bSf">&nbsp;</span>
+        <span class="k">of those, errors</span><span class="v" id="bE">0</span><span class="h" id="bEf">&nbsp;</span>
+      </div>
+      <p class="note">Uses the current Eve setting. Predicted error rate on the sifted key:
+        &frac12;&middot;&frac12;&middot;f = f/4 for an intercepted fraction f.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+function rad(d){ return d*Math.PI/180; }
+function coin(){ return Math.random() < 0.5 ? 0 : 1; }
+
+// basis 0 = z (0/90 deg), basis 1 = x (45/135 deg); bit 0 -> +, bit 1 -> -
+var BAS = ['z','x'], BASGLYPH = ['+','&times;'];
+function ang(b, s){ return 45*b + 90*s; }
+function ketName(b, s){ return '|' + BAS[b] + (s ? '&minus;' : '+') + '&#10217;'; }
+// Born rule for a polarizer pair: P(+ in basis b) = cos^2(theta_psi - theta_b+)
+function pPlus(thPsi, b){ var c = Math.cos(rad(thPsi - ang(b,0))); return c*c; }
+function measure(thPsi, b){
+  var p = pPlus(thPsi, b);
+  return { s: Math.random() < p ? 0 : 1, p: p };
+}
+
+// One photon through the channel. eveOn/frac decide interception.
+function transmit(eveOn, frac){
+  var r = { a: coin(), ab: coin(), eveHit: false };
+  var th = ang(r.ab, r.a);
+  if (eveOn && Math.random() < frac){
+    r.eveHit = true;
+    r.eb = coin();
+    var me = measure(th, r.eb);
+    r.es = me.s; r.ep = me.p;
+    th = ang(r.eb, r.es);              // intercept-resend: Eve re-prepares what she found
+  }
+  r.thBob = th;
+  r.bb = coin();
+  var mb = measure(th, r.bb);
+  r.b = mb.s; r.bp = mb.p;
+  r.agree = (r.ab === r.bb);
+  return r;
+}
+
+var S = { rows: [], phase: 0, eve: false, frac: 1, show: true, queue: 0,
+          anim: null, bulk: { n:0, s:0, e:0 } };
+var MAXCOLS = 32;
+
+// ---------- drawing ----------
+var cv = document.getElementById('scene'), cx = cv.getContext('2d');
+var W = cv.width, H = cv.height, Y = 130;
+var XA = 120, XE = 590, XB = 1060;
+
+function polStick(x, y, thDeg, len, col, w){
+  var a = rad(thDeg), ux = Math.sin(a), uy = -Math.cos(a);
+  cx.strokeStyle = col; cx.lineWidth = w || 4; cx.lineCap = 'round';
+  cx.beginPath(); cx.moveTo(x-ux*len, y-uy*len); cx.lineTo(x+ux*len, y+uy*len); cx.stroke();
+}
+function station(x, name, col, b, s, showState){
+  cx.fillStyle = '#fff'; cx.strokeStyle = col; cx.lineWidth = 2.5;
+  cx.beginPath(); cx.roundRect ? cx.roundRect(x-80, Y-62, 160, 124, 10) : cx.rect(x-80, Y-62, 160, 124);
+  cx.fill(); cx.stroke();
+  cx.fillStyle = col; cx.font = 'bold 24px Georgia, serif'; cx.textAlign = 'center';
+  cx.fillText(name, x, Y-76);
+  if (b === undefined) return;
+  cx.font = 'bold 20px Georgia, serif';
+  cx.fillText('basis ' + BAS[b], x, Y+48);
+  // the two analyzer axes of the basis, faint; the chosen/found one strong
+  polStick(x, Y-6, ang(b,0), 34, '#d3d8e2', 3);
+  polStick(x, Y-6, ang(b,1), 34, '#d3d8e2', 3);
+  if (showState && s !== undefined) polStick(x, Y-6, ang(b,s), 34, col, 5);
+}
+function draw(){
+  cx.clearRect(0,0,W,H);
+  cx.strokeStyle = '#c9cfdb'; cx.lineWidth = 2; cx.setLineDash([8,8]);
+  cx.beginPath(); cx.moveTo(XA+80, Y); cx.lineTo(XB-80, Y); cx.stroke(); cx.setLineDash([]);
+  cx.fillStyle = '#999'; cx.font = '16px Georgia, serif'; cx.textAlign = 'center';
+  cx.fillText('quantum channel: one photon at a time', (XA+XB)/2, H-14);
+  var r = S.rows.length ? S.rows[S.rows.length-1] : null, A = S.anim;
+  station(XA, 'Alice', '#12347D', r ? r.ab : undefined, r ? r.a : undefined, true);
+  if (S.eve) station(XE, 'Eve', '#732891',
+      r && r.eveHit ? r.eb : undefined, r && r.eveHit ? r.es : undefined, !A || A.t > 0.5);
+  station(XB, 'Bob', '#197D3C', r ? r.bb : undefined, r ? r.b : undefined, !A);
+  if (A){
+    var x, th;
+    if (r.eveHit && A.t < 0.5){ x = XA+80 + (XE-80 - XA-80)*(A.t/0.5); th = ang(r.ab, r.a); }
+    else if (r.eveHit){ x = XE+80 + (XB-80 - XE-80)*((A.t-0.5)/0.5); th = r.thBob; }
+    else { x = XA+80 + (XB-80 - XA-80)*A.t; th = r.thBob; }
+    cx.fillStyle = '#f2cf4a'; cx.beginPath(); cx.arc(x, Y, 15, 0, 2*Math.PI); cx.fill();
+    polStick(x, Y, th, 22, '#CD4619', 4);
+  }
+}
+
+// ---------- the table ----------
+var tbl = document.getElementById('tbl');
+function svgPol(th, col){
+  var a = rad(th), ux = 12*Math.sin(a), uy = -12*Math.cos(a);
+  return '<svg class="pol" width="30" height="30" viewBox="-15 -15 30 30"><line x1="'+(-ux).toFixed(2)+
+    '" y1="'+(-uy).toFixed(2)+'" x2="'+ux.toFixed(2)+'" y2="'+uy.toFixed(2)+
+    '" stroke="'+col+'" stroke-width="3.5" stroke-linecap="round"/></svg>';
+}
+function cell(html, cls){ return '<td' + (cls ? ' class="'+cls+'"' : '') + '>' + html + '</td>'; }
+var HID = cell('&middot;', 'hid');
+function render(){
+  var R = S.rows, n = R.length, h = '';
+  var priv = function(html, cls){ return S.show ? cell(html, cls) : HID; };
+  var cur = function(i){ return (S.anim && i === n-1) ? 'cur' : ''; };
+  h += '<tr class="idx"><th></th>';
+  for (var i=0;i<n;i++) h += cell(i+1); h += '</tr>';
+
+  h += '<tr class="alice"><th>Alice: random bit</th>';
+  for (i=0;i<n;i++) h += priv(R[i].a, cur(i)); h += '</tr>';
+  h += '<tr class="alice"><th>Alice: random basis</th>';
+  for (i=0;i<n;i++) h += (S.phase>=1 || S.show) ? cell(BASGLYPH[R[i].ab], cur(i)) : HID; h += '</tr>';
+  h += '<tr class="alice"><th>photon sent</th>';
+  for (i=0;i<n;i++) h += priv(svgPol(ang(R[i].ab,R[i].a), '#12347D'), cur(i)); h += '</tr>';
+
+  if (S.eve){
+    h += '<tr class="eve sep"><th>Eve: random basis</th>';
+    for (i=0;i<n;i++) h += R[i].eveHit ? priv(BASGLYPH[R[i].eb], cur(i)) : priv('&ndash;', 'drop'); h += '</tr>';
+    h += '<tr class="eve"><th>Eve: finds, resends</th>';
+    for (i=0;i<n;i++) h += R[i].eveHit ? priv(svgPol(ang(R[i].eb,R[i].es), '#732891'), cur(i)) : priv('&ndash;', 'drop');
+    h += '</tr>';
+  }
+
+  h += '<tr class="bob sep"><th>Bob: random basis</th>';
+  for (i=0;i<n;i++) h += cell(BASGLYPH[R[i].bb], cur(i)); h += '</tr>';
+  h += '<tr class="bob"><th>Bob: reads bit</th>';
+  for (i=0;i<n;i++) h += (S.anim && i===n-1) ? cell('', 'cur') : cell(R[i].b); h += '</tr>';
+
+  h += '<tr class="pub sep"><th>same basis?</th>';
+  for (i=0;i<n;i++) h += S.phase>=1 ? cell(R[i].agree ? '&#10003;' : '&ndash;', R[i].agree ? '' : 'drop') : HID;
+  h += '</tr>';
+  h += '<tr class="pub"><th>sifted key (Bob)</th>';
+  for (i=0;i<n;i++){
+    if (S.phase<1) { h += HID; continue; }
+    if (!R[i].agree) { h += cell('', 'drop'); continue; }
+    var bad = (R[i].a !== R[i].b);
+    h += cell(R[i].b, (bad && (S.show || (S.phase>=2 && R[i].pub))) ? 'err' : '');
+  }
+  h += '</tr>';
+  if (S.phase>=2){
+    h += '<tr class="pub"><th>published &amp; compared</th>';
+    for (i=0;i<n;i++){
+      if (!R[i].agree) { h += cell('', 'drop'); continue; }
+      h += R[i].pub ? cell(R[i].a + '|' + R[i].b, R[i].a!==R[i].b ? 'err' : 'shown') : cell('');
+    }
+    h += '</tr>';
+    h += '<tr class="pub"><th>final key</th>';
+    for (i=0;i<n;i++) h += (R[i].agree && !R[i].pub) ? cell(R[i].b, (S.show && R[i].a!==R[i].b) ? 'err' : '') : cell('', 'drop');
+    h += '</tr>';
+  }
+  tbl.innerHTML = h;
+  var w = tbl.parentNode; w.scrollLeft = w.scrollWidth;
+  stats(); buttons();
+}
+
+function f3(x){ return isFinite(x) ? x.toFixed(3) : '&mdash;'; }
+function stats(){
+  var R = S.rows, n = R.length - (S.anim ? 1 : 0), ns = 0, ne = 0, i;
+  for (i=0;i<n;i++) if (R[i].agree){ ns++; if (R[i].a!==R[i].b) ne++; }
+  document.getElementById('mS').innerHTML = S.phase>=1 && n ? f3(ns/n) : '&mdash;';
+  document.getElementById('mE').innerHTML = (S.show || S.phase>=2) && ns ? f3(ne/ns) : '&mdash;';
+  document.getElementById('pE').innerHTML = f3(S.eve ? S.frac/4 : 0);
+  var v = document.getElementById('verdict');
+  if (S.phase>=2){
+    var np = 0, nep = 0;
+    for (i=0;i<n;i++) if (R[i].agree && R[i].pub){ np++; if (R[i].a!==R[i].b) nep++; }
+    var q = np ? nep/np : 0;
+    v.className = 'verdict ' + (q > 0.11 ? 'bad' : 'ok');
+    v.innerHTML = 'published sample: ' + nep + ' of ' + np + ' disagree, ' + (100*q).toFixed(0) +
+      '%<br>' + (q > 0.11 ? 'above 11%: abort, discard the key' :
+      'below 11%: error correction and privacy amplification');
+  } else { v.className = ''; v.innerHTML = ''; }
+  var B = S.bulk;
+  document.getElementById('bN').textContent = B.n;
+  document.getElementById('bS').textContent = B.s;
+  document.getElementById('bE').textContent = B.e;
+  document.getElementById('bSf').innerHTML = B.n ? f3(B.s/B.n) : '&nbsp;';
+  document.getElementById('bEf').innerHTML = B.s ? f3(B.e/B.s) : '&nbsp;';
+}
+
+function lastPanel(){
+  var el = document.getElementById('last'), r = S.rows[S.rows.length-1];
+  if (!r){ el.innerHTML = '<span class="lhs">nothing sent yet</span>'; return; }
+  if (!S.show){
+    el.innerHTML = '<span class="lhs">Bob, basis ' + BAS[r.bb] + ', reads</span> ' + ketName(r.bb, r.b) +
+      ' &rarr; bit ' + r.b + '<br><span class="lhs">everything else is private</span>';
+    return;
+  }
+  var h = '<span class="lhs">sent</span> ' + ketName(r.ab, r.a) + ', &theta; = ' + ang(r.ab,r.a) + '&deg;<br>';
+  if (r.eveHit){
+    h += '<span class="lhs">Eve, basis ' + BAS[r.eb] + ':</span> P(+) = <span class="num">' + r.ep.toFixed(2) +
+         '</span>, resends ' + ketName(r.eb, r.es) + '<br>';
+  }
+  var thB = r.thBob;
+  h += '<span class="lhs">Bob, basis ' + BAS[r.bb] + ':</span> P(+) = cos<sup>2</sup>(' + thB + '&deg; &minus; ' +
+       ang(r.bb,0) + '&deg;) = <span class="num">' + r.bp.toFixed(2) + '</span><br>';
+  h += '<span class="lhs">Bob reads</span> ' + ketName(r.bb, r.b) + ' &rarr; bit ' + r.b;
+  if (S.show) h += r.agree ? (r.a===r.b ? ' &nbsp;(= Alice)' : ' &nbsp;<span style="color:#CD4619">(&ne; Alice)</span>')
+                           : ' &nbsp;<span style="color:#999">(bases differ)</span>';
+  el.innerHTML = h;
+}
+
+function buttons(){
+  var busy = !!S.anim || S.queue > 0, full = S.rows.length >= MAXCOLS;
+  document.getElementById('send').disabled = busy || S.phase>0 || full;
+  document.getElementById('send8').disabled = busy || S.phase>0 || full;
+  document.getElementById('announce').disabled = busy || S.phase>0 || !S.rows.length;
+  document.getElementById('check').disabled = S.phase!==1;
+  document.getElementById('eve').disabled = S.rows.length > 0;
+}
+
+// ---------- animation ----------
+var last = 0;
+function sendOne(){
+  if (S.rows.length >= MAXCOLS) { S.queue = 0; return; }
+  S.rows.push(transmit(S.eve, S.frac));
+  S.anim = { t: 0 };
+  render(); requestAnimationFrame(tick);
+}
+function tick(ts){
+  if (!S.anim) return;
+  var dt = last ? Math.min((ts-last)/1000, 0.05) : 0; last = ts;
+  S.anim.t += dt / (S.queue > 0 ? 0.55 : 1.1);
+  if (S.anim.t >= 1){
+    S.anim = null; last = 0; lastPanel(); render(); draw();
+    if (S.queue > 0){ S.queue--; setTimeout(sendOne, 120); }
+    return;
+  }
+  draw(); requestAnimationFrame(tick);
+}
+
+// ---------- controls ----------
+document.getElementById('send').onclick = function(){ sendOne(); };
+document.getElementById('send8').onclick = function(){ S.queue = 7; sendOne(); };
+document.getElementById('announce').onclick = function(){ S.phase = 1; render(); };
+document.getElementById('check').onclick = function(){
+  // publish a random half of the sifted positions
+  var idx = [], i;
+  for (i=0;i<S.rows.length;i++) if (S.rows[i].agree) idx.push(i);
+  for (i=idx.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)), t = idx[i]; idx[i]=idx[j]; idx[j]=t; }
+  for (i=0;i<idx.length;i++) S.rows[idx[i]].pub = (i < Math.ceil(idx.length/2));
+  S.phase = 2; render();
+};
+document.getElementById('reset').onclick = function(){
+  S.rows = []; S.phase = 0; S.queue = 0; S.anim = null; last = 0; lastPanel(); render(); draw();
+};
+var eveBtn = document.getElementById('eve');
+eveBtn.onclick = function(){
+  S.eve = !S.eve; eveBtn.setAttribute('aria-pressed', S.eve);
+  eveBtn.textContent = S.eve ? 'Eve intercepts and resends' : 'Eve absent';
+  render(); draw();
+};
+var frac = document.getElementById('frac');
+frac.oninput = function(){ S.frac = frac.value/100; document.getElementById('fLab').textContent = frac.value + '%'; stats(); };
+var showBtn = document.getElementById('show');
+showBtn.onclick = function(){
+  S.show = !S.show; showBtn.setAttribute('aria-pressed', S.show);
+  showBtn.textContent = S.show ? 'hidden rows: shown' : 'hidden rows: concealed';
+  lastPanel(); render();
+};
+document.getElementById('bulk').onclick = function(){
+  for (var k=0;k<1000;k++){
+    var r = transmit(S.eve, S.frac); S.bulk.n++;
+    if (r.agree){ S.bulk.s++; if (r.a!==r.b) S.bulk.e++; }
+  }
+  stats();
+};
+document.getElementById('bulkReset').onclick = function(){ S.bulk = {n:0,s:0,e:0}; stats(); };
+
+render(); draw();
+})();
+</script>
+</body>
+</html>
