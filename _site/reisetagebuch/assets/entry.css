@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&family=Noto+Serif+JP:wght@400;700&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap');
+
+/* ═══════════════ THEME CONTRACT ═══════════════
+   Every travel chapter shares one Talmud structure; only the colour
+   tokens and the native script change, keyed off <body data-land="…">.
+   Default tokens = warm »Reisetagebuch«.                              */
+:root{
+  --page:#EFE2C5; --ink:#3A2A18; --center:#F6ECD2;
+  --band:#3A2A18; --band-ink:#F6ECD2; --band-sub:#caa86a;
+  --accent:#7A3A1C; --accent2:#9A4520; --rule:#C9AE78;
+  --side:#E4D2AC; --side-ink:#4a3a22;
+  --recipe-bg:#EFE2C5; --recipe-border:#7A3A1C; --recipe-head:#7A3A1C;
+  --foot:#3A2A18; --foot-ink:#cdbb95; --foot-link:#E0A21A;
+  --script:'Noto Serif JP';
+}
+/* ─── Nationalflaggen-Paletten ─── */
+body[data-land="japan"]{      /* weiß · rot · schwarz */
+  --page:#FBFAFA; --ink:#1A1A1A; --center:#FFFFFF;
+  --band:#1A1A1A; --band-ink:#FFFFFF; --band-sub:#F2B8BE;
+  --accent:#BC002D; --accent2:#1A1A1A; --rule:#E6CFD2;
+  --side:#F4F0F1; --side-ink:#2a2226;
+  --recipe-bg:#FFFFFF; --recipe-border:#BC002D; --recipe-head:#BC002D;
+  --foot:#1A1A1A; --foot-ink:#d8d2d3; --foot-link:#F2B8BE;
+  --script:'Noto Serif JP';
+}
+body[data-land="israel"]{     /* blau · weiß */
+  --page:#FAFCFF; --ink:#16233A; --center:#FFFFFF;
+  --band:#0038B8; --band-ink:#FFFFFF; --band-sub:#C9D8FF;
+  --accent:#0038B8; --accent2:#0A2A6B; --rule:#CBD9F2;
+  --side:#EEF3FC; --side-ink:#21344f;
+  --recipe-bg:#FFFFFF; --recipe-border:#0038B8; --recipe-head:#0038B8;
+  --foot:#0A2A6B; --foot-ink:#cfdcf5; --foot-link:#9fc0ff;
+  --script:'Frank Ruhl Libre';
+}
+body[data-land="ecuador"]{    /* gelb · blau · rot */
+  --page:#FFFDF1; --ink:#2A2410; --center:#FFFFFF;
+  --band:#0072CE; --band-ink:#FFFFFF; --band-sub:#FFE680;
+  --accent:#0072CE; --accent2:#EF3340; --rule:#EFE0A6;
+  --side:#FFF6D6; --side-ink:#4a3f17;
+  --recipe-bg:#FFFFFF; --recipe-border:#E0A800; --recipe-head:#EF3340;
+  --foot:#0072CE; --foot-ink:#eaf2ff; --foot-link:#FFE680;
+  --script:'Crimson Text';
+}
+body[data-land="franken"]{    /* schwarz · rot · gold */
+  --page:#FCFAF3; --ink:#1A1A1A; --center:#FFFFFF;
+  --band:#1A1A1A; --band-ink:#FFFFFF; --band-sub:#F6D154;
+  --accent:#C8102E; --accent2:#D4A017; --rule:#E7DAA8;
+  --side:#F6EFD7; --side-ink:#3a3320;
+  --recipe-bg:#FFFFFF; --recipe-border:#C8102E; --recipe-head:#1A1A1A;
+  --foot:#1A1A1A; --foot-ink:#e2dcd0; --foot-link:#F6D154;
+  --script:'Crimson Text';
+}
+body[data-land="australien"]{ /* navy · rot · weiß */
+  --page:#FAFBFE; --ink:#0B1B3A; --center:#FFFFFF;
+  --band:#00247D; --band-ink:#FFFFFF; --band-sub:#AEC2F0;
+  --accent:#00247D; --accent2:#CF142B; --rule:#C8D2EA;
+  --side:#EDF1FA; --side-ink:#16294a;
+  --recipe-bg:#FFFFFF; --recipe-border:#CF142B; --recipe-head:#00247D;
+  --foot:#00247D; --foot-ink:#dde6fa; --foot-link:#AEC2F0;
+  --script:'Crimson Text';
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--page);color:var(--ink);
+  font-family:'Crimson Text',Georgia,var(--script),serif}
+
+/* native-script tokens stay readable next to Latin text */
+.native{font-family:var(--script),'Crimson Text',serif;unicode-bidi:isolate}
+
+/* breadcrumb bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--side);
+  border-bottom:1px solid var(--rule);padding:9px 22px;display:flex;align-items:center;gap:14px;font-size:14px}
+.bar a{color:var(--accent);text-decoration:none}
+.bar a:hover{text-decoration:underline}
+.crumb{color:var(--side-ink)}
+.crumb b{color:var(--ink)}
+
+/* entry header band (Flaggenfarben) */
+.entry-head{text-align:center;padding:46px 24px 36px;background:var(--band);color:var(--band-ink);
+  border-bottom:5px solid var(--accent)}
+.entry-head .eyebrow{font-family:'Caveat',cursive;font-size:23px;color:var(--band-sub);transform:rotate(-1.5deg)}
+.entry-head h1{font-family:'Playfair Display',serif;font-size:clamp(28px,4.4vw,48px);
+  line-height:1.12;margin:8px auto 8px;max-width:880px;color:var(--band-ink)}
+.entry-head .date{font-size:16px;font-style:italic;color:var(--band-sub);letter-spacing:1px}
+
+/* talmud grid */
+.talmud{display:grid;grid-template-columns:235px minmax(0,1fr) 235px;max-width:1260px;margin:0 auto;
+  border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+.col-side{background:var(--side);color:var(--side-ink);padding:28px 18px}
+.col-left{border-right:1px dashed var(--rule)}
+.col-right{border-left:1px dashed var(--rule)}
+.col-main{background:var(--center);padding:36px 42px}
+
+.side-title{font-family:'Caveat',cursive;font-size:25px;color:var(--accent);text-align:center;
+  margin-bottom:20px;line-height:1.1}
+.side-title small{display:block;font-family:var(--script),'Crimson Text',serif;font-size:14px;letter-spacing:1px;
+  color:var(--accent2);margin-top:4px}
+.note{margin-bottom:22px}
+.note h4{font-family:'Playfair Display',var(--script),serif;font-size:15.5px;color:var(--accent);
+  border-bottom:1px solid var(--rule);padding-bottom:4px;margin-bottom:7px}
+.note p{font-size:14.5px;line-height:1.62;color:var(--side-ink)}
+.note .quote{font-style:italic;color:var(--accent2);border-left:3px solid var(--accent);
+  padding-left:9px;margin-top:8px;font-size:14px}
+
+/* center text */
+.col-main p{font-size:18px;line-height:1.82;margin-bottom:1.3em}
+.col-main p:first-of-type::first-letter{font-family:'Playfair Display',serif;font-size:3.1em;
+  float:left;line-height:.82;padding:6px 10px 0 0;color:var(--accent)}
+.col-main h2{font-family:'Playfair Display',serif;font-size:25px;color:var(--accent);
+  text-align:center;margin:1.7em 0 .7em}
+.col-main h2::before,.col-main h2::after{content:' ◈ ';color:var(--accent2);font-size:15px;vertical-align:middle}
+.col-main .signoff{font-family:'Caveat',cursive;font-size:26px;color:var(--accent2);text-align:center;margin:1.4em 0 .3em}
+
+figure.fig{margin:1.7em 0;border:1px solid var(--rule);background:#fff;
+  box-shadow:0 4px 14px rgba(40,30,20,.16)}
+figure.fig img{width:100%;display:block}
+figure.fig figcaption{font-family:'Caveat',cursive;font-size:18px;color:var(--side-ink);text-align:center;
+  padding:8px 12px;background:var(--side);border-top:1px solid var(--rule)}
+
+/* recipe card */
+.recipe{background:var(--recipe-bg);border:2px double var(--recipe-border);border-radius:7px;
+  padding:24px 28px;margin:2em 0}
+.recipe .kick{font-family:'Caveat',cursive;font-size:19px;color:var(--accent2);text-align:center;display:block}
+.recipe h3{font-family:'Playfair Display',var(--script),serif;font-size:23px;color:var(--recipe-head);
+  text-align:center;margin-bottom:16px}
+.recipe-body{display:grid;grid-template-columns:1fr 1.45fr;gap:24px}
+.recipe h4{font-family:'Caveat',cursive;font-size:21px;color:var(--accent2);margin-bottom:6px}
+.recipe ul{list-style:none;margin:0;padding:0}
+.recipe li{padding:3px 0 3px 18px;position:relative;font-size:16px;line-height:1.45}
+.recipe li::before{content:'›';position:absolute;left:0;color:var(--accent);font-weight:700}
+.recipe .method{font-size:16.5px;line-height:1.7}
+@media(max-width:620px){.recipe-body{grid-template-columns:1fr;gap:14px}}
+
+/* footer nav */
+.entry-foot{background:var(--foot);color:var(--foot-ink);text-align:center;padding:28px 24px;
+  font-family:'Caveat',cursive;font-size:17px}
+.entry-foot .nav{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin-bottom:12px}
+.entry-foot a{color:var(--foot-link);text-decoration:none;font-size:18px}
+.entry-foot a:hover{text-decoration:underline}
+.entry-foot .by{font-size:15px;opacity:.8}
+
+@media(max-width:920px){
+  .talmud{grid-template-columns:1fr;border:none}
+  .col-side{border:none}
+  .col-main{order:1;padding:30px 22px}
+  .col-right{order:2;border-top:2px dashed var(--rule)}
+  .col-left{order:3;border-top:2px dashed var(--rule)}
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layout C – Reisetagebuch</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parch:#EFE2C5; --parch2:#E4D2AC; --edge:#C9AE78; --ink:#3A2A18;
+    --stamp:#7A3A1C; --stamp2:#9A4520; --teal:#2C5A52; --gold:#A8782A;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--parch);color:var(--ink);font-family:'Crimson Text',Georgia,serif;
+    background-image:radial-gradient(rgba(150,110,60,.05) 1px,transparent 1px);background-size:14px 14px}
+  .back{position:fixed;top:12px;left:14px;z-index:9;background:rgba(255,255,255,.8);
+    border:1px solid var(--edge);border-radius:20px;padding:5px 14px;font-size:13px;text-decoration:none;color:var(--stamp)}
+
+  header{text-align:center;padding:50px 24px 6px}
+  header .sub{font-family:'Caveat',cursive;font-size:26px;color:var(--stamp2);transform:rotate(-2deg)}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,56px);margin-top:4px;line-height:1.1}
+  header h1 em{color:var(--stamp);font-style:italic}
+  header p{max-width:580px;margin:14px auto 0;font-size:18px;font-style:italic;color:#6a5638}
+
+  .map-frame{max-width:1000px;margin:26px auto 0;padding:18px;background:#F6ECD2;
+    border:1px solid var(--edge);box-shadow:0 8px 26px rgba(80,50,20,.18);position:relative}
+  .map-frame::after{content:'';position:absolute;inset:6px;border:1px dashed var(--edge);pointer-events:none}
+  svg.map{width:100%;height:auto;display:block;filter:sepia(.25)}
+  .land{fill:#D9C39A;stroke:#BFA46F;stroke-width:.6;stroke-linejoin:round}
+  .route{fill:none;stroke:var(--stamp);stroke-width:2;stroke-dasharray:2 7;stroke-linecap:round;opacity:.75}
+  .mk{fill:var(--stamp);stroke:#F6ECD2;stroke-width:2}
+  .mk-num{font-family:'Playfair Display',serif;font-size:11px;font-weight:700;fill:#F6ECD2;text-anchor:middle;pointer-events:none}
+  .mk-lbl{font-family:'Caveat',cursive;font-size:18px;fill:var(--ink);pointer-events:none}
+  .mk-star{fill:#E0A21A;stroke:var(--stamp);stroke-width:1.1;
+    transform-box:fill-box;transform-origin:center;animation:twinkle 2.6s ease-in-out infinite}
+  .mk-date{font-family:'Caveat',cursive;font-size:15px;font-weight:700;fill:var(--stamp2);pointer-events:none}
+  @keyframes twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.16);opacity:.85}}
+
+  .stamps{max-width:1180px;margin:46px auto 70px;padding:0 24px;
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;justify-items:center}
+  .stamp{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:inherit;width:100%;max-width:260px}
+  .seal{width:150px;height:150px;border-radius:50%;border:3px double var(--stamp);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    color:var(--stamp);background:rgba(255,255,255,.18);transition:transform .3s,background .3s;
+    transform:rotate(var(--rot,-3deg))}
+  .stamp:hover .seal{transform:rotate(0deg) scale(1.05);background:rgba(154,69,32,.10)}
+  .seal .no{font-family:'Playfair Display',serif;font-size:13px;letter-spacing:2px}
+  .seal .nm{font-family:'Playfair Display',serif;font-size:21px;line-height:1.05;padding:2px 8px;margin:3px 0}
+  .seal .co{font-size:11px;letter-spacing:2px;text-transform:uppercase}
+  .stamp p{font-size:15.5px;line-height:1.5;color:#5c4a30;text-align:center;margin-top:14px}
+  .stamp .go{font-family:'Caveat',cursive;font-size:20px;color:var(--stamp2);margin-top:8px}
+  .stamp:hover .go{text-decoration:underline}
+  .stamp-latest .seal{border-color:#C8911F;background:rgba(224,162,26,.14)}
+  .latest-tag{display:block;font-family:'Caveat',cursive;font-size:18px;font-weight:700;
+    color:var(--stamp2);margin-bottom:5px}
+
+  footer{background:#3A2A18;color:#cdbb95;text-align:center;padding:26px;font-size:14px;font-family:'Caveat',cursive}
+  footer span{font-size:18px}
+
+  /* keep all five stamps in one row on narrow screens (e.g. iPad portrait) */
+  @media(max-width:860px){
+    .stamps{gap:12px}
+    .seal{width:108px;height:108px;border-width:2px}
+    .seal .no{font-size:10px;letter-spacing:1px}
+    .seal .nm{font-size:14px}
+    .seal .co{font-size:9px}
+    .stamp p{font-size:12.5px;margin-top:8px}
+    .stamp .go{font-size:16px}
+  }
+</style>
+</head>
+<body>
+<a class="back" href="home-index.html">← Übersicht</a>
+
+<header>
+  <div class="sub">Reisetagebuch &amp; Kochbuch</div>
+  <h1>Kulinarisch-kulturelle <em>reiseN</em></h1>
+  <p>Der etwas andere Reisebericht mit Rezepten von gewöhnlichen, ungewöhnlichen und außergewöhnlichen Gerichten – koscheres, veganes, vegetarisches und einfach leckeres!</p>
+</header>
+
+<div class="map-frame">
+  <svg class="map" viewBox="0 0 1000 500" id="map" aria-label="Weltkarte mit Reiseroute"></svg>
+</div>
+
+<div class="stamps" id="stamps"></div>
+
+<footer><span>Mit Liebe gereist und gekocht</span> · jewishgermanculturecooking.com · Entwurf C</footer>
+
+<script src="assets/world.js"></script>
+<script>
+  const order=Object.values(DESTINATIONS).sort((a,b)=>a.order-b.order);
+  const ns="http://www.w3.org/2000/svg";
+  const map=document.getElementById('map');
+  const land=document.createElementNS(ns,'path');
+  land.setAttribute('d',WORLD_PATH);land.setAttribute('class','land');map.appendChild(land);
+
+  function starPath(cx,cy,outer,inner){
+    let p='';
+    for(let i=0;i<10;i++){
+      const r=i%2===0?outer:inner;
+      const a=Math.PI/5*i-Math.PI/2;
+      p+=(i===0?'M':'L')+(cx+r*Math.cos(a)).toFixed(2)+','+(cy+r*Math.sin(a)).toFixed(2);
+    }
+    return p+'Z';
+  }
+  const latestSlug=(typeof LATEST_ENTRY!=='undefined'&&LATEST_ENTRY)?LATEST_ENTRY.slug:null;
+
+  order.forEach(d=>{
+    const isLatest=d.slug===latestSlug;
+    const flip=d.x>820;
+    const g=document.createElementNS(ns,'a');
+    g.setAttribute('href',isLatest?LATEST_ENTRY.href:`reise-${d.slug}.html`);
+    let mk;
+    if(isLatest){
+      mk=document.createElementNS(ns,'path');
+      mk.setAttribute('d',starPath(d.x,d.y,16,7));mk.setAttribute('class','mk-star');
+    }else{
+      mk=document.createElementNS(ns,'circle');
+      mk.setAttribute('cx',d.x);mk.setAttribute('cy',d.y);mk.setAttribute('r',9);mk.setAttribute('class','mk');
+    }
+    const num=document.createElementNS(ns,'text');
+    num.setAttribute('x',d.x);num.setAttribute('y',d.y+4);num.setAttribute('class','mk-num');num.textContent=d.order;
+    const lbl=document.createElementNS(ns,'text');
+    lbl.setAttribute('x',flip?d.x-16:d.x+16);lbl.setAttribute('y',d.y-10);
+    if(flip)lbl.setAttribute('text-anchor','end');
+    lbl.setAttribute('class','mk-lbl');lbl.textContent=d.name;
+    g.append(mk,num,lbl);
+    if(isLatest){
+      const dt=document.createElementNS(ns,'text');
+      dt.setAttribute('x',flip?d.x-16:d.x+16);dt.setAttribute('y',d.y+23);
+      if(flip)dt.setAttribute('text-anchor','end');
+      dt.setAttribute('class','mk-date');
+      dt.textContent='★ Neuester Eintrag · '+LATEST_ENTRY.date;
+      g.appendChild(dt);
+    }
+    map.appendChild(g);
+  });
+
+  const stamps=document.getElementById('stamps');
+  const rots=['-4deg','3deg','-2deg','4deg','-3deg'];
+  order.forEach((d,i)=>{
+    const isLatest=d.slug===latestSlug;
+    const a=document.createElement('a');
+    a.href=isLatest?LATEST_ENTRY.href:`reise-${d.slug}.html`;
+    a.className='stamp'+(isLatest?' stamp-latest':'');
+    const tag=isLatest?`<span class="latest-tag">★ Neuester Eintrag · ${LATEST_ENTRY.date}</span>`:'';
+    const go=isLatest?'→ Neuesten Eintrag lesen':'→ Tagebuch öffnen';
+    a.innerHTML=`<div class="seal" style="--rot:${rots[i%rots.length]}">
+        <div class="no">№ ${d.order}</div><div class="nm">${d.name}</div><div class="co">${d.country}</div>
+      </div><p>${tag}${d.desc}</p><span class="go">${go}</span>`;
+    stamps.appendChild(a);
+  });
+</script>
+<script src="assets/feedback.js"></script>
+</body>
+</html>

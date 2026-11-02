@@ -13,29 +13,37 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="J. Kirscher" />
 <meta property="og:description" content="J. Kirscher" />
-<link rel="canonical" href="http://localhost:4000/publications.html" />
-<meta property="og:url" content="http://localhost:4000/publications.html" />
+<link rel="canonical" href="http://www.hilbert-space.com/publications.html" />
+<meta property="og:url" content="http://www.hilbert-space.com/publications.html" />
 <meta property="og:site_name" content="Research &amp; Teaching on particles, nucleons, and atoms" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="publications" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Johannes Kirscher"},"description":"J. Kirscher","headline":"publications","url":"http://localhost:4000/publications.html"}</script>
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Johannes Kirscher"},"description":"J. Kirscher","headline":"publications","url":"http://www.hilbert-space.com/publications.html"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Research &amp; Teaching on particles, nucleons, and atoms" /><!-- Included since I plan to use javascript for link modification -->    
-  <script src="/assets/jquery-3.4.1.min.js"> </script><script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function(){
-  document.querySelectorAll("script[type='math/tex']").forEach(function(el){
-    el.outerHTML = "\\(" + el.textContent + "\\)";
-  });
-  document.querySelectorAll("script[type='math/tex; mode=display']").forEach(function(el){
-    el.outerHTML = "\\[" + el.textContent + "\\]";
-  });
-  var script = document.createElement('script');
-  script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
-  document.head.appendChild(script);
-}, false);
-</script>
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://www.hilbert-space.com/feed.xml" title="Research &amp; Teaching on particles, nucleons, and atoms" /><!-- Included since I plan to use javascript for link modification -->    
+  <script src="/assets/jquery-3.4.1.min.js"> </script><script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    startup: {
+      ready() {
+        document.querySelectorAll("script[type='math/tex']").forEach(function(el){
+          el.outerHTML = "\\(" + el.textContent + "\\)";
+        });
+        document.querySelectorAll("script[type='math/tex; mode=display']").forEach(function(el){
+          el.outerHTML = "\\[" + el.textContent + "\\]";
+        });
+        MathJax.startup.defaultReady();
+      }
+    }
+  };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
 
 <style>
 * {
@@ -63,11 +71,29 @@ document.addEventListener('DOMContentLoaded', function(){
     width: 100%;
   }
 }
+
+/* scroll nav link: slightly darker gray when not the active page */
+a.nav-scroll:not(.current) { color: #888888; }
+a.nav-scroll:not(.current):hover { color: #000000; }
+
+/* reisetagebuch: pill button next to "scroll" linking to the WIP travel-blog preview */
+a.nav.nav-tagebuch {
+  color: #ffffff !important;
+  background: #7A3A1C;
+  border-radius: 16px;
+  padding: 2px 13px;
+  margin-left: 0.3em;
+  transition: background 0.2s;
+}
+a.nav.nav-tagebuch:hover { background: #9A4520; color: #ffffff !important; }
 </style>
 
 </head>
 <body><header class="site-header" role="banner">
-    <h1 style="float:center;max-width:90%"> Research & Teaching on particles, nucleons, and atoms </h1><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><a class="nav" href="/index.html">home</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/teaching.html">teaching</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/projects.html">projects</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav current" href="/publications.html">publications</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts -->|<a class="nav" href="/personal.html">personal</a></header>
+    <h1 style="float:center;max-width:90%"> Research & Teaching on particles, nucleons, and atoms </h1><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><!-- highlight scroll in nav when viewing scroll category posts --><a class="nav" href="/index.html">home</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><!-- highlight scroll in nav when viewing scroll category posts -->|<a class="nav" href="/teaching.html">teaching</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><!-- highlight scroll in nav when viewing scroll category posts -->|<a class="nav" href="/projects.html">projects</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><!-- highlight scroll in nav when viewing scroll category posts -->|<a class="nav current" href="/publications.html">publications</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><!-- highlight scroll in nav when viewing scroll category posts -->|<a class="nav" href="/personal.html">personal</a><!-- highlight home in nav when viewing homepage category posts --><!-- highlight blog in nav when viewing blog category posts --><!-- highlight scroll in nav when viewing scroll category posts -->|<a class="nav nav-scroll" href="/scroll.html">scroll</a><!-- WIP preview of Renate's Reisetagebuch redesign (design C) -->
+    |
+    <a class="nav nav-tagebuch" href="/reisetagebuch/home-C-tagebuch.html">reisetagebuch</a>
+</header>
 <main>
         <div class="content fade-in">
              <!--Converted from existing html with https://www.browserling.com/tools/html-to-markdown-->
@@ -94,18 +120,3 @@ document.addEventListener('DOMContentLoaded', function(){
 <!--  Lightbox Javascript --><!-- Mailchimp Javascript --><!-- Commentbox Javascript --></body>
 </html>
 
-<!-- mathjax config similar to math.stackexchange -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  jax: ["input/TeX", "output/HTML-CSS"],
-  tex2jax: {
-    inlineMath: [ ['$', '$'] ],
-    displayMath: [ ['$$', '$$']],
-    processEscapes: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-  },
-  messageStyle: "none",
-  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
-});
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>

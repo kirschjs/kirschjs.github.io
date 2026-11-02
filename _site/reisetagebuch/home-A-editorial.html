@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layout A – Stille Weltkarte</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FDF6E9; --sand:#EDE0C8; --terracotta:#9A4520;
+    --forest:#2D4A3E; --forest-light:#4A7A6A; --dark:#221A14; --gold:#C8A060;
+    --land:#DCCBA6; --land-line:#C2A878;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--cream);color:var(--dark);font-family:'Crimson Text',Georgia,serif}
+
+  .topbar{background:var(--forest);text-align:center;padding:10px;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+
+  header{text-align:center;padding:56px 24px 12px}
+  header .orn{color:var(--gold);letter-spacing:12px;font-size:18px;margin-bottom:18px}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,58px);line-height:1.1}
+  header h1 em{color:var(--terracotta);font-style:italic}
+  header p{max-width:600px;margin:18px auto 0;font-size:19px;font-style:italic;color:#6b5d4a;line-height:1.55}
+  header .rule{width:74px;height:2px;background:var(--gold);margin:24px auto 0}
+
+  /* MAP */
+  .map-wrap{max-width:980px;margin:34px auto 0;padding:0 24px;position:relative}
+  svg.map{width:100%;height:auto;display:block}
+  .land{fill:var(--land);stroke:var(--land-line);stroke-width:.6;stroke-linejoin:round}
+  .pin-dot{fill:var(--terracotta);stroke:#fff;stroke-width:2;cursor:pointer;transition:r .25s, fill .25s}
+  .pin-halo{fill:var(--terracotta);opacity:.18;transform-origin:center;animation:pulse 3s ease-in-out infinite}
+  .pin-label{font-family:'Playfair Display',serif;font-size:15px;fill:var(--dark);pointer-events:none;opacity:0;transition:opacity .25s}
+  .pin-g:hover .pin-dot,.pin-g.hot .pin-dot{r:11;fill:var(--forest)}
+  .pin-g:hover .pin-label,.pin-g.hot .pin-label{opacity:1}
+  @keyframes pulse{0%,100%{r:9;opacity:.18}50%{r:18;opacity:0}}
+
+  /* CARDS */
+  .cards{max-width:1180px;margin:18px auto 80px;padding:0 24px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px}
+  .ck{background:#fff;border:1px solid var(--sand);border-radius:5px;padding:24px 22px 26px;
+    text-decoration:none;color:inherit;display:flex;flex-direction:column;
+    box-shadow:0 3px 14px rgba(0,0,0,.06);transition:transform .25s,box-shadow .25s,border-color .25s}
+  .ck:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,.13);border-color:var(--gold)}
+  .ck .num{font-family:'Playfair Display',serif;font-size:13px;letter-spacing:2px;color:var(--gold)}
+  .ck h3{font-family:'Playfair Display',serif;font-size:23px;margin:6px 0 2px;line-height:1.15}
+  .ck .reg{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--terracotta);margin-bottom:12px}
+  .ck p{font-size:16px;line-height:1.55;color:#5c5040;flex:1}
+  .ck .go{margin-top:16px;font-weight:600;color:var(--forest)}
+  .ck:hover .go{color:var(--terracotta)}
+
+  footer{background:var(--dark);color:#b9ab95;text-align:center;padding:26px;font-size:14px}
+  .back{position:fixed;top:12px;left:14px;z-index:9;background:rgba(255,255,255,.85);
+    border:1px solid var(--sand);border-radius:20px;padding:5px 14px;font-size:13px;text-decoration:none;color:var(--forest)}
+</style>
+</head>
+<body>
+<a class="back" href="home-index.html">← Übersicht</a>
+<div class="topbar">Layout A · Stille Weltkarte</div>
+
+<header>
+  <div class="orn">✦ ✦ ✦</div>
+  <h1>Kulinarisch-kulturelle <em>reiseN</em></h1>
+  <p>Fünf Reisen, fünf Küchen, viele Geschichten. Wählen Sie ein Ziel auf der Karte.</p>
+  <div class="rule"></div>
+</header>
+
+<div class="map-wrap">
+  <svg class="map" viewBox="0 0 1000 500" id="map" aria-label="Weltkarte mit Reisezielen"></svg>
+</div>
+
+<div class="cards" id="cards"></div>
+
+<footer>jewishgermanculturecooking.com · Entwurf A</footer>
+
+<script src="assets/world.js"></script>
+<script>
+  const order = Object.values(DESTINATIONS).sort((a,b)=>a.order-b.order);
+  const ns="http://www.w3.org/2000/svg";
+  const map=document.getElementById('map');
+  const land=document.createElementNS(ns,'path');
+  land.setAttribute('d',WORLD_PATH);land.setAttribute('class','land');map.appendChild(land);
+
+  order.forEach(d=>{
+    const g=document.createElementNS(ns,'a');
+    g.setAttribute('href',`reise-${d.slug}.html`);
+    g.setAttribute('class','pin-g');g.dataset.slug=d.slug;
+    const halo=document.createElementNS(ns,'circle');
+    halo.setAttribute('cx',d.x);halo.setAttribute('cy',d.y);halo.setAttribute('r',9);halo.setAttribute('class','pin-halo');
+    const dot=document.createElementNS(ns,'circle');
+    dot.setAttribute('cx',d.x);dot.setAttribute('cy',d.y);dot.setAttribute('r',7);dot.setAttribute('class','pin-dot');
+    const lbl=document.createElementNS(ns,'text');
+    const flip = d.x>820; // keep right-edge labels inside
+    lbl.setAttribute('x', flip ? d.x-12 : d.x+14);
+    lbl.setAttribute('y', d.y+5);
+    if(flip) lbl.setAttribute('text-anchor','end');
+    lbl.setAttribute('class','pin-label');lbl.textContent=d.name;
+    g.append(halo,dot,lbl);map.appendChild(g);
+  });
+
+  const cards=document.getElementById('cards');
+  order.forEach(d=>{
+    const a=document.createElement('a');a.href=`reise-${d.slug}.html`;a.className='ck';a.dataset.slug=d.slug;
+    a.innerHTML=`<span class="num">${String(d.order).padStart(2,'0')}</span>
+      <h3>${d.name}</h3><div class="reg">${d.country}</div>
+      <p>${d.desc}</p><span class="go">Zu den Beiträgen →</span>`;
+    cards.appendChild(a);
+  });
+
+  // link hover between cards and pins
+  const sync=(slug,on)=>{
+    document.querySelectorAll(`.pin-g[data-slug="${slug}"]`).forEach(e=>e.classList.toggle('hot',on));
+  };
+  document.querySelectorAll('.ck').forEach(c=>{
+    c.addEventListener('mouseenter',()=>sync(c.dataset.slug,true));
+    c.addEventListener('mouseleave',()=>sync(c.dataset.slug,false));
+  });
+</script>
+<script src="assets/feedback.js"></script>
+</body>
+</html>

@@ -5,7 +5,7 @@ author: Johannes Kirscher
 description: >- # this means to ignore newlines until "baseurl:"
   J. Kirscher
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://www.hilbert-space.com" # the base hostname & protocol for your site
+url: "https://kirschjs.github.io" # the base hostname & protocol for your site
 
 # The order to list your pages in the nav bar, separated by single spaces
 # The first element is whatever you would like index.html to be called
