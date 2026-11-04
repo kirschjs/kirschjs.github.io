@@ -1,0 +1,31 @@
+---
+layout: problem
+title: "A bushel of apples"
+date: 2026-11-04
+categories: [problem]
+number: 2
+deadline: 2026-11-18
+bounty: "$20"
+status: open
+solver:
+solution_url:
+image: "/images/klingon.svg"
+commentbox: true
+render_with_liquid: false
+---
+<!-- GENERATED from _problems/002-a-buchel-of-apples.tex by problem.py; edit the source, not this body. -->
+<p>Turning a classroom into a lab.</p>
+<h3 class="unnumbered" id="setting">Setting</h3>
+<p>Your university/school has equipped rooms with multiple (apple) desktop computers which are unused when there are
+no classes. During this idle time, these clusters of c/gpus shall be used for scientific tasks. Given the
+limitations placed by the start of the next class, the relatively slow connection between the computing nodes,
+and all issues related to the closedness of iOS, realize a framework which would allow me to distribute <span class="nobr"><span class="math inline">\(\mathcal{O}(10^4)\)</span></span> runs of
+a single sequence of codes (FORTRAN, python, &amp;c.) with typical runtime <span class="nobr"><span class="math inline">\(\tau=\mathcal{O}(10m)\)</span></span> onto the classroom.
+The framework should be controllable from my Linux terminal, and the results of each client run should be stored there temporarily
+before sending them to me.</p>
+<p>If you plan to engage in this problem, contact me for sample code.</p>
+<h3 class="unnumbered" id="deliverable">Deliverable</h3>
+<ul>
+<li><p>Flow diagram of the computation starting from its trigger on the Linux terminal to the final result collection</p></li>
+<li><p>practical implementation respecting the boundary conditions, i.e., runtime estimate and possible job rejection</p></li>
+</ul>

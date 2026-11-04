@@ -20,6 +20,15 @@ email: kirscjo@gmail.com
 github_username:  kirschjs
 googlescholar_id: U1b0cSEAAAAJ
 commentbox_id: 5642141460070400-proj
+
+# Nav-bar display names (key = name in pageorder; file name stays e.g. projects.md)
+navlabels:
+  projects: "£robl€m$"
+
+# Fortnightly problems (see problem.py)
+problems:
+  bounty: "$20"
+  payment: "Click app"
 # Find this from your Google Scholar address, after "user=" and before the "&"
 # e.g. https://scholar.google.com/citations?user=os-j4rIAAAAJ&hl=en
 
@@ -70,6 +79,8 @@ exclude:
    - minima
    - ghostly/skeleton
    - Ghostly-make-skeleton.sh #bash shell I use for copying files for skeleton
+   - problem.py
+   - rules_of_the_game.md
 
 # This paragraph is reproduced from Jekyll's default Minima theme
 ##################################################################

@@ -1,0 +1,15 @@
+---
+layout: default
+---
+<article>
+  {{ content }}
+
+  {%- if page.status == "awarded" and page.solver %}
+  <p style="margin-top:2em; color:#888;">Awarded to {{ page.solver }}
+    {%- if page.solution_url and page.solution_url != "" %} &middot; <a href="{{ page.solution_url }}">solution</a>{%- endif -%}.</p>
+  {%- endif %}
+
+  <p style="margin-top:2.5em; padding-top:0.75em; border-top: solid 1px #B8B8B8; font-size:medium; color:#B8B8B8;">
+    solutions &rarr; <a href="mailto:{{ site.email }}?subject={{ page.title | url_encode }}">{{ site.email }}</a>
+  </p>
+</article>

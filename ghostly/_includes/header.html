@@ -19,6 +19,12 @@
                 {%- assign style = "nav current" -%}
             {%- endif -%}
         {%- endif -%}
+        <!-- highlight projects (£robl€m$) in nav when viewing problem posts -->
+        {%- if page.categories[0] == "problem" or page.categories[0] == "proj" -%}
+            {%- if name == "projects" -%}
+                {%- assign style = "nav current" -%}
+            {%- endif -%}
+        {%- endif -%}
         <!-- highlight scroll in nav when viewing scroll category posts -->
         {%- if page.url contains "/scroll/" or page.categories[0] == "scroll" -%}
             {%- if name == "scroll" -%}
@@ -28,10 +34,11 @@
         {%- if name != "home" -%}
             {{ site.ghostly.itemseparator }}
         {%- endif -%}
+        {%- assign label = site.navlabels[name] | default: name -%}
         {%- if name == "scroll" -%}
-            <a class="{{ style }} nav-scroll" href="/{{ filename }}.html">{{ name }}</a>
+            <a class="{{ style }} nav-scroll" href="/{{ filename }}.html">{{ label }}</a>
         {%- else -%}
-            <a class="{{ style }}" href="/{{ filename }}.html">{{ name }}</a>
+            <a class="{{ style }} tex2jax_ignore" href="/{{ filename }}.html">{{ label }}</a>
         {%- endif -%}
     {%- endfor -%}
 </header>

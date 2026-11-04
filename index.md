@@ -15,9 +15,14 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
 
 <p><img src="/images/back2.svg" style="display:block;margin-left:auto;margin-right:auto;border-radius: 8px;width: 100%; height:auto; margin-top:10px; margin-bottom:0px;"></p>
 
+{%- assign latest = site.categories.problem | sort: 'date' | last -%}
 <span style="margin-left: auto;float:right;color: tomato;font-family: sans-serif;font-size: 15px;">
    <img src="./images/klingon.svg" width=26 height=26>
+{%- if latest %}
+  <a href='{{ latest.url }}' class="tex2jax_ignore nobr">{{ latest.bounty | default: site.problems.bounty }} problem</a>
+{%- else %}
   <a href='iitG_0225.html'>IIT-G presentation</a>
+{%- endif %}
 </span>
 
 <ul>

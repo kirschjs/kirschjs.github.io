@@ -1,0 +1,24 @@
+% £robl€m 002: A bushel of apples
+% Body only -- no \documentclass, no preamble packages. Title, dates, status live in the
+% front matter of _posts/2026-11-04-problem-002-a-buchel-of-apples.html.
+% Macros defined here are expanded by pandoc:
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+
+Turning a classroom into a lab.
+
+\section*{Setting}
+Your university/school has equipped rooms with multiple (apple) desktop computers which are unused when there are
+no classes. During this idle time, these clusters of c/gpus shall be used for scientific tasks. Given the
+limitations placed by the start of the next class, the relatively slow connection between the computing nodes,
+and all issues related to the closedness of iOS, realize a framework which would allow me to distribute $\mathcal{O}(10^4)$ runs of
+a single sequence of codes (FORTRAN, python, &c.) with typical runtime $\tau=\mathcal{O}(10m)$ onto the classroom.
+The framework should be controllable from my Linux terminal, and the results of each client run should be stored there temporarily
+before sending them to me.
+
+If you plan to engage in this problem, contact me for sample code.
+
+\section*{Deliverable}
+\begin{itemize}
+  \item Flow diagram of the computation starting from its trigger on the Linux terminal to the final result collection
+  \item practical implementation respecting the boundary conditions, i.e., runtime estimate and possible job rejection
+\end{itemize}

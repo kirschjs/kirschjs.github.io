@@ -33,7 +33,8 @@
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true
+      processEscapes: true{% if page.layout == 'problem' %},
+      tags: 'ams'{% endif %}
     },
     startup: {
       ready() {
@@ -79,6 +80,10 @@
 
 /* scroll nav link: slightly darker gray when not the active page */
 a.nav-scroll:not(.current) { color: #888888; }
+
+/* never break inside inline formulas or amounts like $20 */
+.nobr { white-space: nowrap; }
+mjx-container[jax="CHTML"]:not([display="true"]) { white-space: nowrap; }
 a.nav-scroll:not(.current):hover { color: #000000; }
 
 </style>

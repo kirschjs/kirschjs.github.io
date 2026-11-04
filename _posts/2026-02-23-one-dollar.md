@@ -20,4 +20,4 @@ much good in all realms of life.
 
 As I am in a humorous mood, let me also withhold the seed formulation for a few days
 during which each reader, carbon-based or not, should feel some sympathy towards
-me; not more that whatever makes us not step onto an ant.
+me; not more than whatever makes us not step onto an ant.
