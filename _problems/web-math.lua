@@ -66,3 +66,19 @@ function Inlines(inl)
   end
   return out
 end
+
+-- \begin{abstract}..\end{abstract} (LaTeX) or `abstract:` in a Markdown YAML block:
+-- pandoc's reader moves it into the metadata; put it back as the first block,
+-- <div class="abstract">, styled in _layouts/problem.html.  Its first paragraph is
+-- the teaser in the £robl€m$ list.
+function Pandoc(doc)
+  local ab = doc.meta.abstract
+  if ab then
+    local ty = pandoc.utils.type(ab)
+    local blocks = ty == 'Blocks' and ab
+                   or pandoc.Blocks{ pandoc.Para(ty == 'Inlines' and ab or pandoc.utils.stringify(ab)) }
+    doc.blocks:insert(1, pandoc.Div(blocks, pandoc.Attr('', { 'abstract' })))
+    doc.meta.abstract = nil
+  end
+  return doc
+end

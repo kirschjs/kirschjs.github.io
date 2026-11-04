@@ -22,7 +22,8 @@ Publishing is unchanged: ./deploy.sh "message".
 LaTeX support (via pandoc's LaTeX reader, rendered by MathJax 3 on the page):
   inline $..$ / \\(..\\), display \\[..\\], equation/align (numbered iff they carry a \\label),
   \\eqref/\\ref, \\newcommand macros, \\section (-> h3), \\emph/\\textbf, itemize/enumerate,
-  \\href/\\url, \\includegraphics{/images/...}, ``quotes''.  No custom packages, no TikZ
+  \\begin{abstract}..\\end{abstract} (context header, typeset like a LaTeX abstract; its first
+  paragraph is the list teaser), \\href/\\url, \\includegraphics{/images/...}, ``quotes''.  No custom packages, no TikZ
   (include a pre-rendered SVG instead).
 """
 import argparse
@@ -48,8 +49,10 @@ TEX_TEMPLATE = r"""% £robl€m {num:03d}: {title}
 % Macros defined here are expanded by pandoc:
 \newcommand{{\vect}}[1]{{\boldsymbol{{#1}}}}
 
-State the problem in one or two sentences; the first paragraph is the teaser shown in the
-£robl€m$ list.
+\begin{{abstract}}
+Context of the problem: where it comes from, why it matters. Typeset like a LaTeX abstract
+above the problem statement; its first paragraph is the teaser in the £robl€m$ list.
+\end{{abstract}}
 
 \section*{{Setting}}
 Inline $E = \hbar\omega$, display with a number:
@@ -64,11 +67,15 @@ and a reference to Eq.~\eqref{{eq:force}}.
 \end{{itemize}}
 """
 
-MD_TEMPLATE = r"""<!-- £robl€m {num:03d}: {title}
+MD_TEMPLATE = r"""---
+abstract: |
+  Context of the problem: where it comes from, why it matters. Typeset like a LaTeX
+  abstract above the problem statement; its first paragraph is the teaser.
+---
+
+<!-- £robl€m {num:03d}: {title}
      Body only. pandoc Markdown: $..$ inline, $$..$$ display, raw LaTeX commands allowed.
      Title, dates, status live in the front matter of {post}. -->
-
-State the problem in one or two sentences; the first paragraph is the teaser.
 
 ### Setting
 
